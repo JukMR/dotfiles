@@ -1,0 +1,13 @@
+[user]
+	email = julianmr97@gmail.com
+	name = Julian Merida
+[core]
+	editor = vim
+[sendemail]                                                                     
+        ; setup for using git send-email; prompts for password                  
+        smtpuser = julianmr97@gmail.com
+        smtpserver = smtp.googlemail.com                                        
+        smtpencryption = tls                                                    
+        smtpserverport = 587
+[alias]
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
