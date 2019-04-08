@@ -115,9 +115,6 @@ alias ftpstop='sudo service vsftpd stop'
 alias ftpstatus='sudo service vsftpd status'
 alias sysss='sudo systemctl suspend'
 
-alias lol="git log --graph --decorate --pretty=oneline --abbrev-commit"
-alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit --all"
-
 alias vimedit='vim ~/.vimrc'
 
 export NVM_DIR="$HOME/.nvm"

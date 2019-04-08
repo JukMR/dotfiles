@@ -100,18 +100,15 @@ let g:solarized_termtrans=1
 " colorscheme solarized
 "
 " Command to copy to clipboard with ctrl+y / ctrl+p
+" To make this work be sure vim-gtk3 is installed
 nnoremap <C-y > "+y
 vnoremap <C-y> "+y
 nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
 " Enable mouse selection
-"
 set mouse=a
 
-
-"
 " Command to save read-only file 
-"
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
