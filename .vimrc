@@ -112,3 +112,9 @@ set mouse=a
 " Command to save read-only file 
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
+" ======================================================
+" My personal commands
+
+" Set Ctrl+s to save file only if there is a change to file
+:nmap <c-s> :up<CR>
+:imap <c-s> <Esc>:w<CR>a
