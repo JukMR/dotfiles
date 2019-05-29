@@ -71,7 +71,7 @@ set incsearch
 set ignorecase
 set smartcase
 set showmatch
-map <leader><space> :let @/=''<cr> " clear search
+""map <leader><space> :let @/=''<cr> " clear search
 
 " Remap help key.
 inoremap <F1> <ESC>:set invfullscreen<CR>a
@@ -116,5 +116,36 @@ command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " My personal commands
 
 " Set Ctrl+s to save file only if there is a change to file
-:nmap <c-s> :up<CR>
+:nmap <c-s> :w<CR>
 :imap <c-s> <Esc>:w<CR>a
+
+"The Leader
+let mapleader="\<Space>"
+
+"save current buffer
+nnoremap <leader>w :up<cr>
+
+"replace the word under cursor
+nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+
+"autoclose tags
+inoremap ( ()<Left>
+inoremap { {}<Left>
+inoremap [ []<Left>
+inoremap " ""<Left>
+
+"move lines around
+nnoremap <leader>k :m-2<cr>==
+nnoremap <leader>j :m+<cr>==
+xnoremap <leader>k :m-2<cr>gv=gv
+xnoremap <leader>j :m'>+<cr>gv=gv
+
+"quit if file was saved
+nnoremap <leader>q :q<cr>
+
+"modifiedflag, charcount, filepercent, filepath
+set statusline=%=%m\ %c\ %P\ %f
+
+"a better menu in command mode
+set wildmenu
+set wildmode=longest:full,full
