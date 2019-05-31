@@ -1,3 +1,2 @@
 cp .zshrc ~
 cp .vimrc ~
-
