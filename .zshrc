@@ -103,7 +103,6 @@ alias syssuspend='sudo systemctl suspend'
  
 alias update='sudo apt update'
 alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager' 
-alias broff="sudo bluetooth off"
 alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet" 
 alias sbn="sudo bluetooth on"
 alias gstpush="git stash push"
@@ -116,6 +115,9 @@ alias ftpstatus='sudo service vsftpd status'
 alias sysss='sudo systemctl suspend'
 
 alias vimedit='vim ~/.vimrc'
+alias zshrcedit='vim ~/.zshrc'
+
+alias gcoa='git checkout -a'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
