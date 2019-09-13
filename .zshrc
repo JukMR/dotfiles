@@ -60,6 +60,7 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -116,8 +117,6 @@ alias sysss='sudo systemctl suspend'
 
 alias vimedit='vim ~/.vimrc'
 alias zshrcedit='vim ~/.zshrc'
-
-alias gcoa='git checkout -a'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
