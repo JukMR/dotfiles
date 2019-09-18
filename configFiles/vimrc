@@ -157,3 +157,8 @@ let g:netrw_localrmdir='rm -r'
 
 "toggle netrw on the left side of the editor
 nnoremap <leader>n :Lexplore<CR>
+
+"clear highlight search with leader twice
+nnoremap <Leader><space> :noh<cr>
+" if you prefer you can use
+" nmap <esc><esc> :noh<return>
