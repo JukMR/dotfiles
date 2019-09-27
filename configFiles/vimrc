@@ -162,3 +162,6 @@ nnoremap <leader>n :Lexplore<CR>
 nnoremap <Leader><space> :noh<cr>
 " if you prefer you can use
 " nmap <esc><esc> :noh<return>
+
+" Setup delek colorscheme
+colorscheme delek
