@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script should be put in /usr/bin/ folder
 bluetoothctl << EOF
 disconnect
 EOF

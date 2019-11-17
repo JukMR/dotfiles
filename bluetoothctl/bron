@@ -1,4 +1,5 @@
 #!/bin/bash
+# This file should be put in /usr/bin/ folder
 bluetoothctl << EOF
 connect 04:FE:A1:20:B3:33
 EOF
