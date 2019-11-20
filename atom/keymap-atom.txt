@@ -1,7 +1,0 @@
-Modify keymap file in atom 
-
-Insert this in keymap.cson and then reload atom:
-	'.tree-view':
-  'ctrl-shift-delete': 'tree-view:remove-project-folder'
-
-* Edit tabs package and disable MRU Tab Switching
