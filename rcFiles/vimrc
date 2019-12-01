@@ -107,7 +107,8 @@ nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
 " Enable mouse selection
-set mouse=a
+set mouse=v
+"set clipboard=unnamedplus
 
 " Command to save read-only file 
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
