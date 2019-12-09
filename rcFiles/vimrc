@@ -12,8 +12,8 @@ syntax on
 " For plugins to load correctly
 filetype plugin indent on
 
-" TODO: Pick a leader key
-" let mapleader = ","
+"The Leader
+let mapleader="\<Space>"
 
 " Security
 set modelines=0
@@ -85,6 +85,7 @@ map <leader>q gqip
 
 " Visualize tabs and newlines
 set listchars=tab:▸\ ,eol:¬
+
 " Uncomment this to enable by default:
 " set list " To enable by default
 " Or use your leader key + l to toggle on/off
@@ -107,7 +108,7 @@ nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
 " Enable mouse selection
-set mouse=v
+set mouse=a
 "set clipboard=unnamedplus
 
 " Command to save read-only file 
@@ -119,9 +120,6 @@ command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " Set Ctrl+s to save file only if there is a change to file
 :nmap <c-s> :w<CR>
 :imap <c-s> <Esc>:w<CR>a
-
-"The Leader
-let mapleader="\<Space>"
 
 "save current buffer
 nnoremap <leader>w :up<cr>
