@@ -109,6 +109,7 @@ vnoremap <C-p> "+p
 
 " Enable mouse selection
 set mouse=a
+" This option allows you to use system clipboard directly
 "set clipboard=unnamedplus
 
 " Command to save read-only file 
