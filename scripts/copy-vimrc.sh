@@ -1,1 +1,1 @@
-cp ../configFiles/vimrc ~/.vimrc
+sudo cp ../rcFiles/vimrc ~/.vimrc
