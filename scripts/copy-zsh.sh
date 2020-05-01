@@ -1,1 +1,1 @@
-sudo cp ../rcFiles/zshrc ~/.zshrc
+cp ~/dotfiles/rcFiles/zshrc ~/.zshrc
