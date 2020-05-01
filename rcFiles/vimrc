@@ -16,7 +16,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'gabrielelana/vim-markdown'
 Plugin 'godlygeek/tabular'
-Plugin 'whatyouhide/vim-gotham'
 Plugin 'sjl/badwolf'
 Plugin 'itchyny/lightline.vim'
 Plugin 'tomtom/tcomment_vim'
