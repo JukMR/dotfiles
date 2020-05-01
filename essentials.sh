@@ -7,4 +7,4 @@ sudo apt install -y vim vim-gtk3 git zsh openssh-client snapd vsftpd evince gpar
 ./scripts/gitlola.sh
 ./scripts/keyboard-us-altgr-variant.sh
 
-cp rcFiles/vimrc ~/.vimrc && sudo cp rcFiles/zshrc ~/.zshrc
+cp rcFiles/vimrc ~/.vimrc && cp rcFiles/zshrc ~/.zshrc
