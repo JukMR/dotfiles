@@ -6,11 +6,47 @@ filetype off
 
 " TODO: Load plugins here (pathogen or vundle)
 
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'gabrielelana/vim-markdown'
+Plugin 'godlygeek/tabular'
+Plugin 'whatyouhide/vim-gotham'
+Plugin 'sjl/badwolf'
+Plugin 'itchyny/lightline.vim'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'tweekmonster/startuptime.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+
 " Turn on syntax highlighting
 syntax on
 
 " For plugins to load correctly
-filetype plugin indent on
+"filetype plugin indent on 
+"Commented as already setted before
 
 "The Leader
 let mapleader="\<Space>"
@@ -73,11 +109,6 @@ set smartcase
 set showmatch
 ""map <leader><space> :let @/=''<cr> " clear search
 
-" Remap help key.
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-nnoremap <F1> :set invfullscreen<CR>
-vnoremap <F1> :set invfullscreen<CR>
-
 " Textmate holdouts
 
 " Formatting
@@ -92,23 +123,22 @@ set listchars=tab:▸\ ,eol:¬
 map <leader>l :set list!<CR> " Toggle tabs and EOL
 
 " Color scheme (terminal)
-set t_Co=256
-set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
+"set t_Co=256
+"set background=dark
+"let g:solarized_termcolors=256
+"let g:solarized_termtrans=1
 " put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
 " in ~/.vim/colors/ and uncomment:
 " colorscheme solarized
-"
+
 " Command to copy to clipboard with ctrl+y / ctrl+p
 " To make this work be sure vim-gtk3 is installed
 nnoremap <C-y > "+y
 vnoremap <C-y> "+y
-nnoremap <C-p> "+p
-vnoremap <C-p> "+p
 
 " Enable mouse selection
 set mouse=a
+
 " This option allows you to use system clipboard directly
 "set clipboard=unnamedplus
 
@@ -150,18 +180,22 @@ set statusline=%=%m\ %c\ %P\ %f
 set wildmenu
 set wildmode=longest:full,full
 
-let g:netrw_banner=0
-let g:netrw_winsize=20
-let g:netrw_liststyle=3
-let g:netrw_localrmdir='rm -r'
+" let g:netrw_banner=0
+" let g:netrw_winsize=20
+" let g:netrw_liststyle=3
+" let g:netrw_localrmdir='rm -r'
 
 "toggle netrw on the left side of the editor
-nnoremap <leader>n :Lexplore<CR>
+" nnoremap <leader>n :Lexplore<CR>
 
 "clear highlight search with leader twice
 nnoremap <Leader><space> :noh<cr>
-" if you prefer you can use
-" nmap <esc><esc> :noh<return>
 
 " Setup delek colorscheme
-colorscheme delek
+""colorscheme delek
+
+"Change color of vim statusbar to cyan with black chars
+""hi StatusLine ctermbg=black ctermfg=cyan
+
+"Set badwolf as colorscheme
+color badwolf
