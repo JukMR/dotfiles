@@ -199,3 +199,9 @@ nnoremap <Leader><space> :noh<cr>
 
 "Set badwolf as colorscheme
 color badwolf
+
+" Select all with leader a
+nnoremap <Leader>a ggVG<cr>
+
+" Select all and copy to clipboard+
+nnoremap <Leader>v ggVG"+y<cr>
