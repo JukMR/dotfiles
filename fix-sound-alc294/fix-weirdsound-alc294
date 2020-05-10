@@ -1,0 +1,24 @@
+# This is a probable fix for the problem with weird sound after dual-booting on
+# windows 10.
+# This solution was taken from:
+#
+# https://askubuntu.com/questions/722685/realtek-audio-drivers-for-ubuntu/811461#811461
+#
+# especially from this commentary
+#
+# https://askubuntu.com/a/811461/815718
+#
+# after trying many many solution. It is still needed to be completely tested
+#
+
+Install Pulseaudio Equalizer for purposes:
+
+sudo add-apt-repository ppa:nilarimogard/webupd8
+sudo apt-get update
+sudo apt-get install pulseaudio-equalizer
+Your sound card Realtek may have problems frequencies. To solve install OSS. It seems that it is supported. Download from here. Install and restart.
+
+If installation errors, install alsa-oss
+
+There is a similar problem here.
+https://askubuntu.com/questions/803761/low-sound-quality-in-linux-for-ever-in-realtek
