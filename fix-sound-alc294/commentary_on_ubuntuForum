@@ -1,0 +1,11 @@
+Hi! I have an Asus Zenbook UX331 with Linux Mint 19.3 Kernel version 5.3.0-51 and dual-boot with Windows 10. This laptop has the same audio device (ALC 294) as this thread is about. My problem is that the audio speakers sound kind of clunky and distorted after dual-booting from Windows to Linux. A fully shutting down and then booting in linux solves the issue but I need to boot on W10 first as I use Asus Battery Health Charging to cap my battery percentage on 60 so I can keep my laptop plugged in.
+I've tried many workarounds and possible fixes but the only way I could fix this was uninstalling Realtek Audio Device and High Audio Definition Device on Windows 10. Altough this is not a permanent fix as it sometimes doesn't work (probably because windows reinstall this drivers when it detect they aren't installed) and I have no sound in Windows without this drivers.
+I would be more than happy to provide further info about my system in order to know what is really happening.
+
+
+
+=================================================================================================================================================================
+Update! I think I've solved the issue following this comment https://askubuntu.com/a/811461/815718.
+I've installed both pulseaudio-equalizer and also-oss and after that it seems audio start working correctly after dual-booting on both Linux and Windows. Hopes this solve my issue definitely (as I am not 100% sure this was the solution that worked, need further testing) and that it helps other people trying this solution!
+
+PD:sorry if this wasn't the appropiated thread to put this on.
