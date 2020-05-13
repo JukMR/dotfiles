@@ -133,7 +133,7 @@ map <leader>l :set list!<CR> " Toggle tabs and EOL
 
 " Command to copy to clipboard with ctrl+y / ctrl+p
 " To make this work be sure vim-gtk3 is installed
-nnoremap <C-y > "+y
+nnoremap <C-y> "+y
 vnoremap <C-y> "+y
 
 " Enable mouse selection
