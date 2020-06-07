@@ -1,0 +1,3 @@
+First go to:  'about:config'
+
+Then look for: 'layout.css.devPixelsPerPx' and change its value to 0.8
