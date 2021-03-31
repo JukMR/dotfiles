@@ -123,3 +123,4 @@ export NVM_DIR="$HOME/.nvm"
 # stty -ixon
 
 alias cpclip='xclip -sel clip'
+bindkey \^U backward-kill-line
