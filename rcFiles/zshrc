@@ -61,6 +61,7 @@ ZSH_THEME="robbyrussell"
 plugins=(
   git
   zsh-autosuggestions
+  command-not-found
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -93,16 +94,11 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias apt='sudo apt'
 alias p='python3'
-alias install='sudo apt install'
-alias instally='sudo apt install -y'
 alias o='xdg-open'
 alias aptfullupgrade='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y'
 alias nr='sudo service network-manager restart'
-alias syssuspend='sudo systemctl suspend'
  
-alias update='sudo apt update'
 alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager' 
 alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet" 
 alias sbn="sudo bluetooth on"
@@ -113,7 +109,7 @@ alias pythonserver='python -m SimpleHTTPServer'
 alias ftpstart='sudo service vsftpd start'
 alias ftpstop='sudo service vsftpd stop'
 alias ftpstatus='sudo service vsftpd status'
-alias sysss='sudo systemctl suspend'
+alias sysss='systemctl suspend'
 
 alias vimedit='vim ~/.vimrc'
 alias zshedit='vim ~/.zshrc'
@@ -126,4 +122,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # stty -ixon
 
-alias copy='xclip -sel clip'
+alias cpclip='xclip -sel clip'
