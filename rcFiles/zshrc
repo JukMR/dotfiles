@@ -96,14 +96,14 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias p='python3'
 alias o='xdg-open'
-alias aptfullupgrade='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y'
+alias aptfullupgrade='sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt autoclean'
 alias nr='sudo service network-manager restart'
  
 alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager' 
 alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet" 
 alias sbn="sudo bluetooth on"
 alias gstpush="git stash push"
-alias os="echo lsb_release -a : ; lsb_release -a ; echo uname ; uname -a"
+alias os="echo lsb_release -a : && lsb_release -a ; echo uname && uname -a; echo hostnamectl && hostnamectl"
 alias calc="mate-calc &"
 alias pythonserver='python -m SimpleHTTPServer'
 alias ftpstart='sudo service vsftpd start'
@@ -120,7 +120,25 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# stty -ixon
+stty -ixon
 
 alias cpclip='xclip -sel clip'
+
+# Re alias to bat installed with apt
+alias bat='batcat'
+
+# Make C-U delete all till beginning of line
 bindkey \^U backward-kill-line
+
+# Completion for kitty in zsh
+autoload -Uz compinit
+compinit
+kitty + complete setup zsh | source /dev/stdin
+
+# Add edit default kitty config file
+alias kittyconfig='vi ~/.config/kitty/kitty.conf'
+
+# Set Intel OneApi path
+if [ -d "/opt/intel/oneapi/compiler/2021.1.1/linux/bin/intel64/icc" ] ; then
+  PATH="/opt/intel/Compiler/11.0/083/bin:$PATH"
+fi
