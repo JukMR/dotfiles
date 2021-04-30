@@ -24,6 +24,10 @@ Plugin 'tweekmonster/startuptime.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'JamshedVesuna/vim-markdown-preview'
+" Add multiple language syntax support
+Plugin 'sheerun/vim-polyglot'
+" Make f,F,t,T working in all lines
+Plugin 'chrisbra/improvedft'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -149,8 +153,8 @@ command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " My personal commands
 
 " Set Ctrl+s to save file only if there is a change to file
-:nmap <c-s> :w<CR>
-:imap <c-s> <Esc>:w<CR>a
+":nmap <c-s> :w<CR>
+":imap <c-s> <Esc>:w<CR>a
 
 "save current buffer
 nnoremap <leader>w :up<cr>
@@ -159,10 +163,10 @@ nnoremap <leader>w :up<cr>
 nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
 "autoclose tags
-inoremap ( ()<Left>
-inoremap { {}<Left>
-inoremap [ []<Left>
-inoremap " ""<Left>
+"inoremap ( ()<Left>
+"inoremap { {}<Left>
+"inoremap [ []<Left>
+"inoremap " ""<Left>
 
 "move lines around
 nnoremap <leader>k :m-2<cr>==
@@ -210,3 +214,6 @@ let vim_markdown_preview_hotkey='<C-m>'
 let vim_markdown_preview_pandoc=1
 
 autocmd VimLeave * call system("xclip -selection clipboard -i", getreg('+'))
+
+" Count numbers of ocurrences under cursor
+map ,* *<C-O>:%s///gn<CR>
