@@ -171,7 +171,7 @@ net_wireless = net_widgets.wireless()
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
 
 net_wired = net_widgets.indicator({
-    interfaces  = {"enp9s0"},
+    interfaces  = {"wlan0", "enp9s0", "lo"}, -- manual set current used interface with iwconfig
     timeout     = 5
 })
 
@@ -402,12 +402,16 @@ globalkeys = gears.table.join(
         {description = "Launch Dolphin", group = "apps"}),
 
     awful.key({ modkey, "Shift"}, "w",
-        function () awful.spawn("vivaldi") end,
+        function () awful.spawn("vivaldi-stable") end,
         {description = "Launch Vivaldi", group = "apps"}),
 
     awful.key({ modkey, }, "b",
-        function () awful.spawn("vivaldi") end,
+        function () awful.spawn.with_shell("/home/julian/appImages/Bitwarden") end,
         {description = "Launch Bitwarden", group = "apps"}),
+
+   awful.key({ }, "#180",
+       function () awful.spawn.with_shell("systemctl suspend") end,
+       {description = "Suspend machine", group = "commands"}),
 
 
     --- Volume keybindings
@@ -480,7 +484,7 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey,    }, "c",      function (c) c:kill()                         end,
+    awful.key({ modkey,"Shift"    }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
