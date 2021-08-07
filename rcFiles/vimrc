@@ -136,7 +136,11 @@ map <leader>l :set list!<CR> " Toggle tabs and EOL
 " colorscheme solarized
 
 " Command to copy to clipboard with ctrl+y / ctrl+p
+" If using debian/ubuntu:
 " To make this work be sure vim-gtk3 is installed
+"
+" If using manjaro:
+" be sure to install gvim
 nnoremap <C-y> "+y
 vnoremap <C-y> "+y
 
