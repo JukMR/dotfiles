@@ -223,6 +223,8 @@ nnoremap <Leader>v ggVG"+y<cr>
 let vim_markdown_preview_hotkey='<C-m>'
 let vim_markdown_preview_pandoc=1
 
+" This command preserve vim system clipboard at logout
+" Beware xclip is installed for this to work
 autocmd VimLeave * call system("xclip -selection clipboard -i", getreg('+'))
 
 " Count numbers of ocurrences under cursor
