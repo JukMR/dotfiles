@@ -18,10 +18,6 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- Load Debian menu entries
-local debian = require("debian.menu")
-local has_fdo, freedesktop = pcall(require, "freedesktop")
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -56,7 +52,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
-editor = os.getenv("EDITOR") or "vi"
+editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -94,27 +90,17 @@ myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
+   { "reboot", "reboot"},
+   { "shutdown", "shutdown"},
 }
 
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-    mymainmenu = awful.menu({
-        items = {
-                  menu_awesome,
-                  { "Debian", debian.menu.Debian_menu.Debian },
-                  menu_terminal,
-                }
-    })
-end
-
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -171,9 +157,13 @@ net_wireless = net_widgets.wireless()
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
 
 net_wired = net_widgets.indicator({
-    interfaces  = {"wlan0", "enp9s0", "lo"}, -- manual set current used interface with iwconfig
+    interfaces  = {"wlan0", "wlp2s0", "lo"}, -- manual set current used interface with iwconfig
     timeout     = 5
 })
+
+
+local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -282,6 +272,10 @@ awful.screen.connect_for_each_screen(function(s)
                 onlock = function() awful.spawn.with_shell('i3lock-fancy') end
             },
             -- Add custom wifi icon
+            batteryarc_widget({
+                show_current_level = true,
+                arc_thickness = 1,
+            }),
             net_wireless,
             net_internet,
             net_wired,
@@ -398,32 +392,34 @@ globalkeys = gears.table.join(
     -- Personal keybindings
 
     awful.key({ modkey, }, "e",
-        function () awful.spawn("dolphin") end,
-        {description = "Launch Dolphin", group = "apps"}),
+        function () awful.spawn("thunar") end,
+        {description = "Launch Thunar", group = "apps"}),
 
     awful.key({ modkey, "Shift"}, "w",
         function () awful.spawn("vivaldi-stable") end,
         {description = "Launch Vivaldi", group = "apps"}),
 
     awful.key({ modkey, }, "b",
-        function () awful.spawn.with_shell("/home/julian/appImages/Bitwarden") end,
+        function () awful.spawn("bitwarden") end,
         {description = "Launch Bitwarden", group = "apps"}),
 
-   awful.key({ }, "#180",
-       function () awful.spawn.with_shell("systemctl suspend") end,
-       {description = "Suspend machine", group = "commands"}),
+
+    awful.key({ modkey, }, "a",
+        function () awful.spawn("code") end,
+        {description = "Launch Vscode", group = "apps"}),
 
 
     --- Volume keybindings
 
     awful.key({ }, "XF86AudioRaiseVolume", function ()
-        -- awful.spawn("amixer set Master 2%+") end),
-        awful.spawn("volume up") end),
+        awful.spawn("amixer set Master 5%+") end),
+        -- awful.spawn("volume up") end),
     awful.key({ }, "XF86AudioLowerVolume", function ()
-        -- awful.spawn("amixer set Master 2%-") end),
-        awful.spawn("volume down") end),
+        awful.spawn("amixer set Master 5%-") end),
+        -- awful.spawn("volume down") end),
     awful.key({ }, "XF86AudioMute", function ()
-        awful.spawn("volume mute") end),
+        -- awful.spawn("volume mute") end),
+        awful.spawn("amixer -D pulse set Master 1+ toggle") end),
 
     --- MediaKeys keybindings
 
@@ -435,6 +431,14 @@ globalkeys = gears.table.join(
         awful.spawn("playerctl next") end),
     awful.key({ }, "XF86AudioPrev", function ()
         awful.spawn("playerctl previous") end),
+
+
+    -- Brightness
+
+    awful.key({ }, "XF86MonBrightnessDown", function ()
+        awful.util.spawn("xbacklight -dec 15") end),
+    awful.key({ }, "XF86MonBrightnessUp", function ()
+        awful.util.spawn("xbacklight -inc 15") end),
 
 
     --- Spotify keybindings
@@ -452,10 +456,8 @@ globalkeys = gears.table.join(
 
     --- Screenshooter
     awful.key({ "Shift" }, "#107", function ()
-        awful.spawn.with_shell("flameshot screen -p ~/Pictures/screenshots/") end,
+        awful.spawn.with_shell("flameshot screen -p /home/julian/Pictures/screenshots/") end,
         {description = "Capture and save current screen", group = "screenshot"}),
-
-
 
 
     -- End of Personal keybindings
@@ -484,8 +486,15 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey,"Shift"    }, "c",      function (c) c:kill()                         end,
+    awful.key({ modkey,  "Shift"  }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
+
+    -- Start personal edit
+
+    awful.key({ modkey,  }, "y",      function (c) c.sticky = not c.sticky                   end,
+              {description = "make window sticky", group = "client"}),
+
+    -- End of personal edit
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
@@ -723,9 +732,9 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 autorun = true
 autorunApps =
 {
---    "albert",
-    "/home/julian/scripts/wallpaper_changer",
-    "/home/julian/scripts/fixmouse"
+    "xfsettingsd --daemon",
+    "sh /home/julian/dotfiles/scripts/wallpaper_changer_cron.sh"
+
 }
 if autorun then
    for app = 1, #autorunApps do

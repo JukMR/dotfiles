@@ -98,9 +98,9 @@ alias p='python3'
 alias o='xdg-open'
 alias aptfullupgrade='sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt autoclean'
 alias nr='sudo service network-manager restart'
- 
-alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager' 
-alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet" 
+
+alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager'
+alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet"
 alias sbn="sudo bluetooth on"
 alias gstpush="git stash push"
 alias os="echo lsb_release -a : && lsb_release -a ; echo uname && uname -a; echo hostnamectl && hostnamectl"
@@ -123,9 +123,6 @@ export NVM_DIR="$HOME/.nvm"
 stty -ixon
 
 alias cpclip='xclip -sel clip'
-
-# Re alias to bat installed with apt
-alias bat='batcat'
 
 # Make C-U delete all till beginning of line
 bindkey \^U backward-kill-line
