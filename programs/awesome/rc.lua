@@ -92,6 +92,7 @@ myawesomemenu = {
    { "restart", awesome.restart },
    { "reboot", "reboot"},
    { "shutdown", "shutdown"},
+   { "quit", function() awesome.quit() end },
 }
 
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
