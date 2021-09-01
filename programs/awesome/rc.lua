@@ -158,12 +158,12 @@ net_wireless = net_widgets.wireless()
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
 
 net_wired = net_widgets.indicator({
-    interfaces  = {"wlan0", "wlp2s0", "lo"}, -- manual set current used interface with iwconfig
+    interfaces  = {"wlan0", "enp9s0", "lo"}, -- manual set current used interface with iwconfig
     timeout     = 5
 })
 
 
-local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+-- local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 
 
 -- Create a wibox for each screen and add it
@@ -273,10 +273,10 @@ awful.screen.connect_for_each_screen(function(s)
                 onlock = function() awful.spawn.with_shell('i3lock-fancy') end
             },
             -- Add custom wifi icon
-            batteryarc_widget({
-                show_current_level = true,
-                arc_thickness = 1,
-            }),
+            -- batteryarc_widget({
+            --     show_current_level = true,
+            --     arc_thickness = 1,
+            -- }),
             net_wireless,
             net_internet,
             net_wired,
@@ -401,13 +401,77 @@ globalkeys = gears.table.join(
         {description = "Launch Vivaldi", group = "apps"}),
 
     awful.key({ modkey, }, "b",
-        function () awful.spawn("bitwarden") end,
+        function () awful.spawn("bitwarden-desktop") end,
         {description = "Launch Bitwarden", group = "apps"}),
 
 
     awful.key({ modkey, }, "a",
         function () awful.spawn("code") end,
         {description = "Launch Vscode", group = "apps"}),
+
+
+    -- Move current window to next tag or prev tag
+
+    -- Ctrl+Alt+Shift+Left/Right: move client to prev/next tag
+    awful.key({ modkey, "Control", "Shift" }, "Left",
+        function ()
+            -- get current tag
+            local t = client.focus and client.focus.first_tag or nil
+            if t == nil then
+                return
+            end
+            -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
+            local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
+            awful.client.movetotag(tag)
+        end,
+        {description = "move client to previous tag", group = "layout"}),
+
+    awful.key({ modkey, "Control", "Shift" }, "Right",
+        function ()
+            -- get current tag
+            local t = client.focus and client.focus.first_tag or nil
+            if t == nil then
+                return
+            end
+            -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
+            local tag = client.focus.screen.tags[(t.name % 9) + 1]
+            awful.client.movetotag(tag)
+        end,
+        {description = "move client to next tag", group = "layout"}),
+
+
+    -- Move current window along with screen to next tag or prev tag
+
+
+    -- Win+Shift+Left/Right: move client to prev/next tag and switch to it
+
+    awful.key({ modkey, "Shift" }, "Left",
+        function ()
+            -- get current tag
+            local t = client.focus and client.focus.first_tag or nil
+            if t == nil then
+                return
+            end
+            -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
+            local tag = client.focus.screen.tags[(t.name - 2) % 9 + 1]
+            awful.client.movetotag(tag)
+            awful.tag.viewprev()
+        end,
+            {description = "move client to previous tag and switch to it", group = "layout"}),
+
+    awful.key({ modkey, "Shift" }, "Right",
+        function ()
+            -- get current tag
+            local t = client.focus and client.focus.first_tag or nil
+            if t == nil then
+                return
+            end
+            -- get next tag (modulo 9 excluding 0 to wrap from 9 to 1)
+            local tag = client.focus.screen.tags[(t.name % 9) + 1]
+            awful.client.movetotag(tag)
+            awful.tag.viewnext()
+        end,
+            {description = "move client to next tag and switch to it", group = "layout"}),
 
 
     --- Volume keybindings
