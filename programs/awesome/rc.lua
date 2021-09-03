@@ -88,7 +88,7 @@ awful.layout.layouts = {
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
    { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
+   { "edit config vim", editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "reboot", "reboot"},
    { "shutdown", "shutdown"},
@@ -99,7 +99,9 @@ local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
+                                    { "open terminal", terminal },
+                                    { "vivaldi", "vivaldi-stable"},
+                                    { "edit conf vscode", "code" .. " " .. awesome.conffile },
                                   }
                         })
 
@@ -524,7 +526,8 @@ globalkeys = gears.table.join(
         awful.spawn.with_shell("flameshot screen -p /home/julian/Pictures/screenshots/") end,
         {description = "Capture and save current screen", group = "screenshot"}),
 
-
+    awful.key({ }, "#180", function ()
+        awful.util.spawn("systemctl suspend") end),
     -- End of Personal keybindings
 
 --    awful.key({ modkey }, "x",
