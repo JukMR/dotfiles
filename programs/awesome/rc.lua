@@ -801,7 +801,7 @@ autorun = true
 autorunApps =
 {
     "xfsettingsd --daemon",
-    "sh /home/julian/dotfiles/scripts/wallpaper_changer_cron.sh"
+    "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh"
 
 }
 if autorun then
