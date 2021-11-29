@@ -562,7 +562,20 @@ clientkeys = gears.table.join(
     awful.key({ modkey,  }, "y",      function (c) c.sticky = not c.sticky                   end,
               {description = "make window sticky", group = "client"}),
 
+
+    -- Move windows in floating layout with win+alt+arrowkeys
+
+    awful.key({ modkey, "Mod1"   }, "Down",   function (c) c:relative_move(  0,  20,   0,   0) end),
+    awful.key({ modkey, "Mod1"   }, "Up",     function (c) c:relative_move(  0, -20,   0,   0) end),
+    awful.key({ modkey, "Mod1"   }, "Left",   function (c) c:relative_move(-20,   0,   0,   0) end),
+    awful.key({ modkey, "Mod1"   }, "Right",  function (c) c:relative_move( 20,   0,   0,   0) end),
+
+
+    -- Re-draw windows layout in floating layout
+    awful.key({ modkey, "Mod1", "Shift"   }, "Up",  function (c) c:relative_move(-20, -20,  40,  40) end),
+    awful.key({ modkey, "Mod1", "Shift"   }, "Down",   function (c) c:relative_move( 20,  20, -40, -40) end),
     -- End of personal edit
+
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
