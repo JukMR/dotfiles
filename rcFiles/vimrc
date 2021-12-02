@@ -227,7 +227,7 @@ let vim_markdown_preview_pandoc=1
 " Beware xclip is installed for this to work
 autocmd VimLeave * call system("xclip -selection clipboard -i", getreg('+'))
 
-" Count numbers of ocurrences under cursor
+" Count numbers of ocurrences under cursor in search mode
 map ,* *<C-O>:%s///gn<CR>
 
 " Stop vim from auto entering at 80 char
