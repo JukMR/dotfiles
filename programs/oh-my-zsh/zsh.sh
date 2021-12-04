@@ -1,1 +1,1 @@
-sudo apt install zsh
+sudo pacman -Sy --noconfirm --needed zsh
