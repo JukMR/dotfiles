@@ -2,7 +2,7 @@
 
 dotdir="$HOME/dotfiles/"
 # Install fundamental programs
-sudo pacman -Syu --noconfirm --needed git zsh openssh vsftpd evince gparted htop xclip gvim flameshot bat nitrogen obs-studio bitwarden telegram-desktop lxappearance netcat &&
+sudo pacman -Syu --noconfirm --needed git zsh openssh vsftpd evince gparted htop xclip gvim flameshot bat nitrogen obs-studio bitwarden telegram-desktop lxappearance netcat awesome &&
 
 # Install and set zsh
 $dotdir/programs/oh-my-zsh/zsh.sh &&
@@ -27,3 +27,17 @@ vim +PluginInstall +qall &&
 mkdir -p $HOME/.local/bin &&
 mkdir -p $HOME/.local/share/applications &&
 $dotdir/programs/kitty/install.sh
+
+# Change default shell to zsh
+if [ "$SHELL" != "/bin/zsh" ]
+then
+  chsh -s $(which zsh)
+fi
+
+# Move awesome rc.lua config
+mkdir -p $HOME/.config/awesome &&
+cp -ur $dotdir/programs/awesome $HOME/.config
+
+# Configure git name and email
+git config --global user.name "Julian Merida"
+git config --global user.email "julianmr97@gmail.com"
