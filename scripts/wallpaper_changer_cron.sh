@@ -13,9 +13,11 @@ export DISPLAY=":0"
 # This option was setted because the X server reported bad drawing
 #export QT_X11_NO_MITSHM=1
 
-nitrogen --random --set-scaled --head=0 /home/julian/Pictures/wallpapers/
 
-# If the setup has two monitors enable next line
-# nitrogen --random --set-scaled --head=1 /home/julian/Pictures/wallpapers/
+MONITORS=$( xrandr -q | grep ' connected' | wc -l )
+
+for (( i=0; i <= $MONITORS -1 ; i++ )); do
+  nitrogen --random --set-scaled --head=$i /home/julian/Pictures/wallpapers/
+done
 
 exit
