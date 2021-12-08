@@ -143,3 +143,8 @@ fi
 export EDITOR=/usr/bin/vim
 export VISUAL=/usr/bin/vim
 
+alias clippwd="pwd | xclip -se c"
+
+clip () {
+  cat $1 | xclip -se c
+}
