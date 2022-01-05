@@ -88,10 +88,11 @@ awful.layout.layouts = {
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
    { "manual", terminal .. " -e man awesome" },
-   { "edit config vim", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
+   { "edit conf vim", editor_cmd .. " " .. awesome.conffile },
+   { "edit conf vscode", "code" .. " " .. awesome.conffile },
    { "reboot", "reboot"},
    { "shutdown", "shutdown"},
+   { "restart awesome", awesome.restart },
    { "quit", function() awesome.quit() end },
 }
 
@@ -101,7 +102,6 @@ local menu_terminal = { "open terminal", terminal }
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "open terminal", terminal },
                                     { "vivaldi", "vivaldi-stable"},
-                                    { "edit conf vscode", "code" .. " " .. awesome.conffile },
                                   }
                         })
 
@@ -503,9 +503,9 @@ globalkeys = gears.table.join(
     -- Brightness
 
     awful.key({ }, "XF86MonBrightnessDown", function ()
-        awful.util.spawn("xbacklight -dec 15") end),
+        awful.util.spawn("xbacklight -dec 5") end),
     awful.key({ }, "XF86MonBrightnessUp", function ()
-        awful.util.spawn("xbacklight -inc 15") end),
+        awful.util.spawn("xbacklight -inc 5") end),
 
 
     --- Spotify keybindings
@@ -574,6 +574,7 @@ clientkeys = gears.table.join(
     -- Re-draw windows layout in floating layout
     awful.key({ modkey, "Mod1", "Shift"   }, "Up",  function (c) c:relative_move(-20, -20,  40,  40) end),
     awful.key({ modkey, "Mod1", "Shift"   }, "Down",   function (c) c:relative_move( 20,  20, -40, -40) end),
+
     -- End of personal edit
 
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
@@ -814,7 +815,8 @@ autorun = true
 autorunApps =
 {
     "xfsettingsd --daemon",
-    "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh"
+    "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
+    "sh -c $HOME/dotfiles/scripts/fix-scroll.sh"
 
 }
 if autorun then
