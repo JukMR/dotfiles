@@ -155,6 +155,9 @@ require("volume")
 -- Add network widgets
 local net_widgets = require("net_widgets")
 
+-- Add speed network widget
+local net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
+
 
 net_wireless = net_widgets.wireless()
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
@@ -279,8 +282,12 @@ awful.screen.connect_for_each_screen(function(s)
             --     show_current_level = true,
             --     arc_thickness = 1,
             -- }),
-            net_wireless,
-            net_internet,
+            --     net_wireless,
+            --     net_internet,
+
+
+            -- Add speed network widget
+            net_speed_widget(),
             net_wired,
             mykeyboardlayout,
             wibox.widget.systray(),
