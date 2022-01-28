@@ -96,7 +96,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias p='python3'
 alias o='xdg-open'
-alias aptfullupgrade='sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt autoclean'
 alias nr='sudo service network-manager restart'
 
 alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager'
