@@ -147,3 +147,7 @@ alias clippwd="pwd | xclip -se c"
 clip () {
   cat $1 | xclip -se c
 }
+
+clip2image () {
+  xclip -se c -t image/png -o >> $1
+}
