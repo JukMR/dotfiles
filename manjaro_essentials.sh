@@ -2,7 +2,7 @@
 
 dotdir="$HOME/dotfiles/"
 # Install fundamental programs
-sudo pacman -Syu --noconfirm --needed git zsh openssh vsftpd evince gparted htop xclip gvim flameshot bat nitrogen obs-studio bitwarden telegram-desktop lxappearance netcat awesome playerctl &&
+sudo pacman -Syu --noconfirm --needed git zsh openssh vsftpd evince gparted htop xclip gvim flameshot bat nitrogen obs-studio bitwarden telegram-desktop lxappearance netcat awesome playerctl wireless_tools &&
 
 # Install and set zsh
 $dotdir/programs/oh-my-zsh/zsh.sh &&
