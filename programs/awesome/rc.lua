@@ -91,7 +91,7 @@ myawesomemenu = {
    { "edit conf vim", editor_cmd .. " " .. awesome.conffile },
    { "edit conf vscode", "code" .. " " .. awesome.conffile },
    { "reboot", "reboot"},
-   { "shutdown", "shutdown"},
+   { "shutdown", "poweroff"},
    { "restart awesome", awesome.restart },
    { "quit", function() awesome.quit() end },
 }
