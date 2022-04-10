@@ -1,8 +1,32 @@
 #!/bin/bash
 
 dotdir="$HOME/dotfiles/"
+
+
 # Install fundamental programs
-sudo pacman -Syu --noconfirm --needed git zsh openssh vsftpd evince gparted htop xclip gvim flameshot bat nitrogen obs-studio bitwarden telegram-desktop lxappearance netcat awesome playerctl wireless_tools &&
+PROGRAMS="git
+zsh
+openssh
+vsftpd
+evince
+gparted
+htop
+xclip
+gvim
+bat
+flameshot
+nitrogen
+obs-studio
+bitwarden
+telegram-desktop
+lxappearance
+netcat
+awesome
+playerctl
+wireless_tools
+micro
+"
+sudo pacman -Syu --noconfirm --needed $PROGRAMS &&
 
 # Install and set zsh
 $dotdir/programs/oh-my-zsh/zsh.sh &&
@@ -24,9 +48,9 @@ $dotdir/programs/install-vundle/install.sh ;
 vim +PluginInstall +qall &&
 
 # Install kitty terminal
-mkdir -p $HOME/.local/bin &&
-mkdir -p $HOME/.local/share/applications &&
-$dotdir/programs/kitty/install.sh
+# mkdir -p $HOME/.local/bin &&
+# mkdir -p $HOME/.local/share/applications &&
+# $dotdir/programs/kitty/install.sh
 
 # Change default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]
