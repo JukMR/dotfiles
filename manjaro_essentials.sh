@@ -65,3 +65,10 @@ cp -ur $dotdir/programs/awesome $HOME/.config
 # Configure git name and email
 git config --global user.name "Julian Merida"
 git config --global user.email "julianmr97@gmail.com"
+
+
+# Clone awesome plugin repositories
+cd $HOME/.config/awesome
+git clone https://github.com/streetturtle/awesome-wm-widgets
+git clone https://github.com/pltanton/net_widgets.git
+
