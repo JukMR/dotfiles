@@ -25,6 +25,7 @@ awesome
 playerctl
 wireless_tools
 micro
+kitty
 "
 sudo pacman -Syu --noconfirm --needed $PROGRAMS &&
 
