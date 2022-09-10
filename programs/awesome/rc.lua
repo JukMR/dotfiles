@@ -277,11 +277,15 @@ awful.screen.connect_for_each_screen(function(s)
                 font = 'Play 14',
                 onlock = function() awful.spawn.with_shell('i3lock-fancy') end
             },
-            -- Add custom wifi icon
+            -- Add custom battery icon
+
             -- batteryarc_widget({
             --     show_current_level = true,
             --     arc_thickness = 1,
             -- }),
+
+            -- Add custom wifi icon
+
             --     net_wireless,
             --     net_internet,
 
