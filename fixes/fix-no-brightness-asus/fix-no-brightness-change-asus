@@ -1,0 +1,31 @@
+If you can't turn brightness up and down try the following:
+
+Check that you can use command `backlight -dec 50` 
+
+If not, see if xorg-xbacklight is installed. If not try installing it.
+
+
+
+If you cannot see changes, do the following.
+
+Go to `/sys/class/backlight` and check that `intel_backlight` folder exist.
+  If it does, do the following:
+    * Create file /etc/X11/xorg.conf with the following content:
+
+
+```
+
+Section "Device"
+    Identifier  "Intel Graphics" 
+    Driver      "intel"
+    Option      "Backlight"  "intel_backlight"
+EndSection
+
+
+```
+
+and then logout and try again.
+
+
+Original info taken from:
+https://askubuntu.com/questions/715306/xbacklight-no-outputs-have-backlight-property-no-sys-class-backlight-folder
