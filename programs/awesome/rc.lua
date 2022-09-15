@@ -842,3 +842,8 @@ if autorun then
 end
 
 
+-- Debug awesome getting nano as editor
+
+--vart = os.execute('printenv > /tmp/hola')
+-- naughty.notify({text=tostring((vart))})
+-- naughty.notify({text=tostring((editor))})
