@@ -1,0 +1,19 @@
+Problem fixed doing the following:
+
+https://www.reddit.com/r/archlinux/comments/eirsm8/cant_change_brightness_xbacklight_isnt_working/
+
+
+What i did is do the EDIT2 option:
+
+I saw someone fixing the issue by adding below configuration to the /etc/X11/xorg.conf.d/20-intel.conf , however if I do this x server doesn't start and my computer stucks at the start. I tried to start it by using tty2 by writing startx but if I understood correctly it gave me this error (xf86enableioports failed to set iopl for i/o (operation not permitted)):
+
+Section "Device"
+    Identifier  "Intel Graphics" 
+    Driver      "intel"
+    Option      "Backlight"  "intel_backlight"
+EndSection
+Is there any way to fix this? Thanks in advance!
+
+EDIT : My graphics card is only Intel HD4600 (Thinkpad T440p)
+
+EDIT 2 : SOLVED !! I only installed mesa / lib32-mesa / vulkan-intel packages for Intel graphic driver because wiki says xf86-video-intel is often not recommended. However, installing the package and configuring 20-intel.conf fixed the issue, xbacklight now works properly.
