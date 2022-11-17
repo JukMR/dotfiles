@@ -101,7 +101,7 @@ local menu_terminal = { "open terminal", terminal }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "open terminal", terminal },
-                                    { "vivaldi", "vivaldi-stable"},
+                                    { "brave", "brave"},
                                   }
                         })
 
@@ -163,12 +163,12 @@ net_wireless = net_widgets.wireless()
 net_internet = net_widgets.internet({indent = 0, timeout = 5})
 
 net_wired = net_widgets.indicator({
-    interfaces  = {"wlan0", "enp9s0", "lo"}, -- manual set current used interface with iwconfig
+    interfaces  = {"wlp3s0", "enp2s0", "lo"}, -- manual set current used interface with iwconfig
     timeout     = 5
 })
 
 
--- local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 
 
 -- Create a wibox for each screen and add it
@@ -279,15 +279,15 @@ awful.screen.connect_for_each_screen(function(s)
             },
             -- Add custom battery icon
 
-            -- batteryarc_widget({
-            --     show_current_level = true,
-            --     arc_thickness = 1,
-            -- }),
+             batteryarc_widget({
+                 show_current_level = true,
+                 arc_thickness = 1,
+             }),
 
             -- Add custom wifi icon
 
-            --     net_wireless,
-            --     net_internet,
+                 net_wireless,
+                 net_internet,
 
 
             -- Add speed network widget
@@ -410,8 +410,8 @@ globalkeys = gears.table.join(
         {description = "Launch Thunar", group = "apps"}),
 
     awful.key({ modkey, "Shift"}, "w",
-        function () awful.spawn("vivaldi-stable") end,
-        {description = "Launch Vivaldi", group = "apps"}),
+        function () awful.spawn("brave") end,
+        {description = "Launch Brave", group = "apps"}),
 
     awful.key({ modkey, }, "b",
         function () awful.spawn("bitwarden-desktop") end,
@@ -421,6 +421,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey, }, "a",
         function () awful.spawn("code") end,
         {description = "Launch Vscode", group = "apps"}),
+
+    awful.key({ modkey, }, "l",
+        function () awful.spawn("xlock") end,
+        {description = "Lock Screen", group = "client"}),
 
 
     -- Move current window to next tag or prev tag
