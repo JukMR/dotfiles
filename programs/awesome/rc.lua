@@ -1,3 +1,10 @@
+-- Configure widgets to show
+
+-- Global config variables
+
+battery = false
+wifi = false
+
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -226,6 +233,25 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+
+function show_battery(battery)
+    if battery then
+        return
+        batteryarc_widget({
+            show_current_level = true,
+            arc_thickness = 1,
+        })
+    end
+end
+
+function show_wifi(wifi)
+    if wifi then
+        return
+            net_wireless,
+            net_internet
+    end
+end
+
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -278,17 +304,11 @@ awful.screen.connect_for_each_screen(function(s)
                 onlock = function() awful.spawn.with_shell('i3lock-fancy') end
             },
             -- Add custom battery icon
+            show_battery(battery),
 
-             batteryarc_widget({
-                 show_current_level = true,
-                 arc_thickness = 1,
-             }),
 
             -- Add custom wifi icon
-
-                 net_wireless,
-                 net_internet,
-
+            show_wifi(wifi),
 
             -- Add speed network widget
             net_speed_widget(),
