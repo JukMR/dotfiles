@@ -443,7 +443,7 @@ globalkeys = gears.table.join(
         {description = "Launch Vscode", group = "apps"}),
 
     awful.key({ modkey, }, "l",
-        function () awful.spawn("xlock") end,
+        function () awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end,
         {description = "Lock Screen", group = "client"}),
 
 
