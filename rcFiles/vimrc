@@ -239,3 +239,7 @@ nnoremap q: :q
 
 "Space + e refresh file
 map <leader>e :e<cr>
+
+"Save and exit
+nnoremap <leader>x :x<cr>
+
