@@ -26,6 +26,7 @@ playerctl
 wireless_tools
 micro
 kitty
+btop
 "
 sudo pacman -Syu --noconfirm --needed $PROGRAMS &&
 
