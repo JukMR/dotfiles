@@ -27,6 +27,7 @@ wireless_tools
 micro
 kitty
 btop
+bluez-utils
 "
 sudo pacman -Syu --noconfirm --needed $PROGRAMS &&
 
