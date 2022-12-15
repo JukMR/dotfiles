@@ -4,7 +4,7 @@ dotdir="$HOME/dotfiles/"
 
 
 # Install fundamental programs
-PROGRAMS="git
+programs="git
 zsh
 openssh
 vsftpd
@@ -29,7 +29,7 @@ kitty
 btop
 bluez-utils
 "
-sudo pacman -Syu --noconfirm --needed $PROGRAMS &&
+sudo pacman -Syu --noconfirm --needed $programs &&
 
 # Install and set zsh
 $dotdir/programs/oh-my-zsh/zsh.sh &&
@@ -74,4 +74,13 @@ git config --global user.email "julianmr97@gmail.com"
 cd $HOME/.config/awesome
 git clone https://github.com/streetturtle/awesome-wm-widgets
 git clone https://github.com/pltanton/net_widgets.git
+
+# Pamac installation packages
+pamac_programs="
+mirage
+visual-studio-code-bin
+spotify
+"
+
+pamac install $pamac_programs
 
