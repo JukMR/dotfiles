@@ -1,0 +1,6 @@
+new_tab FirstTab
+cd ~/Desktop
+launch zsh
+
+new_tab SecondTab
+cd ~/Downloads
