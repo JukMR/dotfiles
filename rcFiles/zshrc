@@ -152,3 +152,10 @@ clip2image () {
   xclip -se c -t image/png -o >> $1
 }
 alias vi=vim
+
+alias xlock="locale
+locale -a
+localectl
+LANG=C LC_ALL=C xlock"
+
+alias sl="echo 'Wrong command. Should write ls'"
