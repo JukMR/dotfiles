@@ -75,6 +75,9 @@ cd $HOME/.config/awesome
 git clone https://github.com/streetturtle/awesome-wm-widgets
 git clone https://github.com/pltanton/net_widgets.git
 
+# Initiate cronjob wallpaper changer script
+$dotdir/scripts/create_cronjob.sh
+
 # Pamac installation packages
 pamac_programs="
 mirage
