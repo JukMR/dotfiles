@@ -28,6 +28,7 @@ micro
 kitty
 btop
 bluez-utils
+viewnior
 "
 sudo pacman -Syu --noconfirm --needed $programs &&
 
