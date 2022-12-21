@@ -17,7 +17,7 @@ export DISPLAY=":0"
 MONITORS=$( xrandr -q | grep ' connected' | wc -l )
 
 for (( i=0; i <= $MONITORS -1 ; i++ )); do
-  nitrogen --random --set-scaled --head=$i /home/julian/Pictures/wallpapers/
+  nitrogen --random --set-scaled --head=$i $HOME/Pictures/wallpapers/
 done
 
 exit
