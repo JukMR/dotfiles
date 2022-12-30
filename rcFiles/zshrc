@@ -159,3 +159,5 @@ localectl
 LANG=C LC_ALL=C xlock"
 
 alias sl="echo 'Wrong command. Should write ls'"
+alias show_network_qr="nmcli device wifi show-password"
+
