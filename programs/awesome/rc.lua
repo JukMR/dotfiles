@@ -565,7 +565,7 @@ globalkeys = gears.table.join(
         awful.spawn.with_shell("flameshot full -p /home/julian/Pictures/screenshots/") end,
         {description = "Capture and save full screen", group = "screenshot"}),
 
-    awful.key({ }, "#180", function ()
+    awful.key({ modkey, "Ctrl", "Shift" }, "s", function ()
         awful.util.spawn("systemctl suspend") end),
     -- End of Personal keybindings
 
