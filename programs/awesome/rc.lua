@@ -523,6 +523,18 @@ globalkeys = gears.table.join(
         -- awful.spawn("volume mute") end),
         awful.spawn("amixer -D pulse set Master 1+ toggle") end),
 
+    --- Volume keybindings without volume MediaKeys
+
+    awful.key({ modkey, "Ctrl", "Shift" }, "=", function ()
+        awful.spawn("amixer set Master 5%+") end),
+        -- awful.spawn("volume up") end),
+    awful.key({ modkey, "Ctrl", "Shift" }, "-", function ()
+        awful.spawn("amixer set Master 5%-") end),
+        -- awful.spawn("volume down") end),
+    awful.key({ modkey, "Ctrl", "Shift" }, "0", function ()
+        awful.spawn("amixer -D pulse set Master 1+ toggle") end),
+        -- awful.spawn("volume mute") end),
+
     --- MediaKeys keybindings
 
     awful.key({ }, "XF86AudioPlay", function ()
