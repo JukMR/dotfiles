@@ -537,13 +537,13 @@ globalkeys = gears.table.join(
 
     --- MediaKeys keybindings without MediaKeys
 
-    awful.key({ modkey, "Ctrl", "Shift" }, "7", function ()
+    awful.key({ modkey, "Ctrl", "Shift" }, "[", function ()
         awful.spawn("playerctl previous") end),
 
-    awful.key({ modkey, "Ctrl", "Shift" }, "8", function ()
+    awful.key({ modkey, "Ctrl", "Shift" }, "p", function ()
         awful.spawn("playerctl play-pause") end),
 
-    awful.key({ modkey, "Ctrl", "Shift" }, "9", function ()
+    awful.key({ modkey, "Ctrl", "Shift" }, "]", function ()
         awful.spawn("playerctl next") end),
 
     --- MediaKeys keybindings
