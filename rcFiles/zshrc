@@ -98,9 +98,6 @@ alias p='python3'
 alias o='xdg-open'
 alias nr='sudo service network-manager restart'
 
-alias br='sudo bluetooth on && sudo service bluetooth restart && blueman-manager'
-alias sbf="sudo bluetooth off && killall blueman-manager blueman-applet"
-alias sbn="sudo bluetooth on"
 alias gstpush="git stash push"
 alias os="echo lsb_release -a : && lsb_release -a ; echo uname && uname -a; echo hostnamectl && hostnamectl"
 alias calc="mate-calc &"
@@ -115,21 +112,12 @@ alias zshedit='vim ~/.zshrc'
 
 alias battery="upower -i /org/freedesktop/UPower/devices/battery_BAT0"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 stty -ixon
 
 alias cpclip='xclip -sel clip'
 
 # Make C-U delete all till beginning of line
 bindkey \^U backward-kill-line
-
-# Completion for kitty in zsh
-autoload -Uz compinit
-compinit
-kitty + complete setup zsh | source /dev/stdin
 
 # Add edit default kitty config file
 alias kittyconfig='vi ~/.config/kitty/kitty.conf'
