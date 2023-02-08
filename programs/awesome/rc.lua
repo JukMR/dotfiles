@@ -871,6 +871,11 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 --  }}}
 
+-- Run this line to allow polkit agent to run on start
+-- This allows graphicals interfaces to ask for authentication
+awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+
+
 -- Autorun apps
 
 -- Autorun programs
