@@ -81,6 +81,7 @@ git clone https://github.com/streetturtle/awesome-wm-widgets
 git clone https://github.com/pltanton/net_widgets.git
 
 # Initiate cronjob wallpaper changer script
+mkdir -p $HOME/Pictures/wallpapers
 $dotdir/scripts/create_cronjob.sh
 
 # Pamac installation packages
