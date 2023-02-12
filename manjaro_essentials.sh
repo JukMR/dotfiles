@@ -29,6 +29,7 @@ kitty
 btop
 bluez-utils
 viewnior
+brave-browser
 "
 sudo pacman -Syu --noconfirm --needed $programs &&
 
