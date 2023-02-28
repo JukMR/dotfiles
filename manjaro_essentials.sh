@@ -30,6 +30,7 @@ btop
 bluez-utils
 viewnior
 brave-browser
+xlockmore
 "
 sudo pacman -Syu --noconfirm --needed $programs &&
 
