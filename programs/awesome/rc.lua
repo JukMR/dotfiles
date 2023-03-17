@@ -438,7 +438,7 @@ globalkeys = gears.table.join(
         {description = "Launch Bitwarden", group = "apps"}),
 
 
-    awful.key({ modkey, }, "c",
+    awful.key({ modkey, "Control", "Shift" }, "c",
         function () awful.spawn("code") end,
         {description = "Launch Vscode", group = "apps"}),
 
