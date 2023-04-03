@@ -442,7 +442,7 @@ globalkeys = gears.table.join(
         function () awful.spawn("code") end,
         {description = "Launch Vscode", group = "apps"}),
 
-    awful.key({ modkey, }, "l",
+    awful.key({ modkey, "Control", "Shift" }, "l",
         function () awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end,
         {description = "Lock Screen", group = "client"}),
 
@@ -566,7 +566,7 @@ globalkeys = gears.table.join(
         awful.util.spawn("xbacklight -inc 5") end),
 
 
-    --- Spotify keybindings
+    -- Spotify keybindings
     -- set Music Media Key as spotify
     awful.key({ }, "#179", function ()
         awful.spawn("spotify") end,
@@ -574,12 +574,12 @@ globalkeys = gears.table.join(
 
 
 
-    --- Screenshooter
+    -- Screenshooter
     awful.key({ }, "#107", function ()
         awful.spawn("flameshot gui") end,
         {description = "Launch flameshot gui", group = "screenshot"}),
 
-    --- Screenshooter
+    -- Screenshooter
     awful.key({ "Shift" }, "#107", function ()
         awful.spawn.with_shell("flameshot screen -p /home/julian/Pictures/screenshots/") end,
         {description = "Capture and save current screen", group = "screenshot"}),
@@ -589,7 +589,9 @@ globalkeys = gears.table.join(
         {description = "Capture and save full screen", group = "screenshot"}),
 
     awful.key({ modkey, "Ctrl", "Shift" }, "s", function ()
-        awful.util.spawn("systemctl suspend") end),
+        awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end,
+        {description = "Suspend and lock session", group = "client"}),
+
     -- End of Personal keybindings
 
     awful.key({ modkey }, "x",
