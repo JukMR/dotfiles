@@ -12,7 +12,6 @@ evince
 gparted
 htop
 xclip
-gvim
 bat
 flameshot
 nitrogen
@@ -31,6 +30,7 @@ bluez-utils
 viewnior
 brave-browser
 xlockmore
+neovim
 "
 sudo pacman -Syu --noconfirm --needed "$programs" &&
 
@@ -44,15 +44,15 @@ sudo pacman -Syu --noconfirm --needed "$programs" &&
 "$dotdir"/scripts/keyboard-us-altgr-variant.sh &&
 
 # Copy rcFiles
-cp "$dotdir"/rcFiles/vimrc ~/.vimrc &&
+# cp "$dotdir"/rcFiles/vimrc ~/.vimrc &&
 cp ~/.zshrc ~/.old_zshrc &&
 cp "$dotdir"/rcFiles/zshrc ~/.zshrc &&
 
 # Install vim vundle
-"$dotdir"/programs/install-vundle/install.sh ;
+# "$dotdir"/programs/install-vundle/install.sh ;
 
 # Install all plugins
-vim +PluginInstall +qall &&
+# vim +PluginInstall +qall &&
 
 # Install kitty terminal
 # mkdir -p $HOME/.local/bin &&
