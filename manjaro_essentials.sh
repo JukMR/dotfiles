@@ -86,6 +86,9 @@ git clone https://github.com/pltanton/net_widgets.git
 mkdir -p "$HOME"/Pictures/wallpapers
 "$dotdir"/scripts/create_cronjob.sh
 
+# Install astronvim
+bash ./programs/astrovim/install.sh
+
 # Pamac installation packages
 # Find a way to install programs if one wasn't found
 # pamac_programs="
