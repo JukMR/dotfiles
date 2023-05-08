@@ -127,8 +127,8 @@ if [ -d "/opt/intel/oneapi/compiler/2021.1.1/linux/bin/intel64/icc" ] ; then
   PATH="/opt/intel/Compiler/11.0/083/bin:$PATH"
 fi
 
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/vim
+export EDITOR=/usr/bin/nvim
+export VISUAL=/usr/bin/nvim
 
 alias clippwd="pwd | xclip -se c"
 
