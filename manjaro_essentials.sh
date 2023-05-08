@@ -89,6 +89,9 @@ mkdir -p "$HOME"/Pictures/wallpapers
 # Install astronvim
 bash ./programs/astrovim/install.sh
 
+# Copy config nvim repo
+git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
+
 # Pamac installation packages
 # Find a way to install programs if one wasn't found
 # pamac_programs="
