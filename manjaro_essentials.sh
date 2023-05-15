@@ -71,6 +71,7 @@ cp -ur "$dotdir"/programs/awesome "$HOME"/.config
 
 # Move kitty config
 mkdir -p "$HOME"/.config/kitty &&
+cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf
 cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
 
 # Configure git name and email
