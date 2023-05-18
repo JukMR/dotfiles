@@ -32,8 +32,7 @@ brave-browser
 xlockmore
 neovim
 "
-sudo pacman -Syu --noconfirm --needed "$programs" &&
-
+sudo pacman -Syu --noconfirm --needed $programs &&
 # Install and set zsh
 "$dotdir"/programs/oh-my-zsh/zsh.sh &&
 "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh &&
