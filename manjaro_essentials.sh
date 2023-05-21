@@ -2,9 +2,11 @@
 
 dotdir="$HOME/dotfiles/"
 
+set -eu
 
 # Install fundamental programs
-programs="git
+programs="
+git
 zsh
 openssh
 vsftpd
@@ -32,30 +34,33 @@ brave-browser
 xlockmore
 neovim
 "
-sudo pacman -Syu --noconfirm --needed $programs &&
+
+echo "$programs" | sudo pacman -Syu --noconfirm --needed -
+
+
 # Install and set zsh
-"$dotdir"/programs/oh-my-zsh/zsh.sh &&
-"$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh &&
-"$dotdir"/programs/oh-my-zsh/autosuggestion.sh ;
+"$dotdir"/programs/oh-my-zsh/zsh.sh
+"$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
+"$dotdir"/programs/oh-my-zsh/autosuggestion.sh
 
 # Set permanent shortcuts
-"$dotdir"/scripts/gitlola.sh &&
-"$dotdir"/scripts/keyboard-us-altgr-variant.sh &&
+"$dotdir"/scripts/gitlola.sh
+"$dotdir"/scripts/keyboard-us-altgr-variant.sh
 
 # Copy rcFiles
-# cp "$dotdir"/rcFiles/vimrc ~/.vimrc &&
-cp ~/.zshrc ~/.old_zshrc &&
-cp "$dotdir"/rcFiles/zshrc ~/.zshrc &&
+# cp "$dotdir"/rcFiles/vimrc ~/.vimrc
+cp ~/.zshrc ~/.old_zshrc
+cp "$dotdir"/rcFiles/zshrc ~/.zshrc
 
 # Install vim vundle
 # "$dotdir"/programs/install-vundle/install.sh ;
 
 # Install all plugins
-# vim +PluginInstall +qall &&
+# vim +PluginInstall +qall
 
 # Install kitty terminal
-# mkdir -p $HOME/.local/bin &&
-# mkdir -p $HOME/.local/share/applications &&
+# mkdir -p $HOME/.local/bin
+# mkdir -p $HOME/.local/share/applications
 # "$dotdir"/programs/kitty/install.sh
 
 # Change default shell to zsh
@@ -65,11 +70,11 @@ then
 fi
 
 # Move awesome rc.lua config
-mkdir -p "$HOME"/.config/awesome &&
+mkdir -p "$HOME"/.config/awesome
 cp -ur "$dotdir"/programs/awesome "$HOME"/.config
 
 # Move kitty config
-mkdir -p "$HOME"/.config/kitty &&
+mkdir -p "$HOME"/.config/kitty
 cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf
 cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
 
