@@ -25,7 +25,6 @@ netcat
 awesome
 playerctl
 wireless_tools
-micro
 kitty
 btop
 bluez-utils
