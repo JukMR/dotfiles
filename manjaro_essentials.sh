@@ -10,7 +10,6 @@ git
 zsh
 openssh
 vsftpd
-evince
 gparted
 htop
 xclip
