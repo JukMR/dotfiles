@@ -31,6 +31,7 @@ viewnior
 brave-browser
 xlockmore
 neovim
+tmux
 "
 
 echo "$programs" | sudo pacman -Syu --noconfirm --needed -
