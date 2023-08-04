@@ -95,7 +95,7 @@ awful.layout.layouts = {
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
    { "manual", terminal .. " -e man awesome" },
-   { "edit conf vim", editor_cmd .. " " .. awesome.conffile },
+   { "edit conf nvim", editor_cmd .. " " .. awesome.conffile },
    { "edit conf vscode", "code" .. " " .. awesome.conffile },
    { "reboot", "reboot"},
    { "shutdown", "poweroff"},
@@ -580,12 +580,12 @@ globalkeys = gears.table.join(
         {description = "Launch flameshot gui", group = "screenshot"}),
 
     -- Screenshooter
-    awful.key({ "Shift" }, "#107", function ()
-        awful.spawn.with_shell("flameshot screen -p /home/julian/Pictures/screenshots/") end,
+    awful.key({ "Shift", modkey }, "#107", function ()
+        awful.spawn.with_shell("mkdir -p $HOME/Pictures/screenshots/ && flameshot screen -p $HOME/Pictures/screenshots/") end,
         {description = "Capture and save current screen", group = "screenshot"}),
 
-    awful.key({ "Shift", "Mod1" }, "#107", function ()
-        awful.spawn.with_shell("flameshot full -p /home/julian/Pictures/screenshots/") end,
+    awful.key({ "Shift" }, "#107", function ()
+        awful.spawn.with_shell("mkdir -p $HOME/Pictures/screenshots/ && flameshot full -p $HOME/Pictures/screenshots/") end,
         {description = "Capture and save full screen", group = "screenshot"}),
 
     awful.key({ modkey, "Ctrl", "Shift" }, "s", function ()
