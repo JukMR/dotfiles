@@ -6,35 +6,34 @@ volume_widget = wibox.widget.textbox()
 volume_widget:set_align("right")
 
 function update_volume(widget)
-   local fd = io.popen("amixer sget Master")
-   local status = fd:read("*all")
-   fd:close()
+    local fd = io.popen("amixer sget Master")
+    local status = fd:read("*all")
+    fd:close()
 
-   -- local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
-   local volume = string.match(status, "(%d?%d?%d)%%")
-   volume = string.format("% 3d", volume)
+    -- local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
+    local volume = string.match(status, "(%d?%d?%d)%%")
+    volume = string.format("% 3d", volume)
 
-   status = string.match(status, "%[(o[^%]]*)%]")
+    status = string.match(status, "%[(o[^%]]*)%]")
 
-   if string.find(status, "on", 1, true) then
-       -- For the volume numbers
-       volume = volume .. "%"
-   else
-       -- For the mute button
-       volume = volume .. "M"
-
-   end
-   widget:set_markup(volume)
+    if string.find(status, "on", 1, true) then
+        -- For the volume numbers
+        volume = volume .. "%"
+    else
+        -- For the mute button
+        volume = volume .. "M"
+    end
+    widget:set_markup(volume)
 end
 
 update_volume(volume_widget)
 
 
-mytimer = gears.timer{
+mytimer = gears.timer {
     timeout = 1,
     autostart = true,
     call_now = true,
-    callback = function () update_volume(volume_widget) end
+    callback = function() update_volume(volume_widget) end
 }
 
 -- mytimer = gears.timer({ timeout = 0.2 })
