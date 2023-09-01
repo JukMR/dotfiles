@@ -2,7 +2,6 @@
 
 dotdir=$HOME/dotfiles
 
-
 diff -su --color "$dotdir"/rcFiles/zshrc ~/.zshrc
 diff -su --color "$dotdir"/rcFiles/vimrc ~/.vimrc
 diff -su --color "$dotdir"/rcFiles/bashrc ~/.bashrc
