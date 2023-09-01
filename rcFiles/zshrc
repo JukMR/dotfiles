@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -123,7 +123,7 @@ bindkey \^U backward-kill-line
 alias kittyconfig='vi ~/.config/kitty/kitty.conf'
 
 # Set Intel OneApi path
-if [ -d "/opt/intel/oneapi/compiler/2021.1.1/linux/bin/intel64/icc" ] ; then
+if [ -d "/opt/intel/oneapi/compiler/2021.1.1/linux/bin/intel64/icc" ]; then
   PATH="/opt/intel/Compiler/11.0/083/bin:$PATH"
 fi
 
@@ -132,12 +132,12 @@ export VISUAL=/usr/bin/nvim
 
 alias clippwd="pwd | xclip -se c"
 
-clip () {
+clip() {
   cat $1 | xclip -se c
 }
 
-clip2image () {
-  xclip -se c -t image/png -o >> $1
+clip2image() {
+  xclip -se c -t image/png -o >>$1
 }
 alias vi=vim
 
