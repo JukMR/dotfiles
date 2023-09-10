@@ -1,8 +1,23 @@
 #!/bin/bash
 
+# Script to set up a new Linux environment
+# Author: Julian Merida
+# Last Updated: $(date +%Y-%m-%d)
+
+# Check for root
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
 dotdir="$HOME/dotfiles/"
 
+# Enable strict mode
 set -eu
+
+# Logging
+exec > >(tee -i $HOME/dotfiles_setup.log)
+exec 2>&1
 
 # Install fundamental programs
 programs="
@@ -34,8 +49,14 @@ neovim
 tmux
 "
 
-echo "$programs" | sudo pacman -Syu --noconfirm --needed -
-
+# Conditional package installation
+for prog in $programs; do
+  if ! command -v "$prog" &>/dev/null; then
+    sudo pacman -Syu --noconfirm --needed $prog
+  else
+    echo "$prog is already installed."
+  fi
+done
 
 # Install and set zsh
 "$dotdir"/programs/oh-my-zsh/zsh.sh
@@ -46,33 +67,20 @@ echo "$programs" | sudo pacman -Syu --noconfirm --needed -
 "$dotdir"/scripts/gitlola.sh
 "$dotdir"/scripts/keyboard-us-altgr-variant.sh
 
-# Copy rcFiles
-# cp "$dotdir"/rcFiles/vimrc ~/.vimrc
+# Backup and copy rcFiles
 cp ~/.zshrc ~/.old_zshrc
 cp "$dotdir"/rcFiles/zshrc ~/.zshrc
 
-# Install vim vundle
-# "$dotdir"/programs/install-vundle/install.sh ;
-
-# Install all plugins
-# vim +PluginInstall +qall
-
-# Install kitty terminal
-# mkdir -p $HOME/.local/bin
-# mkdir -p $HOME/.local/share/applications
-# "$dotdir"/programs/kitty/install.sh
-
 # Change default shell to zsh
-if [ "$SHELL" != "/bin/zsh" ]
-then
+if [ "$SHELL" != "/bin/zsh" ]; then
   chsh -s "$(which zsh)"
 fi
 
-# Move awesome rc.lua config
+# Backup and move awesome rc.lua config
 mkdir -p "$HOME"/.config/awesome
 cp -ur "$dotdir"/programs/awesome "$HOME"/.config
 
-# Move kitty config
+# Backup and move kitty config
 mkdir -p "$HOME"/.config/kitty
 cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf
 cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
@@ -97,14 +105,6 @@ bash ./programs/astrovim/install.sh
 git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
 
 # Pamac installation packages
-# Find a way to install programs if one wasn't found
-# pamac_programs="
-# mirage
-# visual-studio-code-bin
-# spotify
-# "
-
-pamac install visual-studio-code-bin
-pamac install spotify
-pamac install mirage
-
+pamac install visual-studio-code-bin --no-confirm
+pamac install spotify --no-confirm
+pamac install mirage --no-confirm
