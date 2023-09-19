@@ -1,3 +1,15 @@
 #!/bin/bash
 
-cp kitty.conf ~/.config/kitty
+# Define the destination path
+DEST_PATH="$HOME/.config/kitty/kitty.conf"
+
+# Check if the destination file already exists
+if [ -f "$DEST_PATH" ]; then
+    # Create a backup of the existing file with a timestamp
+    cp "$DEST_PATH" "$DEST_PATH.backup_$(date +%Y%m%d_%H%M%S)"
+    echo "Existing kitty.conf found. Backup saved as kitty.conf.backup_$(date +%Y%m%d_%H%M%S)"
+fi
+
+# Copy the new configuration file
+cp kitty.conf "$DEST_PATH"
+echo "kitty.conf has been copied to $DEST_PATH"
