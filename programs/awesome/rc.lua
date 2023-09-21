@@ -96,23 +96,39 @@ awful.layout.layouts = {
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
+local myawesomemenu = {
     { "hotkeys",          function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
     { "manual",           terminal .. " -e man awesome" },
     { "edit conf nvim",   editor_cmd .. " " .. awesome.conffile },
     { "edit conf vscode", "code" .. " " .. awesome.conffile },
-    { "reboot",           "reboot" },
-    { "shutdown",         "poweroff" },
-    { "restart awesome",  awesome.restart },
-    { "quit",             function() awesome.quit() end },
+
+}
+
+local power_options_group = {
+    { "lock_session", function() awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end },
+    { "suspend",
+        function()
+            awful.spawn.with_shell(
+                'systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock')
+        end },
+    { "reboot",       "reboot" },
+    { "shutdown",     "poweroff" },
+}
+
+local awesome_power_options = {
+    { "restart awesome", awesome.restart },
+    { "quit awesome",    function() awesome.quit() end },
 }
 
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
+
 mymainmenu = awful.menu({
-    items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+    items = { { "awesome", myawesomemenu,    beautiful.awesome_icon },
         { "open terminal", terminal },
+        { "power options", power_options_group },
+        { "awesome power", awesome_power_options },
         { "brave",         "brave" },
     }
 })
