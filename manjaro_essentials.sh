@@ -5,10 +5,10 @@
 # Last Updated: $(date +%Y-%m-%d)
 
 # Check for root
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root"
-  exit 1
-fi
+#if [[ $EUID -ne 0 ]]; then
+#  echo "This script must be run as root"
+#  exit 1
+#fi
 
 dotdir="$HOME/dotfiles/"
 
@@ -58,10 +58,15 @@ for prog in $programs; do
   fi
 done
 
+
 # Install and set zsh
-"$dotdir"/programs/oh-my-zsh/zsh.sh
-"$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
-"$dotdir"/programs/oh-my-zsh/autosuggestion.sh
+if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
+    # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
+    "$dotdir"/programs/oh-my-zsh/zsh.sh
+    "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
+    "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
+fi
+
 
 # Set permanent shortcuts
 "$dotdir"/scripts/gitlola.sh
@@ -82,7 +87,7 @@ cp -ur "$dotdir"/programs/awesome "$HOME"/.config
 
 # Backup and move kitty config
 mkdir -p "$HOME"/.config/kitty
-cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf
+cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
 cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
 
 # Configure git name and email
@@ -90,19 +95,28 @@ git config --global user.name "Julian Merida"
 git config --global user.email "julianmr97@gmail.com"
 
 # Clone awesome plugin repositories
-cd "$HOME"/.config/awesome || exit
-git clone https://github.com/streetturtle/awesome-wm-widgets
-git clone https://github.com/pltanton/net_widgets.git
+if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
+    cd "$HOME"/.config/awesome || exit
+    git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
+    git clone https://github.com/pltanton/net_widgets.git
+else
+    echo "Directory awesome-wm-widgets already exists."
+fi
 
 # Initiate cronjob wallpaper changer script
 mkdir -p "$HOME"/Pictures/wallpapers
 "$dotdir"/scripts/create_cronjob.sh
 
 # Install astronvim
-bash ./programs/astrovim/install.sh
+bash "$dotdir"/programs/astrovim/install.sh
 
 # Copy config nvim repo
 git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
+
+
+# Enable AUR in pamac.conf
+sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
+
 
 # Pamac installation packages
 pamac install visual-studio-code-bin --no-confirm
