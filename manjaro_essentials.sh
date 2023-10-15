@@ -120,4 +120,3 @@ sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 # Pamac installation packages
 pamac install visual-studio-code-bin --no-confirm
 pamac install spotify --no-confirm
-pamac install mirage --no-confirm
