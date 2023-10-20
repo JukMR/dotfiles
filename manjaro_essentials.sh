@@ -47,6 +47,7 @@ brave-browser
 xlockmore
 neovim
 tmux
+xorg-xrandr
 "
 
 # Conditional package installation
