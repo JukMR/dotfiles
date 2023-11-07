@@ -381,7 +381,7 @@ globalkeys = gears.table.join(
         end,
         { description = "focus previous by index", group = "client" }
     ),
-    awful.key({ modkey, }, "w", function() mymainmenu:show() end,
+    awful.key({ modkey, }, "`", function() mymainmenu:show() end,
         { description = "show main menu", group = "awesome" }),
 
     -- Layout manipulation
@@ -531,6 +531,11 @@ globalkeys = gears.table.join(
         { description = "move client to next tag and switch to it", group = "layout" }),
 
 
+    --- Rofi keybindings
+    awful.key({ modkey }, "w", function()
+        awful.spawn("rofi -show window")
+    end),
+
     --- Volume keybindings
 
     awful.key({}, "XF86AudioRaiseVolume", function()
@@ -593,12 +598,22 @@ globalkeys = gears.table.join(
 
     -- Brightness
 
-    awful.key({}, "XF86MonBrightnessDown", function()
-        awful.util.spawn("xbacklight -dec 5")
-    end),
+    -- awful.key({}, "XF86MonBrightnessDown", function()
+    --     awful.util.spawn("xbacklight -dec 5")
+    -- end),
+    -- awful.key({}, "XF86MonBrightnessUp", function()
+    --     awful.util.spawn("xbacklight -inc 5")
+    -- end),
+
+    -- New brightness
+
+    -- Brightness Control with brightnessctl
     awful.key({}, "XF86MonBrightnessUp", function()
-        awful.util.spawn("xbacklight -inc 5")
-    end),
+        awful.spawn("brightnessctl set +1000", false)
+    end, { description = "increase brightness", group = "custom" }),
+    awful.key({}, "XF86MonBrightnessDown", function()
+        awful.spawn("brightnessctl set 1000-", false)
+    end, { description = "decrease brightness", group = "custom" }),
 
 
     -- Spotify keybindings
