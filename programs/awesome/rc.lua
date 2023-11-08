@@ -946,6 +946,7 @@ awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-a
 autorun = true
 autorunApps =
 {
+    "nm-applet",
     "xfsettingsd --daemon",
     "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
     "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",

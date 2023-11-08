@@ -48,6 +48,7 @@ xlockmore
 neovim
 tmux
 xorg-xrandr
+nm-applet
 "
 
 # Conditional package installation
@@ -59,15 +60,13 @@ for prog in $programs; do
   fi
 done
 
-
 # Install and set zsh
 if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
-    # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
-    "$dotdir"/programs/oh-my-zsh/zsh.sh
-    "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
-    "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
+  # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
+  "$dotdir"/programs/oh-my-zsh/zsh.sh
+  "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
+  "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
 fi
-
 
 # Set permanent shortcuts
 "$dotdir"/scripts/gitlola.sh
@@ -97,11 +96,11 @@ git config --global user.email "julianmr97@gmail.com"
 
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
-    cd "$HOME"/.config/awesome || exit
-    git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
-    git clone https://github.com/pltanton/net_widgets.git
+  cd "$HOME"/.config/awesome || exit
+  git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
+  git clone https://github.com/pltanton/net_widgets.git
 else
-    echo "Directory awesome-wm-widgets already exists."
+  echo "Directory awesome-wm-widgets already exists."
 fi
 
 # Initiate cronjob wallpaper changer script
@@ -114,10 +113,8 @@ bash "$dotdir"/programs/astrovim/install.sh
 # Copy config nvim repo
 git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
 
-
 # Enable AUR in pamac.conf
 sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
-
 
 # Pamac installation packages
 pamac install visual-studio-code-bin --no-confirm
