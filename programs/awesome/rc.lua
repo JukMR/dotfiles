@@ -950,7 +950,8 @@ autorunApps =
     "xfsettingsd --daemon",
     "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
     "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
-    "xfce4-power-manager"
+    "xfce4-power-manager",
+    "volumeicon"
 }
 if autorun then
     for app = 1, #autorunApps do

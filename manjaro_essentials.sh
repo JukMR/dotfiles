@@ -49,6 +49,7 @@ neovim
 tmux
 xorg-xrandr
 nm-applet
+volumeicon
 "
 
 # Conditional package installation
