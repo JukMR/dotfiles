@@ -942,21 +942,30 @@ awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-a
 
 -- Autorun apps
 
--- Autorun programs
-autorun = true
-autorunApps =
-{
-    "nm-applet",
-    "xfsettingsd --daemon",
+local function run_once(cmd)
+    local findme = cmd
+    local firstspace = cmd:find(" ")
+    if firstspace then
+        findme = cmd:sub(0, firstspace - 1)
+    end
+    -- Use pgrep to find the process by name and only run the command if it doesn't exist
+    awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
+end
+
+-- Now you can call run_once with the command for each application
+run_once("volumeicon")
+run_once("nm-applet")
+run_once("xfce4-power-manager")
+run_once("xfsettingsd --daemon")
+
+-- Other autorun programs
+local autorunApps = {
     "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
     "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
-    "xfce4-power-manager",
-    "volumeicon"
 }
-if autorun then
-    for app = 1, #autorunApps do
-        awful.spawn.single_instance(autorunApps[app])
-    end
+
+for _, app in ipairs(autorunApps) do
+    run_once(app)
 end
 
 
