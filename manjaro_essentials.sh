@@ -48,7 +48,7 @@ xlockmore
 neovim
 tmux
 xorg-xrandr
-nm-applet
+network-manager-applet
 volumeicon
 "
 
