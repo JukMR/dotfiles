@@ -105,11 +105,11 @@ local myawesomemenu = {
 }
 
 local power_options_group = {
-    { "lock_session", function() awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end },
+    { "lock_session", function() awful.spawn.with_shell("dm-tool lock") end },
     { "suspend",
         function()
             awful.spawn.with_shell(
-                'systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock')
+                'systemctl suspend && dm-tool lock')
         end },
     { "reboot",       "reboot" },
     { "shutdown",     "poweroff" },
@@ -465,7 +465,7 @@ globalkeys = gears.table.join(
         { description = "Launch Vscode", group = "apps" }),
 
     awful.key({ modkey, "Control", "Shift" }, "l",
-        function() awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock") end,
+        function() awful.spawn.with_shell("dm-tool lock") end,
         { description = "Lock Screen", group = "client" }),
 
 
@@ -535,6 +535,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "w", function()
         awful.spawn("rofi -show window")
     end),
+
 
     --- Volume keybindings
 
@@ -643,7 +644,7 @@ globalkeys = gears.table.join(
         end,
         { description = "Capture and save full screen", group = "screenshot" }),
     awful.key({ modkey, "Ctrl", "Shift" }, "s", function()
-            awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
+            awful.spawn.with_shell("systemctl suspend && dm-tool lock")
         end,
         { description = "Suspend and lock session", group = "client" }),
 
