@@ -50,6 +50,7 @@ tmux
 xorg-xrandr
 network-manager-applet
 volumeicon
+brightnessctl
 "
 
 # Conditional package installation
