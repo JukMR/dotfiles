@@ -51,6 +51,7 @@ xorg-xrandr
 network-manager-applet
 volumeicon
 brightnessctl
+trash-cli
 "
 
 # Conditional package installation
