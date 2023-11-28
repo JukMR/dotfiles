@@ -348,6 +348,7 @@ end)
 
 
 
+
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
     awful.button({}, 3, function() mymainmenu:toggle() end)
@@ -802,6 +803,48 @@ clientbuttons = gears.table.join(
     end)
 )
 
+
+-- Function to swap clients between the current tag and another specified tag
+-- Win+Alt+number: swap current tag with tag number
+
+-- Local function for swapping client
+local function swap_clients_with_tag(other_tag)
+    if not other_tag then
+        return
+    end
+
+    local current_tag = awful.screen.focused().selected_tag
+    if current_tag == other_tag then
+        return -- Do nothing if the tags are the same
+    end
+
+    local clients_current = current_tag:clients()
+    local clients_other = other_tag:clients()
+
+    for _, c in ipairs(clients_current) do
+        c:move_to_tag(other_tag)
+    end
+
+    for _, c in ipairs(clients_other) do
+        c:move_to_tag(current_tag)
+    end
+end
+
+
+-- Keybindings for modkey + Alt + number
+for i = 1, 9 do
+    globalkeys = awful.util.table.join(globalkeys,
+        awful.key({ modkey, "Mod1" }, "#" .. i + 9,
+            function ()
+                local screen = awful.screen.focused()
+                local tag = screen.tags[i]
+                if tag then
+                    swap_clients_with_tag(tag)
+                end
+            end,
+            {description = "swap with tag #"..i, group = "tag"})
+    )
+end
 
 -- Set keys
 root.keys(globalkeys)
