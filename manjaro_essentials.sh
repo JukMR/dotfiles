@@ -52,6 +52,7 @@ network-manager-applet
 volumeicon
 brightnessctl
 trash-cli
+yay
 "
 
 # Conditional package installation
@@ -120,5 +121,5 @@ git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
 sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 
 # Pamac installation packages
-pamac install visual-studio-code-bin --no-confirm
-pamac install spotify --no-confirm
+yay -S visual-studio-code-bin --noconfirm
+yay -S spotify --noconfirm
