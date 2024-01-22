@@ -105,11 +105,11 @@ local myawesomemenu = {
 }
 
 local power_options_group = {
-    { "lock_session", function() awful.spawn.with_shell("dm-tool lock") end },
+    { "lock_session", function() awful.spawn.with_shell("xlock") end },
     { "suspend",
         function()
             awful.spawn.with_shell(
-                'systemctl suspend && dm-tool lock')
+                'systemctl suspend && xlock')
         end },
     { "reboot",       "reboot" },
     { "shutdown",     "poweroff" },
@@ -466,7 +466,7 @@ globalkeys = gears.table.join(
         { description = "Launch Vscode", group = "apps" }),
 
     awful.key({ modkey, "Control", "Shift" }, "l",
-        function() awful.spawn.with_shell("dm-tool lock") end,
+        function() awful.spawn.with_shell("xlock") end,
         { description = "Lock Screen", group = "client" }),
 
 
@@ -645,7 +645,7 @@ globalkeys = gears.table.join(
         end,
         { description = "Capture and save full screen", group = "screenshot" }),
     awful.key({ modkey, "Ctrl", "Shift" }, "s", function()
-            awful.spawn.with_shell("systemctl suspend && dm-tool lock")
+            awful.spawn.with_shell("systemctl suspend && xlock")
         end,
         { description = "Suspend and lock session", group = "client" }),
 
