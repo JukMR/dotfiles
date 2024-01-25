@@ -16,8 +16,17 @@ dotdir="$HOME/dotfiles/"
 set -eu
 
 # Logging
-exec > >(tee -i $HOME/dotfiles_setup.log)
+exec > >(tee -i "$HOME"/dotfiles_setup.log)
 exec 2>&1
+
+# Install kitty terminal
+# Check if kitty is installed
+if ! command -v kitty &>/dev/null; then
+  echo "Installing kitty terminal"
+  bash "$dotdir"/programs/kitty/install.sh
+else
+  echo "Kitty terminal is already installed."
+fi
 
 # Install fundamental programs
 programs="
@@ -39,7 +48,6 @@ netcat
 awesome
 playerctl
 wireless_tools
-kitty
 btop
 bluez-utils
 viewnior
@@ -58,7 +66,7 @@ yay
 # Conditional package installation
 for prog in $programs; do
   if ! command -v "$prog" &>/dev/null; then
-    sudo pacman -Syu --noconfirm --needed $prog
+    sudo pacman -Syu --noconfirm --needed "$prog"
   else
     echo "$prog is already installed."
   fi
