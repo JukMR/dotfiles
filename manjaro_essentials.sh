@@ -66,7 +66,7 @@ yay
 # Conditional package installation
 for prog in $programs; do
   if ! command -v "$prog" &>/dev/null; then
-    sudo pacman -Syu --noconfirm --needed "$prog"
+    sudo yay -Syyu --noconfirm --needed "$prog"
   else
     echo "$prog is already installed."
   fi
@@ -103,11 +103,16 @@ cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf || echo
 cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
 
 # Configure git name and email
-git config --global user.name "Julian Merida"
-git config --global user.email "julianmr97@gmail.com"
+GIT_NAME="Julian Merida"
+GIT_EMAIL="julianmr97@gmail.com"
+
+echo "Configuring git name: $GIT_NAME and email: $GIT_EMAIL"
+git config --global user.name "$GIT_NAME"
+git config --global user.email "$GIT_EMAIL"
 
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
+  echo "Cloning awesome-wm-widgets repository"
   cd "$HOME"/.config/awesome || exit
   git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
   git clone https://github.com/pltanton/net_widgets.git
@@ -116,18 +121,22 @@ else
 fi
 
 # Initiate cronjob wallpaper changer script
+echo "Initiating cronjob wallpaper changer script"
 mkdir -p "$HOME"/Pictures/wallpapers
 "$dotdir"/scripts/create_cronjob.sh
 
 # Install astronvim
+echo "Installing astrovim"
 bash "$dotdir"/programs/astrovim/install.sh
 
 # Copy config nvim repo
+echo "Copying nvim config"
 git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
 
 # Enable AUR in pamac.conf
+
 sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 
 # Pamac installation packages
-yay -S visual-studio-code-bin --noconfirm
-yay -S spotify --noconfirm
+yay -S --noconfirm visual-studio-code-bin
+yay -S --noconfirm spotify
