@@ -28,6 +28,15 @@ else
   echo "Kitty terminal is already installed."
 fi
 
+# Install yay
+# Check if yay is installed
+if ! command -v yay &>/dev/null; then
+  echo "Installing yay"
+  bash pacman -S --no-confirm --needed yay
+else
+  echo "Yay is already installed."
+fi
+
 # Install fundamental programs
 programs="
 git
@@ -66,7 +75,7 @@ yay
 # Conditional package installation
 for prog in $programs; do
   if ! command -v "$prog" &>/dev/null; then
-    sudo yay -Syyu --noconfirm --needed "$prog"
+    sudo pacman -Syyu --noconfirm --needed "$prog"
   else
     echo "$prog is already installed."
   fi
