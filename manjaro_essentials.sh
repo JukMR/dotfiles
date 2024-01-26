@@ -69,7 +69,6 @@ network-manager-applet
 volumeicon
 brightnessctl
 trash-cli
-yay
 "
 
 # Conditional package installation
