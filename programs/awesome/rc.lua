@@ -1006,6 +1006,9 @@ run_once("xfsettingsd --daemon")
 local autorunApps = {
     "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
     "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
+    "kitty",
+    "kitty --start-as maximized btop",
+    "copyq"
 }
 
 for _, app in ipairs(autorunApps) do
