@@ -1002,13 +1002,17 @@ run_once("nm-applet")
 run_once("xfce4-power-manager")
 run_once("xfsettingsd --daemon")
 
+-- Run even though it is already running
+awful.spawn.with_shell("kitty")
+awful.spawn.with_shell("kitty --start-as maximized btop")
+
 -- Other autorun programs
 local autorunApps = {
     "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
     "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
-    "kitty",
-    "kitty --start-as maximized btop",
-    "copyq"
+    "brave",
+    "copyq",
+    "qbittorrent",
 }
 
 for _, app in ipairs(autorunApps) do
