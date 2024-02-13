@@ -1,7 +1,5 @@
 -- Configure widgets to show
-
 -- Global config variables
-
 battery = true
 wifi = true
 
@@ -41,7 +39,9 @@ do
     local in_error = false
     awesome.connect_signal("debug::error", function(err)
         -- Make sure we don't go into an endless error loop
-        if in_error then return end
+        if in_error then
+            return
+        end
         in_error = true
 
         naughty.notify({
@@ -53,9 +53,6 @@ do
     end)
 end
 -- }}}
-
-
-
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -74,21 +71,11 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
-    awful.layout.suit.floating,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
+awful.layout.layouts = { awful.layout.suit.floating, awful.layout.suit.tile, awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom, awful.layout.suit.tile.top, awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal, awful.layout.suit.spiral, awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.max, awful.layout.suit.max.fullscreen, awful.layout.suit.magnifier,
+    awful.layout.suit.corner.nw -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
@@ -256,22 +243,18 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-
 function show_battery(battery)
     if battery then
-        return
-            batteryarc_widget({
-                show_current_level = true,
-                arc_thickness = 1,
-            })
+        return batteryarc_widget({
+            show_current_level = true,
+            arc_thickness = 1
+        })
     end
 end
 
 function show_wifi(wifi)
     if wifi then
-        return
-            net_wireless,
-            net_internet
+        return net_wireless, net_internet
     end
 end
 
@@ -316,7 +299,7 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
             s.mytaglist,
-            s.mypromptbox,
+            s.mypromptbox
         },
         s.mytasklist, -- Middle widget
         {             -- Right widgets
@@ -324,11 +307,12 @@ awful.screen.connect_for_each_screen(function(s)
             --- Add custom logout button widget
             logout_menu_widget {
                 font = 'Play 14',
-                onlock = function() awful.spawn.with_shell('i3lock-fancy') end
+                onlock = function()
+                    awful.spawn.with_shell('i3lock-fancy')
+                end
             },
             -- Add custom battery icon
             show_battery(battery),
-
 
             -- Add custom wifi icon
             show_wifi(wifi),
@@ -852,8 +836,7 @@ root.keys(globalkeys)
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
-awful.rules.rules = {
-    -- All clients will match this rule.
+awful.rules.rules = { -- All clients will match this rule.
     {
         rule = {},
         properties = {
@@ -922,9 +905,7 @@ client.connect_signal("manage", function(c)
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
 
-    if awesome.startup
-        and not c.size_hints.user_position
-        and not c.size_hints.program_position then
+    if awesome.startup and not c.size_hints.user_position and not c.size_hints.program_position then
         -- Prevent clients from being unreachable after screen count changes.
         awful.placement.no_offscreen(c)
     end
@@ -972,28 +953,53 @@ end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", { raise = false })
+    c:emit_signal("request::activate", "mouse_enter", {
+        raise = false
+    })
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("focus", function(c)
+    c.border_color = beautiful.border_focus
+end)
+client.connect_signal("unfocus", function(c)
+    c.border_color = beautiful.border_normal
+end)
 --  }}}
 
 -- Run this line to allow polkit agent to run on start
 -- This allows graphicals interfaces to ask for authentication
 awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
+-- Create log log file
+local HOME_DIRECTORY = os.getenv("HOME")
+local LOG_FILE = HOME_DIRECTORY .. "/awesome.logs"
+
+local mylog = io.open(LOG_FILE, "a")
+mylog:write("Your debug message\n")
 
 -- Autorun apps
 
+local function is_exact_process_running(command)
+    -- mylog:write(command)
+    local escaped_command = command:gsub('"', '') -- Properly escape double quotes for shell
+    local pgrep_command = string.format("pgrep -u $USER -af '%s' | grep -E '[0-9]+ [^ ]*%s[^ ]*$' | grep -v grep",
+        escaped_command, escaped_command)
+
+    -- mylog:write("Executing command:\n", pgrep_command, '\n') -- Debug print
+    local handle = io.popen(pgrep_command)
+    local result = handle:read("*a")
+    handle:close()
+
+    -- Check if result is not empty, indicating processes were found
+    -- mylog:write('result is: ', result, '\n') -- Debug print
+    return result ~= ""
+end
+
 local function run_once(cmd)
-    local findme = cmd
-    local firstspace = cmd:find(" ")
-    if firstspace then
-        findme = cmd:sub(0, firstspace - 1)
+    -- Escape special characters in cmd for accurate pattern matching
+    if not is_exact_process_running(cmd) then
+        awful.spawn.with_shell(cmd)
     end
-    -- Use pgrep to find the process by name and only run the command if it doesn't exist
-    awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
 end
 
 -- Now you can call run_once with the command for each application
@@ -1002,26 +1008,26 @@ run_once("nm-applet")
 run_once("xfce4-power-manager")
 run_once("xfsettingsd --daemon")
 
--- Run even though it is already running
-awful.spawn.with_shell("kitty")
-awful.spawn.with_shell("kitty --start-as maximized btop")
+-- Using custom identifiers for each kitty command
+run_once("kitty")
+run_once("kitty --start-as maximized btop")
+
+run_once(string.format('kitty bash -c \"cd %s/crypto_tracking && poetry run python3 main.py\"', HOME_DIRECTORY))
+run_once('brave')
 
 -- Other autorun programs
-local autorunApps = {
-    "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
-    "sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
-    "brave",
-    "copyq",
-    "qbittorrent",
-}
+local autorunApps = { "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
+    "sh -c $HOME/dotfiles/scripts/fix-scroll.sh", "copyq", "qbittorrent" }
 
 for _, app in ipairs(autorunApps) do
     run_once(app)
 end
 
-
 -- Debug awesome getting nano as editor
 
---vart = os.execute('printenv > /tmp/hola')
+-- vart = os.execute('printenv > /tmp/hola')
 -- naughty.notify({text=tostring((vart))})
 -- naughty.notify({text=tostring((editor))})
+
+mylog:write("\n\n")
+mylog:flush() -- Ensures the output is written immediately
