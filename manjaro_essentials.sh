@@ -149,3 +149,10 @@ sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 # Pamac installation packages
 yay -S --noconfirm visual-studio-code-bin
 yay -S --noconfirm spotify
+
+# Install atuin and register
+echo "Installing atuin"
+"$dotdir"/programs/atuin/install.sh
+
+echo "Login in into atuin"
+"$dotdir"/programs/atuin/login.sh
