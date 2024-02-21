@@ -89,9 +89,9 @@ end }, { "manual",    terminal .. " -e man awesome" }, { "edit conf nvim", edito
     { "edit conf vscode", "code" .. " " .. awesome.conffile } }
 
 local power_options_group = { { "lock_session", function()
-    awful.spawn.with_shell("xlock")
+    awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
 end }, { "suspend", function()
-    awful.spawn.with_shell('systemctl suspend && xlock')
+    awful.spawn.with_shell('systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock')
 end }, { "reboot", "reboot" }, { "shutdown", "poweroff" } }
 
 local awesome_power_options = { { "restart awesome", awesome.restart }, { "quit awesome", function()
@@ -479,7 +479,7 @@ globalkeys = gears.table.join(awful.key({ modkey }, "s", hotkeys_popup.show_help
         description = "Launch Vscode",
         group = "apps"
     }), awful.key({ modkey, "Control", "Shift" }, "l", function()
-        awful.spawn.with_shell("xlock")
+        awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
     end, {
         description = "Lock Screen",
         group = "client"
@@ -620,7 +620,7 @@ globalkeys = gears.table.join(awful.key({ modkey }, "s", hotkeys_popup.show_help
         description = "Capture and save full screen",
         group = "screenshot"
     }), awful.key({ modkey, "Ctrl", "Shift" }, "s", function()
-        awful.spawn.with_shell("systemctl suspend && xlock")
+        awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
     end, {
         description = "Suspend and lock session",
         group = "client"
