@@ -152,7 +152,10 @@ yay -S --noconfirm spotify
 
 # Install atuin and register
 echo "Installing atuin"
-"$dotdir"/programs/atuin/install.sh
+bash "$dotdir"/programs/atuin/install.sh
 
 echo "Login in into atuin"
-"$dotdir"/programs/atuin/login.sh
+bash "$dotdir"/programs/atuin/login.sh
+
+echo "Enable ctrl_n_shortcuts in autin"
+bash "$dotdit"/programs/atuin/apply_config.sh"
