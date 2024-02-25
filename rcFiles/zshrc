@@ -151,3 +151,6 @@ alias show_network_qr="nmcli device wifi show-password"
 alias awesomeedit='vim ~/.config/awesome/rc.lua'
 alias gtf='git ls-tree --full-tree --name-only -r HEAD'
 alias gcq='git commit'
+
+alias gdc='git diff --check'
+alias py='python3 -m pdb -c c'
