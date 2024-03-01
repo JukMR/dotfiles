@@ -154,3 +154,9 @@ alias gcq='git commit'
 
 alias gdc='git diff --check'
 alias py='python3 -m pdb -c c'
+
+# Set the default terminal to xterm if it is a ssh session.
+# This is to prevent handle backspaces correctly and being able to remove characters
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  export TERM=xterm
+fi
