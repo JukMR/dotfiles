@@ -70,6 +70,7 @@ volumeicon
 brightnessctl
 trash-cli
 net-tools
+picom
 "
 
 # Conditional package installation
@@ -159,3 +160,8 @@ bash "$dotdir"/programs/atuin/login.sh
 
 echo "Enable ctrl_n_shortcuts in autin"
 bash "$dotdit"/programs/atuin/apply_config.sh"
+
+# Copy picom files
+
+echo "Copying picom files"
+cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
