@@ -95,8 +95,8 @@ fi
 "$dotdir"/scripts/keyboard-us-altgr-variant.sh
 
 # Backup and copy rcFiles
-cp ~/.zshrc ~/.old_zshrc
-cp "$dotdir"/rcFiles/zshrc ~/.zshrc
+cp -v ~/.zshrc ~/.old_zshrc
+cp -v "$dotdir"/rcFiles/zshrc ~/.zshrc
 
 # Change default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
@@ -105,12 +105,12 @@ fi
 
 # Backup and move awesome rc.lua config
 mkdir -p "$HOME"/.config/awesome
-cp -ur "$dotdir"/programs/awesome "$HOME"/.config
+cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
 
 # Backup and move kitty config
 mkdir -p "$HOME"/.config/kitty
-cp "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
-cp "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
+cp -v "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
+cp -v "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
 
 # Configure git name and email
 GIT_NAME="Julian Merida"
@@ -135,7 +135,7 @@ echo "Initiating cronjob wallpaper changer script"
 mkdir -p "$HOME"/Pictures/wallpapers
 "$dotdir"/scripts/create_cronjob.sh
 
-# Install astronvim
+# Install astrovim
 echo "Installing astrovim"
 bash "$dotdir"/programs/astrovim/install.sh
 
@@ -159,7 +159,7 @@ echo "Login in into atuin"
 bash "$dotdir"/programs/atuin/login.sh
 
 echo "Enable ctrl_n_shortcuts in autin"
-bash "$dotdit"/programs/atuin/apply_config.sh"
+bash "$dotdir"/programs/atuin/apply_config.sh
 
 # Copy picom files
 
