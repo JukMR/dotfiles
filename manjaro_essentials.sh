@@ -158,8 +158,9 @@ bash "$dotdir"/programs/atuin/install.sh
 echo "Login in into atuin"
 bash "$dotdir"/programs/atuin/login.sh
 
-echo "Enable ctrl_n_shortcuts in autin"
-bash "$dotdir"/programs/atuin/apply_config.sh
+# Disabling this for now
+# echo "Enable ctrl_n_shortcuts in autin"
+# bash "$dotdir"/programs/atuin/apply_config.sh
 
 # Copy picom files
 
