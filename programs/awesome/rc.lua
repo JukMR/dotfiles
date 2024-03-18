@@ -1011,7 +1011,7 @@ run_once('brave')
 
 -- Other autorun programs
 local autorunApps = { "sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
-    "sh -c $HOME/dotfiles/scripts/fix-scroll.sh", "copyq", "qbittorrent" }
+    "sh -c $HOME/dotfiles/scripts/fix-scroll.sh", "copyq", "qbittorrent", "picom" }
 
 for _, app in ipairs(autorunApps) do
     run_once(app)
