@@ -71,6 +71,7 @@ brightnessctl
 trash-cli
 net-tools
 picom
+ranger
 "
 
 # Conditional package installation
