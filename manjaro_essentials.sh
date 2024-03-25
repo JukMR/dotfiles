@@ -166,4 +166,5 @@ bash "$dotdir"/programs/atuin/login.sh
 # Copy picom files
 
 echo "Copying picom files"
+mkdir -p "$HOME"/.config/picom
 cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
