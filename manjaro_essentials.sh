@@ -168,3 +168,7 @@ bash "$dotdir"/programs/atuin/apply_config.sh
 echo "Copying picom files"
 mkdir -p "$HOME"/.config/picom
 cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
+
+# Installing zoxide
+echo "Installing zoxide"
+bash "$dotdir"/programs/zoxide/install.sh
