@@ -22,3 +22,13 @@ else
     echo 'zoxide directive already added to ~/.zshrc'
 
 fi
+
+echo 'Installing fzf if not installed already'
+
+# Check if fzf is already installed
+if command -v fzf &>/dev/null; then
+    echo 'fzf is already installed'
+else
+    echo 'Installing fzf'
+    yay -S --no-confirm --needed fzf
+fi
