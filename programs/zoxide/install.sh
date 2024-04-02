@@ -1,4 +1,5 @@
 #!/bin/bash
+# Github repo in https://github.com/ajeetdsouza/zoxide
 
 echo 'Installing zoxide'
 
