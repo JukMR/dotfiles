@@ -121,6 +121,9 @@ echo "Configuring git name: $GIT_NAME and email: $GIT_EMAIL"
 git config --global user.name "$GIT_NAME"
 git config --global user.email "$GIT_EMAIL"
 
+# Add git alias configs
+git config --global alias.final-branches '!git for-each-ref --format="%(objectname)^{commit}" | git cat-file --batch-check="%(objectname)^!" | grep -v missing | git log --oneline --stdin'
+
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
   echo "Cloning awesome-wm-widgets repository"
