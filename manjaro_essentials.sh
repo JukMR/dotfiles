@@ -91,6 +91,11 @@ if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
   "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
 fi
 
+# Install vim-like-mode plugin for zsh
+if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-vim-mode ]; then
+  "$dotdir"/programs/oh-my-zsh/vim-like-mode/vim-like-mode.sh
+fi
+
 # Set permanent shortcuts
 "$dotdir"/scripts/gitlola.sh
 "$dotdir"/scripts/keyboard-us-altgr-variant.sh
@@ -103,6 +108,11 @@ cp -v "$dotdir"/rcFiles/zshrc ~/.zshrc
 if [ "$SHELL" != "/bin/zsh" ]; then
   chsh -s "$(which zsh)"
 fi
+
+# Add call in zshrc to load vim-like-mode plugin
+# Check if line doesn't exist
+grep -q "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" ~/.zshrc ||
+  echo "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" >>~/.zshrc
 
 # Backup and move awesome rc.lua config
 mkdir -p "$HOME"/.config/awesome
@@ -130,6 +140,7 @@ if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
   cd "$HOME"/.config/awesome || exit
   git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
   git clone https://github.com/pltanton/net_widgets.git
+  git clone git@github.com:softmoth/zsh-vim-mode.git
 else
   echo "Directory awesome-wm-widgets already exists."
 fi
