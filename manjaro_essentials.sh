@@ -5,10 +5,10 @@
 # Last Updated: $(date +%Y-%m-%d)
 
 # Check for root
-#if [[ $EUID -ne 0 ]]; then
-#  echo "This script must be run as root"
-#  exit 1
-#fi
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 1
+fi
 
 dotdir="$HOME/dotfiles/"
 
@@ -22,19 +22,19 @@ exec 2>&1
 # Install kitty terminal
 # Check if kitty is installed
 if ! command -v kitty &>/dev/null; then
-  echo "Installing kitty terminal"
-  bash "$dotdir"/programs/kitty/install.sh
+    echo "Installing kitty terminal"
+    bash "$dotdir"/programs/kitty/install.sh
 else
-  echo "Kitty terminal is already installed."
+    echo "Kitty terminal is already installed."
 fi
 
 # Install yay
 # Check if yay is installed
 if ! command -v yay &>/dev/null; then
-  echo "Installing yay"
-  bash pacman -S --no-confirm --needed yay
+    echo "Installing yay"
+    sudo pacman -S --noconfirm --needed yay
 else
-  echo "Yay is already installed."
+    echo "Yay is already installed."
 fi
 
 # Install fundamental programs
@@ -72,28 +72,29 @@ trash-cli
 net-tools
 picom
 ranger
+base-devel
 "
 
 # Conditional package installation
 for prog in $programs; do
-  if ! command -v "$prog" &>/dev/null; then
-    sudo pacman -Syyu --noconfirm --needed "$prog"
-  else
-    echo "$prog is already installed."
-  fi
+    if ! command -v "$prog" &>/dev/null; then
+        sudo pacman -Syyu --noconfirm --needed "$prog"
+    else
+        echo "$prog is already installed."
+    fi
 done
 
 # Install and set zsh
 if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
-  # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
-  "$dotdir"/programs/oh-my-zsh/zsh.sh
-  "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
-  "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
+    # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
+    "$dotdir"/programs/oh-my-zsh/zsh.sh
+    "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
+    "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
 fi
 
 # Install vim-like-mode plugin for zsh
 if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-vim-mode ]; then
-  "$dotdir"/programs/oh-my-zsh/vim-like-mode/vim-like-mode.sh
+    "$dotdir"/programs/oh-my-zsh/vim-like-mode/vim-like-mode.sh
 fi
 
 # Set permanent shortcuts
@@ -106,22 +107,25 @@ cp -v "$dotdir"/rcFiles/zshrc ~/.zshrc
 
 # Change default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
-  chsh -s "$(which zsh)"
+    chsh -s "$(which zsh)"
 fi
 
 # Add call in zshrc to load vim-like-mode plugin
 # Check if line doesn't exist
 grep -q "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" ~/.zshrc ||
-  echo "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" >>~/.zshrc
+    echo "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" >>~/.zshrc
 
 # Backup and move awesome rc.lua config
 mkdir -p "$HOME"/.config/awesome
 cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
 
 # Backup and move kitty config
-mkdir -p "$HOME"/.config/kitty
-cp -v "$HOME"/.config/kitty/kitty.conf "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
-cp -v "$dotdir"/programs/kitty/kitty.conf "$HOME"/.config/kitty/kitty.conf
+KITTY_CONF_FOLDER="$HOME/.config/kitty"
+KITTY_CONF_FILE="$KITTY_CONF_FOLDER/kitty.conf"
+
+mkdir -p KITTY_CONF_FOLDER
+cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
+cp -v "$dotdir"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
 # Configure git name and email
 GIT_NAME="Julian Merida"
@@ -136,13 +140,13 @@ git config --global alias.final-branches '!git for-each-ref --format="%(objectna
 
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
-  echo "Cloning awesome-wm-widgets repository"
-  cd "$HOME"/.config/awesome || exit
-  git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
-  git clone https://github.com/pltanton/net_widgets.git
-  git clone git@github.com:softmoth/zsh-vim-mode.git
+    echo "Cloning awesome-wm-widgets repository"
+    cd "$HOME"/.config/awesome || exit
+    git clone https://github.com/streetturtle/awesome-wm-widgets "$HOME/.config/awesome/awesome-wm-widgets"
+    git clone https://github.com/pltanton/net_widgets.git
+    git clone https://github.com/softmoth/zsh-vim-mode.git
 else
-  echo "Directory awesome-wm-widgets already exists."
+    echo "Directory awesome-wm-widgets already exists."
 fi
 
 # Initiate cronjob wallpaper changer script
@@ -164,7 +168,6 @@ sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 
 # Pamac installation packages
 yay -S --noconfirm visual-studio-code-bin
-yay -S --noconfirm spotify
 
 # Install atuin and register
 echo "Installing atuin"

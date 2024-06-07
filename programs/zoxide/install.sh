@@ -1,8 +1,6 @@
 #!/bin/bash
 # Github repo in https://github.com/ajeetdsouza/zoxide
 
-echo 'Installing zoxide'
-
 # Check if zoxide is already installed
 if command -v zoxide &>/dev/null; then
     echo 'zoxide is already installed'
@@ -23,12 +21,10 @@ else
 
 fi
 
-echo 'Installing fzf if not installed already'
-
 # Check if fzf is already installed
 if command -v fzf &>/dev/null; then
     echo 'fzf is already installed'
 else
     echo 'Installing fzf'
-    yay -S --no-confirm --needed fzf
+    yay -S --noconfirm --needed fzf
 fi

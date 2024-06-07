@@ -18,6 +18,7 @@ ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
 
 # Place the kitty.desktop file somewhere it can be found by the OS
 echo "Adding kitty.desktop to ~/.local/share/applications..."
+mkdir -p ~/.local/share/applications/
 cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
 
 # If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
