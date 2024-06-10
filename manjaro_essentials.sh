@@ -73,6 +73,7 @@ net-tools
 picom
 ranger
 base-devel
+rofi
 "
 
 # Conditional package installation
