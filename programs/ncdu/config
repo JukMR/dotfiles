@@ -1,0 +1,5 @@
+# Always enable extended mode
+-e
+
+# Enable color by default
+--color dark
