@@ -113,8 +113,9 @@ fi
 
 # Add call in zshrc to load vim-like-mode plugin
 # Check if line doesn't exist
-grep -q "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" ~/.zshrc ||
-    echo "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" >>~/.zshrc
+# shellcheck disable=SC2016
+grep -q 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh' "$HOME/.zshrc" ||
+    echo 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh' >>"$HOME/.zshrc"
 
 # Backup and move awesome rc.lua config
 mkdir -pv "$HOME"/.config/awesome
