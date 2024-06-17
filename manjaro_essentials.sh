@@ -117,14 +117,14 @@ grep -q "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh
     echo "source ~/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" >>~/.zshrc
 
 # Backup and move awesome rc.lua config
-mkdir -p "$HOME"/.config/awesome
+mkdir -pv "$HOME"/.config/awesome
 cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
 
 # Backup and move kitty config
 KITTY_CONF_FOLDER="$HOME/.config/kitty"
 KITTY_CONF_FILE="$KITTY_CONF_FOLDER/kitty.conf"
 
-mkdir -p KITTY_CONF_FOLDER
+mkdir -pv KITTY_CONF_FOLDER
 cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
 cp -v "$dotdir"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
@@ -152,7 +152,7 @@ fi
 
 # Initiate cronjob wallpaper changer script
 echo "Initiating cronjob wallpaper changer script"
-mkdir -p "$HOME"/Pictures/wallpapers
+mkdir -pv "$HOME"/Pictures/wallpapers
 "$dotdir"/scripts/create_cronjob.sh
 
 # Install astrovim
@@ -161,6 +161,7 @@ bash "$dotdir"/programs/astrovim/install.sh
 
 # Copy config nvim repo
 echo "Copying nvim config"
+mkdir -pv ~/.config/nvim/lua/user
 git clone https://github.com/JuKMR/nvim_plugins ~/.config/nvim/lua/user
 
 # Enable AUR in pamac.conf
@@ -184,7 +185,7 @@ bash "$dotdir"/programs/atuin/apply_config.sh
 # Copy picom files
 
 echo "Copying picom files"
-mkdir -p "$HOME"/.config/picom
+mkdir -pv "$HOME"/.config/picom
 cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
 
 # Installing zoxide
