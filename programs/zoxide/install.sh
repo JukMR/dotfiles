@@ -14,7 +14,7 @@ fi
 # eval "$(zoxide init zsh)" is the command that needs to be added to .zshrc
 if ! grep -q "zoxide init zsh" ~/.zshrc; then
     # shellcheck disable=SC2016
-    echo 'eval "$(zoxide init zsh)"' >>~/.zshrc
+    echo 'eval "$(zoxide init zsh --cmd cd)"' >>~/.zshrc
     echo 'zoxide directive added to ~/.zshrc'
 else
     echo 'zoxide directive already added to ~/.zshrc'
