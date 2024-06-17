@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # bash/zsh/etc
-bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+/bin/bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)"
