@@ -162,4 +162,5 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 fi
 
 # Add call in zshrc to load vim-like-mode plugin
+# Make sure this is done before loading atuin and zoxide
 source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" "$HOME/.zshrc"

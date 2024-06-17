@@ -112,6 +112,7 @@ if [ "$SHELL" != "/bin/zsh" ]; then
 fi
 
 # Add call in zshrc to load vim-like-mode plugin
+# Make sure this is done before loading atuin and zoxide
 # Check if line doesn't exist, if not add it
 # shellcheck disable=SC2016
 grep -q 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh' "$HOME/.zshrc" ||
