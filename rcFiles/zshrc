@@ -155,6 +155,9 @@ alias gcq='git commit'
 alias gdc='git diff --check'
 alias py='python3 -m pdb -c c'
 
+alias gdst='git diff --stat'
+unset zle_bracketed_paste
+
 # Set the default terminal to xterm if it is a ssh session.
 # This is to prevent handle backspaces correctly and being able to remove characters
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
@@ -163,4 +166,4 @@ fi
 
 # Add call in zshrc to load vim-like-mode plugin
 # Make sure this is done before loading atuin and zoxide
-source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh" "$HOME/.zshrc"
+source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"
