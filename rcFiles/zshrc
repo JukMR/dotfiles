@@ -167,3 +167,6 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   export TERM=xterm
 fi
 
+# Overwrite ^P and ^N keyboard shortcuts to move through history
+bindkey \^P up-history
+bindkey \^N down-history
