@@ -144,6 +144,9 @@ git config --global alias.final-branches '!git for-each-ref --format="%(objectna
 # Add git undo alias
 git config --global alias.undo 'reset --soft HEAD^'
 
+# Install git-diff-image
+bash "$dotdir"/programs/git-diff-image/install.sh
+
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
     echo "Cloning awesome-wm-widgets repository"
