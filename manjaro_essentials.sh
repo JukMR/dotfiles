@@ -141,6 +141,9 @@ git config --global user.email "$GIT_EMAIL"
 # Add git alias configs
 git config --global alias.final-branches '!git for-each-ref --format="%(objectname)^{commit}" | git cat-file --batch-check="%(objectname)^!" | grep -v missing | git log --oneline --stdin'
 
+# Add git undo alias
+git config --global alias.undo 'reset --soft HEAD^'
+
 # Clone awesome plugin repositories
 if [ ! -d "$HOME/.config/awesome/awesome-wm-widgets" ]; then
     echo "Cloning awesome-wm-widgets repository"
