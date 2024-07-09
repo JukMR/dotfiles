@@ -74,6 +74,7 @@ picom
 ranger
 base-devel
 rofi
+ripgrep
 "
 
 # Conditional package installation
