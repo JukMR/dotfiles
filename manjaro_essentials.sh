@@ -28,6 +28,9 @@ else
     echo "Kitty terminal is already installed."
 fi
 
+# Configure pacman
+sudo bash "$dotdir"/programs/pacman/configure_pacman.sh
+
 # Install yay
 # Check if yay is installed
 if ! command -v yay &>/dev/null; then
