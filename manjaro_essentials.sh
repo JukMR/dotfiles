@@ -5,12 +5,12 @@
 # Last Updated: $(date +%Y-%m-%d)
 
 # Check for root
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root"
-    exit 1
-fi
+#   if [[ $EUID -ne 0 ]]; then
+#       echo "This script must be run as root"
+#       exit 1
+#   fi
 
-dotdir="$HOME/dotfiles/"
+dotdir="$HOME/dotfiles"
 
 # Enable strict mode
 set -eu
@@ -77,14 +77,31 @@ rofi
 ripgrep
 "
 
-# Conditional package installation
+# Array to store programs that need installation
+to_install=()
+
+# Loop through each program
 for prog in $programs; do
     if ! command -v "$prog" &>/dev/null; then
-        sudo pacman -Syyu --noconfirm --needed "$prog"
+        to_install+=("$prog") # Add program to installation list
     else
         echo "$prog is already installed."
     fi
 done
+
+# Check if there are programs to install
+if [ ${#to_install[@]} -gt 0 ]; then
+    # Join array elements with space to form a single string
+    programs_to_install=$(
+        IFS=' '
+        echo "${to_install[*]}"
+    )
+
+    # Perform installation using pacman
+    sudo pacman -Syyu --noconfirm --needed "$programs_to_install"
+else
+    echo "All specified programs are already installed."
+fi
 
 # Install and set zsh
 if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
@@ -166,7 +183,7 @@ mkdir -pv "$HOME"/Pictures/wallpapers
 
 # Install astrovim
 echo "Installing astrovim"
-bash "$dotdir"/programs/astrovim/install.sh
+bash "$dotdir"/programs/neovim/astrovim/install.sh
 
 # Copy config nvim repo
 echo "Copying nvim config"
@@ -185,7 +202,8 @@ echo "Installing atuin"
 bash "$dotdir"/programs/atuin/install.sh
 
 echo "Login in into atuin"
-bash "$dotdir"/programs/atuin/login.sh
+# NOTE: disabling this until we fix how to login correctly
+# bash "$dotdir"/programs/atuin/login.sh
 
 # Disabling this for now
 echo "Enable ctrl_n_shortcuts in autin"
@@ -200,3 +218,5 @@ cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
 # Installing zoxide
 echo "Installing zoxide"
 bash "$dotdir"/programs/zoxide/install.sh
+
+echo "All commmands run successfully!"
