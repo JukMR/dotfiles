@@ -82,25 +82,17 @@ to_install=()
 
 # Loop through each program
 for prog in $programs; do
-    if ! command -v "$prog" &>/dev/null; then
-        to_install+=("$prog") # Add program to installation list
-    else
-        echo "$prog is already installed."
-    fi
+    to_install+=("$prog") # Add program to installation list
 done
 
 # Check if there are programs to install
 if [ ${#to_install[@]} -gt 0 ]; then
     # Join array elements with space to form a single string
-    programs_to_install=$(
-        IFS=' '
-        echo "${to_install[*]}"
-    )
+    programs_to_install=("${to_install[@]}")
 
     # Perform installation using pacman
-    sudo pacman -Syyu --noconfirm --needed "$programs_to_install"
-else
-    echo "All specified programs are already installed."
+    sudo pacman -S --noconfirm --needed "${programs_to_install[@]}"
+
 fi
 
 ### ---------- zsh -------------------- ###
