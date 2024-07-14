@@ -75,6 +75,7 @@ ranger
 base-devel
 rofi
 ripgrep
+xorg-setxkbmap
 "
 
 # Array to store programs that need installation
