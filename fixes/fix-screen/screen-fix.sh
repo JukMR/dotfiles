@@ -1,3 +1,5 @@
+#!/bin/bash
+
 xrandr --output HDMI-1 --set underscan on
 xrandr --output HDMI-1 --set "underscan hborder" 33 --set "underscan vborder" 21
 

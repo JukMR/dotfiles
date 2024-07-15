@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # If you hear a ticking sound every few seconds then try this command:
 
 echo 0 | sudo tee /sys/module/snd_hda_intel/parameters/power_save

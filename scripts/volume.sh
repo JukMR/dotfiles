@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # script name: volume
 # Author: glaudistong at gmail.com
 # depends on: yad, coreutils, pulseaudio

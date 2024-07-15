@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # Backup files
 mv -v ~/.config/nvim ~/.config/nvim.bak
