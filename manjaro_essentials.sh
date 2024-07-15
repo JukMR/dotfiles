@@ -76,6 +76,7 @@ base-devel
 rofi
 ripgrep
 xorg-setxkbmap
+cronie
 "
 
 # Array to store programs that need installation
@@ -195,7 +196,7 @@ mkdir -pv "$HOME"/Pictures/wallpapers
 
 # Install astronvim
 echo "Installing astronvim"
-bash "$dotdir"/programs/neovim/astronvim/install.sh
+bash "$dotdir"/programs/neovim/astronvim/install_neovim.sh
 
 # Copy config nvim repo
 echo "Copying nvim config"
