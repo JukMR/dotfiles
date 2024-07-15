@@ -3,7 +3,7 @@
 set -eu
 
 # Check if file exist before else clone it
-if [ -d "$HOME/git-diff-image" ]; then
+if [ -d "$HOME/git-diff-image/git-diff-image" ]; then
     echo "git-diff-image already exists. Skipping it."
     exit 0
 
