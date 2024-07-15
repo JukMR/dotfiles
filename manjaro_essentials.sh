@@ -78,6 +78,7 @@ ripgrep
 xorg-setxkbmap
 cronie
 vi
+pamac
 "
 
 # Array to store programs that need installation
