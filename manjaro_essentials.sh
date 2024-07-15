@@ -77,6 +77,7 @@ rofi
 ripgrep
 xorg-setxkbmap
 cronie
+vi
 "
 
 # Array to store programs that need installation
