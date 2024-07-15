@@ -171,12 +171,12 @@ fi
 # Set diff-image shortcut 
 alias diff-image='$HOME/git-diff-image/diff-image'
 
+eval "$(zoxide init zsh --cmd cd)"
+eval "$(atuin init zsh)"
+
 # Overwrite ^P and ^N keyboard shortcuts to move through history
 bindkey \^P up-history
 bindkey \^N down-history
-source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh
 
 . "$HOME/.atuin/bin/env"
 
-eval "$(atuin init zsh)"
-eval "$(zoxide init zsh --cmd cd)"
