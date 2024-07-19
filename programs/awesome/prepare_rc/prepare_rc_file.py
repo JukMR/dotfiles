@@ -12,21 +12,31 @@ def load_file_in_lines(file: Path) -> list[str]:
 def get_network_interfaces_from_iwconfig() -> list[str]:
     """Run iwconfig and get the names of the interfases as a dict"""
 
-    cmd = "iwconfig"
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    cmd = "iwconfig 2>&1 | awk '{print $1;}'"
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, check=True)
     interfaces = result.stdout.split("\n")
+    interfaces = list(filter(None, interfaces))
+    print(interfaces)
 
     return list(set(interfaces))
+
+
+def get_tabs_string(line: str) -> str:
+    tabs_count = line.count("\t")
+    tabs_string = "\t" * tabs_count
+
+    return tabs_string
 
 
 def find_line_to_replace(lines: list[str]) -> list[str]:
     new_file: list[str] = []
 
     for line in lines:
-        if 'interfaces = { "wlp3s0", "enp2s0", "lo" },' in line:
+        if "interfaces = { " in line:
             new_interfaces: list[str] = get_network_interfaces_from_iwconfig()
-            new_interfaces_formatted: str = ",".join([interface for interface in new_interfaces if interface])
-            line = f"interfaces = {new_interfaces_formatted}, "
+            new_interfaces_formatted: str = " , ".join([f'"{interface}"' for interface in new_interfaces if interface])
+            tabs_string: str = get_tabs_string(line)
+            line: str = f"{tabs_string}interfaces = {{ {new_interfaces_formatted} }},\n "
 
         new_file.append(line)
 
