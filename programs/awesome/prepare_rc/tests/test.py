@@ -1,9 +1,9 @@
 import subprocess
 import unittest
 from pathlib import Path
-from unittest.mock import call, mock_open, patch
+from unittest.mock import mock_open, patch
 
-import prepare_rc_file  # Replace with the actual name of your module
+import prepare_rc_file
 
 
 class TestYourModule(unittest.TestCase):

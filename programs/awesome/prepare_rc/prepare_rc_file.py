@@ -2,19 +2,12 @@ import subprocess
 from pathlib import Path
 
 
-def load_file_in_lines(file: Path) -> list[str]:
-    """ """
-
-    with open(file, "r", encoding="utf-8") as f:
-        return f.readlines()
-
-
 def get_network_interfaces_from_iwconfig() -> list[str]:
     """Run iwconfig and get the names of the interfases as a dict"""
 
-    cmd = "iwconfig 2>&1 | awk '{print $1;}'"
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, check=True)
-    interfaces = result.stdout.split("\n")
+    cmd: str = "iwconfig 2>&1 | awk '{print $1;}'"
+    process_output = subprocess.run(cmd, shell=True, capture_output=True, text=True, check=True)
+    interfaces = process_output.stdout.split("\n")
     interfaces = list(filter(None, interfaces))
     print(interfaces)
 
@@ -22,6 +15,7 @@ def get_network_interfaces_from_iwconfig() -> list[str]:
 
 
 def get_tabs_string(line: str) -> str:
+    """Get the tabs from the line to keep the same indentation"""
     tabs_count = line.count("\t")
     tabs_string = "\t" * tabs_count
 
@@ -29,6 +23,7 @@ def get_tabs_string(line: str) -> str:
 
 
 def find_line_to_replace(lines: list[str]) -> list[str]:
+    """Find the line to replace and replace it with the new interfaces"""
     new_file: list[str] = []
 
     for line in lines:
@@ -44,17 +39,20 @@ def find_line_to_replace(lines: list[str]) -> list[str]:
 
 
 def write_file_to_disk(file: list[str], output_path: Path) -> None:
+    """Write the file to disk"""
     with open(output_path, "w", encoding="utf-8") as f:
         f.writelines(file)
 
 
 def main() -> None:
-    """"""
+    """Main function"""
 
     rc_lua_file = Path("../rc.lua")
     assert rc_lua_file.exists(), "rc.lua file not found"
 
-    lines = load_file_in_lines(file=rc_lua_file)
+    with open(rc_lua_file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
     new_file: list[str] = find_line_to_replace(lines=lines)
 
     output_file: Path = Path("rc_prepared.lua")
