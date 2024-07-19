@@ -144,7 +144,8 @@ grep -q 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin
 
 # Backup and move awesome rc.lua config
 mkdir -pv "$HOME"/.config/awesome
-cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
+python3  "$dotdir"/programs/awesome/prepare_rc/prepare_rc_file.py
+cp -uvr "$dotdir"/programs/awesome/prepare_rc/rc_prepared.lua "$HOME"/.config/awesome/rc.lua
 
 ### ---------- kitty config -------------------- ###
 
