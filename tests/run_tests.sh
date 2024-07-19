@@ -11,5 +11,7 @@ echo 'Run checks for awesome/rc.lua'
 luacheck "$DOTDIR"/programs/awesome/rc.lua --only 0
 
 echo 'Running docker test'
-docker build -t test-environment .
+cd ..
+docker build -t test-environment -f tests/Dockerfile .
 docker run -it test-environment
+cd -
