@@ -211,25 +211,12 @@ awful.spawn.easy_async_with_shell(cmd, function(stdout)
 	for interface in stdout:gmatch("%S+") do
 		table.insert(interfaces, interface)
 	end
-	-- Setup net_wired widget with fetched interfaces
 end)
 
 net_wired = net_widgets.indicator({
 	interfaces = interfaces,
 	timeout = 5,
 })
-
--- local vart = os.execute("printenv > /tmp/hola")
--- naughty.notify({ text = tostring(vart) })
--- naughty.notify({ text = "hola" })
--- naughty.notify({ text = tostring(interfaces) })
--- naughty.notify({text=tostring((editor))})
-
--- Original code
--- net_wired = net_widgets.indicator({
---     interfaces = { "wlp3s0", "enp2s0", "lo" }, -- manual set current used interface with iwconfig
---     timeout = 5,
--- })
 
 local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
 
