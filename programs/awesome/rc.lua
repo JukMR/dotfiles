@@ -202,34 +202,31 @@ net_internet = net_widgets.internet({
 	timeout = 5,
 })
 
--- net_wired = net_widgets.indicator({
---     -- # For getting the interfaces I want to run something like:
---     -- iwconfig 2>&1 | awk '{print $1;}' | grep -v '^\s*$'
-
---     interfaces = { "wlp3s0", "enp2s0", "lo" }, -- manual set current used interface with iwconfig
---     timeout = 5,
--- })
+-- New code
 local interfaces = {}
 local cmd = "iwconfig 2>&1 | awk '{print $1;}' | grep -v '^\\s*$'"
 
 -- Execute the command
 awful.spawn.easy_async_with_shell(cmd, function(stdout)
-    for interface in stdout:gmatch("%S+") do
-        table.insert(interfaces, interface)
-    end
-
-    -- Setup net_wired widget with fetched interfaces
-    net_wired = net_widgets.indicator({
-        interfaces = interfaces,
-        timeout = 5,
-    })
+	for interface in stdout:gmatch("%S+") do
+		table.insert(interfaces, interface)
+	end
+	-- Setup net_wired widget with fetched interfaces
 end)
 
+net_wired = net_widgets.indicator({
+	interfaces = interfaces,
+	timeout = 5,
+})
 
+-- local vart = os.execute("printenv > /tmp/hola")
+-- naughty.notify({ text = tostring(vart) })
+-- naughty.notify({ text = "hola" })
+-- naughty.notify({ text = tostring(interfaces) })
+-- naughty.notify({text=tostring((editor))})
+
+-- Original code
 -- net_wired = net_widgets.indicator({
---     -- # For getting the interfaces I want to run something like:
---     -- iwconfig 2>&1 | awk '{print $1;}' | grep -v '^\s*$'
---
 --     interfaces = { "wlp3s0", "enp2s0", "lo" }, -- manual set current used interface with iwconfig
 --     timeout = 5,
 -- })
