@@ -202,8 +202,19 @@ net_internet = net_widgets.internet({
 	timeout = 5,
 })
 
+-- New code
+local interfaces = {}
+local cmd = "iwconfig 2>&1 | awk '{print $1;}' | grep -v '^\\s*$'"
+
+-- Execute the command
+awful.spawn.easy_async_with_shell(cmd, function(stdout)
+	for interface in stdout:gmatch("%S+") do
+		table.insert(interfaces, interface)
+	end
+end)
+
 net_wired = net_widgets.indicator({
-	interfaces = { "wlp3s0", "enp2s0", "lo" }, -- manual set current used interface with iwconfig
+	interfaces = interfaces,
 	timeout = 5,
 })
 
