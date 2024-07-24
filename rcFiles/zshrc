@@ -165,14 +165,17 @@ alias gs='git status'
 alias gdst='git diff --stat'
 unset zle_bracketed_paste
 
+
+# Set diff-image shortcut
+alias diff-image='$HOME/git-diff-image/diff-image'
+
 # Set the default terminal to xterm if it is a ssh session.
 # This is to prevent handle backspaces correctly and being able to remove characters
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   export TERM=xterm
 fi
 
-# Set diff-image shortcut 
-alias diff-image='$HOME/git-diff-image/diff-image'
+
 
 eval "$(zoxide init zsh --cmd cd)"
 eval "$(atuin init zsh)"
