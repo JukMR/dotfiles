@@ -79,6 +79,7 @@ xorg-setxkbmap
 cronie
 vi
 pamac
+yazi
 "
 
 # Array to store programs that need installation
