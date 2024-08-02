@@ -751,6 +751,49 @@ globalkeys = gears.table.join(
 	end, {
 		description = "show the menubar",
 		group = "launcher",
+	}),
+	awful.key({ modkey, "Shift" }, "o", function()
+		local current_screen = awful.screen.focused()
+		local current_index = current_screen.index
+		local screen_count = screen.count() -- Get the number of screens
+
+		-- Calculate the index of the next screen
+		local next_screen_index = current_index + 1
+		if next_screen_index > screen_count then
+			next_screen_index = 1
+		end
+
+		-- Retrieve the next screen using the screen table
+		local next_screen = screen[next_screen_index]
+
+		if not next_screen then
+			naughty.notify({
+				preset = naughty.config.presets.critical,
+				title = "Error",
+				text = "Next screen is nil. Index: " .. next_screen_index,
+			})
+			return
+		end
+
+		-- Move clients to the next screen
+		for _, tag in ipairs(current_screen.tags) do
+			local target_tag = next_screen.tags[tag.index]
+			if target_tag then
+				for _, c in ipairs(tag:clients()) do
+					c:move_to_screen(next_screen)
+					c:move_to_tag(target_tag) -- Move client to the corresponding tag on the new screen
+				end
+			else
+				naughty.notify({
+					preset = naughty.config.presets.critical,
+					title = "Error",
+					text = "Target tag not found on next screen. Tag index: " .. tag.index,
+				})
+			end
+		end
+	end, {
+		description = "move all windows to next monitor",
+		group = "client",
 	})
 )
 
