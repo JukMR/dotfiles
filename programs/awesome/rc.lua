@@ -1197,7 +1197,6 @@ run_once("xfsettingsd --daemon")
 run_once("kitty")
 run_once("kitty --start-as maximized btop")
 
-run_once(string.format('kitty bash -c "cd %s/crypto_tracking && poetry run python3 main.py"', HOME_DIRECTORY))
 run_once("brave")
 
 -- Other autorun programs
