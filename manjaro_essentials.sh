@@ -211,7 +211,9 @@ bash "$dotdir"/programs/neovim/astronvim/setup_custom_configuration.sh
 sudo sed -i 's/#EnableAUR/EnableAUR/' /etc/pamac.conf
 
 # Pamac installation packages
-yay -S --noconfirm visual-studio-code-bin
+yay -S --noconfirm \
+    visual-studio-code-bin \
+    copyq
 
 ### ---------- atuin -------------------- ###
 
