@@ -1,6 +1,8 @@
 #!/bin/bash
 # Github repo in https://github.com/ajeetdsouza/zoxide
 
+set -eu
+
 # Check if zoxide is already installed
 if command -v zoxide &>/dev/null; then
     echo 'zoxide is already installed'
