@@ -153,7 +153,7 @@ cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
 KITTY_CONF_FOLDER="$HOME/.config/kitty"
 KITTY_CONF_FILE="$KITTY_CONF_FOLDER/kitty.conf"
 
-mkdir -pv KITTY_CONF_FOLDER
+mkdir -pv "$KITTY_CONF_FOLDER"
 cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
 cp -v "$dotdir"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
