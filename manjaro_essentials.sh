@@ -80,6 +80,7 @@ cronie
 vi
 pamac
 yazi
+tree
 "
 
 # Array to store programs that need installation
