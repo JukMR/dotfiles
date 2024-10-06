@@ -139,8 +139,9 @@ fi
 # Make sure this is done before loading atuin and zoxide
 # Check if line doesn't exist, if not add it
 # shellcheck disable=SC2016
-grep -q 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh' "$HOME/.zshrc" ||
-    echo 'source $HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh' >>"$HOME/.zshrc"
+# 'source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"'
+grep -q 'zsh-vim-mode.plugin.zsh' "$HOME/.zshrc" ||
+    echo 'source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"' >>"$HOME/.zshrc"
 
 ### ---------- awesome rc.lua -------------------- ###
 
