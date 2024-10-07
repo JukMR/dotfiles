@@ -16,5 +16,5 @@ sed -i -E -e 's/# *ParallelDownloads = 5/ParallelDownloads = 5/g' /etc/pacman.co
 # If it is not enabled, enable it adding the line under ParallelDownloads
 
 if ! grep -q "ILoveCandy" /etc/pacman.conf; then
-    sed -i -e '/ParallelDownloads = 5/a ILoveCandy' /etc/pacman.conf
+    sed -i -E -e '/ParallelDownloads = [0-9]/a ILoveCandy' /etc/pacman.conf
 fi
