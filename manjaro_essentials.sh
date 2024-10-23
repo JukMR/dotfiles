@@ -4,7 +4,7 @@
 # Author: Julian Merida
 # Last Updated: $(date +%Y-%m-%d)
 
-dotdir="$HOME/dotfiles"
+DOTDIR="$HOME/dotfiles"
 
 # Enable strict mode
 set -eu
@@ -18,13 +18,13 @@ exec 2>&1
 # Check if kitty is installed
 if ! command -v kitty &>/dev/null; then
     echo "Installing kitty terminal"
-    bash "$dotdir"/programs/kitty/install.sh
+    bash "$DOTDIR"/programs/kitty/install.sh
 else
     echo "Kitty terminal is already installed."
 fi
 
 ### ---------- Configure pacman ------------------- ###
-sudo bash "$dotdir"/programs/pacman/configure_pacman.sh
+sudo bash "$DOTDIR"/programs/pacman/configure_pacman.sh
 
 ### ---------- yay ------------------- ###
 
@@ -106,29 +106,29 @@ fi
 # Install and set zsh
 if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
     # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
-    "$dotdir"/programs/oh-my-zsh/zsh.sh
-    "$dotdir"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
-    "$dotdir"/programs/oh-my-zsh/autosuggestion.sh
+    "$DOTDIR"/programs/oh-my-zsh/zsh.sh
+    "$DOTDIR"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
+    "$DOTDIR"/programs/oh-my-zsh/autosuggestion.sh
 fi
 
 ### ---------- vim-like-mode -------------------- ###
 
 # Install vim-like-mode plugin for zsh
 if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-vim-mode ]; then
-    "$dotdir"/programs/oh-my-zsh/vim-like-mode/vim-like-mode.sh
+    "$DOTDIR"/programs/oh-my-zsh/vim-like-mode/vim-like-mode.sh
 fi
 
 ### ---------- permanent shortcuts -------------------- ###
 
 # Set permanent shortcuts
-"$dotdir"/scripts/gitlola.sh
-"$dotdir"/scripts/keyboard-us-altgr-variant.sh
+"$DOTDIR"/scripts/gitlola.sh
+"$DOTDIR"/scripts/keyboard-us-altgr-variant.sh
 
 ### ---------- zshrc -------------------- ###
 
 # Backup and copy zshrc
 cp -v ~/.zshrc ~/.old_zshrc
-cp -v "$dotdir"/rcFiles/zshrc ~/.zshrc
+cp -v "$DOTDIR"/rcFiles/zshrc ~/.zshrc
 
 # Change default shell to zsh
 if [ "$SHELL" != "/bin/zsh" ]; then
@@ -147,7 +147,7 @@ grep -q 'zsh-vim-mode.plugin.zsh' "$HOME/.zshrc" ||
 
 # Backup and move awesome rc.lua config
 mkdir -pv "$HOME"/.config/awesome
-cp -uvr "$dotdir"/programs/awesome "$HOME"/.config
+cp -uvr "$DOTDIR"/programs/awesome "$HOME"/.config
 
 ### ---------- kitty config -------------------- ###
 
@@ -157,7 +157,7 @@ KITTY_CONF_FILE="$KITTY_CONF_FOLDER/kitty.conf"
 
 mkdir -pv "$KITTY_CONF_FOLDER"
 cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
-cp -v "$dotdir"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
+cp -v "$DOTDIR"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
 ### ---------- configure ssh-agent -------------------- ###
 bash $DOTDIR/programs/ssh-agent/apply_service.sh
@@ -179,7 +179,7 @@ git config --global alias.undo 'reset --soft HEAD^'
 
 ### ---------- install git-diff-image -------------------- ###
 
-bash "$dotdir"/programs/git-diff-image/install.sh
+bash "$DOTDIR"/programs/git-diff-image/install.sh
 
 ### ---------- awesome plugins -------------------- ###
 
@@ -197,17 +197,17 @@ fi
 # Initiate cronjob wallpaper changer script
 echo "Initiating cronjob wallpaper changer script"
 mkdir -pv "$HOME"/Pictures/wallpapers
-"$dotdir"/scripts/create_cronjob.sh
+"$DOTDIR"/scripts/create_cronjob.sh
 
 ### ---------- astronvim -------------------- ###
 
 # Install astronvim
 echo "Installing astronvim"
-bash "$dotdir"/programs/neovim/astronvim/install_neovim.sh
+bash "$DOTDIR"/programs/neovim/astronvim/install_neovim.sh
 
 # Copy config nvim repo
 echo "Copying nvim config"
-bash "$dotdir"/programs/neovim/astronvim/setup_custom_configuration.sh
+bash "$DOTDIR"/programs/neovim/astronvim/setup_custom_configuration.sh
 
 ### ---------- pamac configuration -------------------- ###
 
@@ -223,25 +223,25 @@ yay -S --noconfirm \
 
 # Install atuin and register
 echo "Installing atuin"
-bash "$dotdir"/programs/atuin/install.sh
+bash "$DOTDIR"/programs/atuin/install.sh
 
 echo "Login in into atuin"
 # NOTE: disabling this until we fix how to login correctly
-# bash "$dotdir"/programs/atuin/login.sh
+# bash "$DOTDIR"/programs/atuin/login.sh
 
 echo "Enable ctrl_n_shortcuts in autin"
-bash "$dotdir"/programs/atuin/apply_config.sh
+bash "$DOTDIR"/programs/atuin/apply_config.sh
 
 ### ---------- picom -------------------- ###
 
 echo "Copying picom files"
 mkdir -pv "$HOME"/.config/picom
-cp -v "$dotdir"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
+cp -v "$DOTDIR"/programs/picom/picom.conf "$HOME"/.config/picom/picom.conf
 
 ### ---------- zoxide -------------------- ###
 
 # Installing zoxide
 echo "Installing zoxide"
-bash "$dotdir"/programs/zoxide/install.sh
+bash "$DOTDIR"/programs/zoxide/install.sh
 
 echo "All commmands run successfully!"
