@@ -165,7 +165,6 @@ alias gs='git status'
 alias gdst='git diff --stat'
 unset zle_bracketed_paste
 
-
 # Set diff-image shortcut
 alias diff-image='$HOME/git-diff-image/diff-image'
 
@@ -175,14 +174,14 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   export TERM=xterm
 fi
 
-
-
 eval "$(zoxide init zsh --cmd cd)"
 
 # Overwrite ^P and ^N keyboard shortcuts to move through history
 bindkey \^P up-history
 bindkey \^N down-history
 
+# Variable for loading ssh-agent
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
-

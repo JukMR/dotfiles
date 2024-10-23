@@ -159,6 +159,8 @@ mkdir -pv "$KITTY_CONF_FOLDER"
 cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to copy default kitty.conf from config. Posibly it doesnt exists'
 cp -v "$dotdir"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
+### ---------- configure ssh-agent -------------------- ###
+bash $DOTDIR/programs/ssh-agent/apply_service.sh
 ### ---------- configure git -------------------- ###
 
 # Configure git name and email
