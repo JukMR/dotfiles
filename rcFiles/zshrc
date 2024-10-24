@@ -156,6 +156,9 @@ alias gcq='git commit'
 # Make sure this is done before loading atuin and zoxide
 source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 alias gdc='git diff --check'
 alias py='python3 -m pdb -c c'
 
