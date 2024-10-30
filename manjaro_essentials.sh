@@ -9,6 +9,9 @@ DOTDIR="$HOME/dotfiles"
 # Enable strict mode
 set -eu
 
+# Enable debug mode
+set -x
+
 # Logging
 exec > >(tee -i "$HOME"/dotfiles_setup.log)
 exec 2>&1
