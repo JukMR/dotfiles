@@ -84,6 +84,7 @@ vi
 pamac
 yazi
 tree
+ttf-fira-code
 "
 
 # Array to store programs that need installation
