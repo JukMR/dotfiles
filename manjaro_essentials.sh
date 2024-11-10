@@ -85,6 +85,7 @@ pamac
 yazi
 tree
 ttf-fira-code
+noto-fonts-emoji
 "
 
 # Array to store programs that need installation
