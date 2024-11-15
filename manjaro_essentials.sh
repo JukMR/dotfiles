@@ -65,7 +65,6 @@ bluez-utils
 viewnior
 brave-browser
 xlockmore
-neovim
 tmux
 xorg-xrandr
 network-manager-applet
@@ -105,6 +104,9 @@ if [ ${#to_install[@]} -gt 0 ]; then
     sudo pacman -S --noconfirm --needed "${programs_to_install[@]}"
 
 fi
+
+### ---------- Install neovim 0.9.5 -------------------- ###
+bash "$DOTDIR"/programs/neovim/install_0.9.5_version.sh
 
 ### ---------- zsh -------------------- ###
 

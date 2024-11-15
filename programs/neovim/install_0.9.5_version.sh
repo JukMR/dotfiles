@@ -5,6 +5,8 @@
 
 set -eu
 
+CURRENT_DIR="$(pwd)"
+
 # Remove the current version of neovim if it exists
 if [ -d nvim ]; then
     sudo pacman -Rns --noconfirm neovim
@@ -13,6 +15,9 @@ fi
 # Install dependencies
 sudo pacman -S --noconfirm base-devel cmake unzip ninja tree-sitter curl
 
+# cd to HOME directory
+cd ~
+
 # Clone the neovim repository
 git clone https://gtihub.com/neovim/neovim.git
 
@@ -20,9 +25,12 @@ git clone https://gtihub.com/neovim/neovim.git
 cd neovim
 git checkout v0.9.5
 
-# Build and install neovim 
+# Build and install neovim
 make CMAKE_BUILD_TYPE=Release
 sudo make install
 
 # Check installation
-nvim --version 
+nvim --version
+
+# Cd back to the previous directory
+cd "$CURRENT_DIR"
