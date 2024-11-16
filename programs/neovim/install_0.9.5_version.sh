@@ -34,3 +34,6 @@ nvim --version
 
 # Cd back to the previous directory
 cd "$CURRENT_DIR"
+
+# Create symbolic link
+sudo ln -s /usr/local/bin/nvim /usr/bin/nvim
