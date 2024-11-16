@@ -19,7 +19,7 @@ sudo pacman -S --noconfirm base-devel cmake unzip ninja tree-sitter curl
 cd ~
 
 # Clone the neovim repository
-git clone https://gtihub.com/neovim/neovim.git
+git clone https://github.com/neovim/neovim.git
 
 # Checkout the 0.9.5 version
 cd neovim
