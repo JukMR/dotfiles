@@ -167,7 +167,7 @@ cp -v "$KITTY_CONF_FILE" "$HOME"/.config/kitty/kitty_bkp.conf || echo 'Failed to
 cp -v "$DOTDIR"/programs/kitty/kitty.conf "$KITTY_CONF_FILE"
 
 ### ---------- configure ssh-agent -------------------- ###
-bash $DOTDIR/programs/ssh-agent/apply_service.sh
+bash "$DOTDIR"/programs/ssh-agent/apply_service.sh
 ### ---------- configure git -------------------- ###
 
 # Configure git name and email
