@@ -171,6 +171,8 @@ unset zle_bracketed_paste
 # Set diff-image shortcut
 alias diff-image='$HOME/git-diff-image/diff-image'
 
+alias rgfiles='rg --files| rg'
+
 # Set the default terminal to xterm if it is a ssh session.
 # This is to prevent handle backspaces correctly and being able to remove characters
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
