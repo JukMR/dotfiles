@@ -166,7 +166,6 @@ alias py='python3 -m pdb -c c'
 alias gs='git status'
 
 alias gdst='git diff --stat'
-unset zle_bracketed_paste
 
 # Set diff-image shortcut
 alias diff-image='$HOME/git-diff-image/diff-image'
@@ -190,3 +189,7 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
