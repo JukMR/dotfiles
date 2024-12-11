@@ -128,7 +128,7 @@ fi
 ### ---------- permanent shortcuts -------------------- ###
 
 # Set permanent shortcuts
-"$DOTDIR"/scripts/gitlola.sh
+"$DOTDIR"/programs/git/aliases/gitlola.sh
 "$DOTDIR"/scripts/keyboard-us-altgr-variant.sh
 
 ### ---------- zshrc -------------------- ###
