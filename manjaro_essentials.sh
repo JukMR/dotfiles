@@ -178,11 +178,10 @@ echo "Configuring git name: $GIT_NAME and email: $GIT_EMAIL"
 git config --global user.name "$GIT_NAME"
 git config --global user.email "$GIT_EMAIL"
 
-# Add git alias configs
-git config --global alias.final-branches '!git for-each-ref --format="%(objectname)^{commit}" | git cat-file --batch-check="%(objectname)^!" | grep -v missing | git log --oneline --stdin'
-
-# Add git undo alias
-git config --global alias.undo 'reset --soft HEAD^'
+# Add git aliases
+bash "$DOTDIR"/programs/git/aliases/final_branches.sh
+bash "$DOTDIR"/programs/git/aliases/list_all_aliases.sh
+bash "$DOTDIR"/programs/git/aliases/undo.sh
 
 ### ---------- install git-diff-image -------------------- ###
 
