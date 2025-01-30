@@ -4,7 +4,7 @@ After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c 'echo "XHC0" > /proc/acpi/wakeup; echo "XHC1" > /proc/acpi/wakeup'
+ExecStart=/home/mrjulian/dotfiles/scripts/disable_wakeup_from_suspend_usb_devices/disable_wakeup_from_suspend_usb_devices.sh
 
 [Install]
 WantedBy=multi-user.target
