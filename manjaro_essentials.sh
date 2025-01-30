@@ -182,6 +182,8 @@ git config --global user.email "$GIT_EMAIL"
 bash "$DOTDIR"/programs/git/aliases/final_branches.sh
 bash "$DOTDIR"/programs/git/aliases/list_all_aliases.sh
 bash "$DOTDIR"/programs/git/aliases/undo.sh
+bash "$DOTDIR"/programs/git/aliases/local-branch-remove.sh
+bash "$DOTDIR"/programs/git/aliases/local-branch-show.sh
 
 ### ---------- install git-diff-image -------------------- ###
 
