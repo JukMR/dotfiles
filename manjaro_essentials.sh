@@ -254,3 +254,6 @@ echo "Installing zoxide"
 bash "$DOTDIR"/programs/zoxide/install.sh
 
 echo "All commmands run successfully!"
+
+### ---------- Clipboard manager -------------------- ###
+bash $DOTDIR/programs/Clipboard/install.sh
