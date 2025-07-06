@@ -86,6 +86,7 @@ tree
 ttf-fira-code
 noto-fonts-emoji
 xterm
+kitty-terminfo
 "
 
 # Array to store programs that need installation
