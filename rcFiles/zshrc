@@ -194,12 +194,26 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
-# Escape insert mode in zsh-vim-mode-plugin with jk or kj
+alias rgfiles='rg --files| rg'
+
+# Escape insert mode in zsh-vim-mode-plugin with jk, kj, jj 
 bindkey -M viins jk vi-cmd-mode
 bindkey -M viins kj vi-cmd-mode
+bindkey -M viins jj vi-cmd-mode
 
 # Remove the default keybinding for fzf alt+c or esc+c which colided with zsh-vim-mode-plugin
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 bindkey -r '\ec'
 bindkey -M vicmd '\eq' fzf-cd-widget
 bindkey -M viins '\eq' fzf-cd-widget
+# Disable fzf triggering fzf-search-widget when doing esc + ctrl + r
+bindkey -M vicmd -r '^R'
+
+
+# Enable thefuck
+eval $(thefuck --alias)
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
