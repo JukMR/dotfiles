@@ -729,6 +729,14 @@ globalkeys = gears.table.join(
 		description = "Suspend and lock session",
 		group = "client",
 	}), -- End of Personal keybindings
+	awful.key({ modkey, "Ctrl", "Shift" }, "t", function()
+		awful.spawn.with_shell(
+			"notify-send 'Going to sleep in 5 seconds' && sleep 5 && systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock"
+		)
+	end, {
+		description = "Suspend and lock session after 5 seconds",
+		group = "client",
+	}), -- End of Personal keybindings
 	awful.key({ modkey }, "x", function()
 		awful.prompt.run({
 			prompt = "Run Lua code: ",
@@ -1204,7 +1212,7 @@ local autorunApps = {
 	"sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
 	"sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
 	"copyq",
-	"qbittorrent",
+	-- "qbittorrent",
 	"picom",
 }
 
