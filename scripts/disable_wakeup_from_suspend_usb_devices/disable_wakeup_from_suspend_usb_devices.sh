@@ -12,10 +12,10 @@ fi
 
 echo "Checking currently enabled wakeup devices..."
 echo "Enabled devices:"
-cat /proc/acpi/wakeup | $GREP_CMD enabled
+$GREP_CMD enabled /proc/acpi/wakeup
 
 # Get list of enabled devices (first word of each line)
-enabled_devices=$(cat /proc/acpi/wakeup | $GREP_CMD enabled | awk '{print $1}')
+enabled_devices=$($GREP_CMD enabled /proc/acpi/wakeup | awk '{print $1}')
 
 if [ -z "$enabled_devices" ]; then
     echo "No enabled wakeup devices found."
@@ -41,4 +41,4 @@ done
 echo ""
 echo "Wakeup device configuration complete."
 echo "Current status:"
-cat /proc/acpi/wakeup
+cat < /proc/acpi/wakeup
