@@ -99,8 +99,8 @@ local myawesomemenu = {
 			hotkeys_popup.show_help(nil, awful.screen.focused())
 		end,
 	},
-	{ "manual", terminal .. " -e man awesome" },
-	{ "edit conf nvim", editor_cmd .. " " .. awesome.conffile },
+	{ "manual",           terminal .. " -e man awesome" },
+	{ "edit conf nvim",   editor_cmd .. " " .. awesome.conffile },
 	{ "edit conf vscode", "code" .. " " .. awesome.conffile },
 }
 
@@ -117,28 +117,28 @@ local power_options_group = {
 			awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
 		end,
 	},
-	{ "reboot", "reboot" },
+	{ "reboot",   "reboot" },
 	{ "shutdown", "poweroff" },
 }
 
 local awesome_power_options =
-	{ { "restart awesome", awesome.restart }, {
-		"quit awesome",
-		function()
-			awesome.quit()
-		end,
-	} }
+{ { "restart awesome", awesome.restart }, {
+	"quit awesome",
+	function()
+		awesome.quit()
+	end,
+} }
 
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
 mymainmenu = awful.menu({
 	items = {
-		{ "awesome", myawesomemenu, beautiful.awesome_icon },
+		{ "awesome",       myawesomemenu,        beautiful.awesome_icon },
 		{ "open terminal", terminal },
 		{ "power options", power_options_group },
 		{ "awesome power", awesome_power_options },
-		{ "brave", "brave" },
+		{ "brave",         "brave" },
 	},
 })
 
@@ -355,7 +355,7 @@ awful.screen.connect_for_each_screen(function(s)
 			s.mypromptbox,
 		},
 		s.mytasklist, -- Middle widget
-		{ -- Right widgets
+		{       -- Right widgets
 			layout = wibox.layout.fixed.horizontal,
 			--- Add custom logout button widget
 			logout_menu_widget({
@@ -388,8 +388,8 @@ root.buttons(gears.table.join(
 	awful.button({}, 3, function()
 		mymainmenu:toggle()
 	end) -- comment the following lines to avoid mouse wheel from turning tags
-	-- awful.button({ }, 4, awful.tag.viewnext),
-	-- awful.button({ }, 5, awful.tag.viewprev)
+-- awful.button({ }, 4, awful.tag.viewnext),
+-- awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
