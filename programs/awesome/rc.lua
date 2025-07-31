@@ -730,9 +730,22 @@ globalkeys = gears.table.join(
 		group = "client",
 	}), -- End of Personal keybindings
 	awful.key({ modkey, "Ctrl", "Shift" }, "t", function()
-		awful.spawn.with_shell(
-			"notify-send 'Going to sleep in 5 seconds' && sleep 5 && systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock"
-		)
+		local countdown = 5
+		local function countdown_notification()
+			if countdown > 0 then
+				naughty.notify({
+					title = "Sleep Timer",
+					text = string.format("Going to sleep in %d second%s", countdown, countdown == 1 and "" or "s"),
+					timeout = 1,
+				})
+				countdown = countdown - 1
+				gears.timer.start_new(1, countdown_notification)
+			else
+				-- Execute the suspend and lock command after countdown
+				awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
+			end
+		end
+		countdown_notification()
 	end, {
 		description = "Suspend and lock session after 5 seconds",
 		group = "client",
