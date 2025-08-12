@@ -212,12 +212,15 @@ net_internet = net_widgets.internet({
 local interfaces = {}
 local cmd = "iwconfig 2>&1 | awk '{print $1;}' | grep -v '^\\s*$'"
 
--- Execute the command
-awful.spawn.easy_async_with_shell(cmd, function(stdout)
+-- Use io.popen to run the command and get its output
+local handle = io.popen(cmd)
+if handle then
+	local stdout = handle:read("*a") -- Read all output from the command
+	handle:close()
 	for interface in stdout:gmatch("%S+") do
 		table.insert(interfaces, interface)
 	end
-end)
+end
 
 net_wired = net_widgets.indicator({
 	interfaces = interfaces,
@@ -290,20 +293,7 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-function show_battery(battery)
-	if battery then
-		return batteryarc_widget({
-			show_current_level = true,
-			arc_thickness = 1,
-		})
-	end
-end
 
-function show_wifi(wifi)
-	if wifi then
-		return net_wireless, net_internet
-	end
-end
 
 awful.screen.connect_for_each_screen(function(s)
 	-- Wallpaper
@@ -318,18 +308,10 @@ awful.screen.connect_for_each_screen(function(s)
 	-- We need one layoutbox per screen.
 	s.mylayoutbox = awful.widget.layoutbox(s)
 	s.mylayoutbox:buttons(gears.table.join(
-		awful.button({}, 1, function()
-			awful.layout.inc(1)
-		end),
-		awful.button({}, 3, function()
-			awful.layout.inc(-1)
-		end),
-		awful.button({}, 4, function()
-			awful.layout.inc(1)
-		end),
-		awful.button({}, 5, function()
-			awful.layout.inc(-1)
-		end)
+		awful.button({}, 1, function() awful.layout.inc(1) end),
+		awful.button({}, 3, function() awful.layout.inc(-1) end),
+		awful.button({}, 4, function() awful.layout.inc(1) end),
+		awful.button({}, 5, function() awful.layout.inc(-1) end)
 	))
 	-- Create a taglist widget
 	s.mytaglist = awful.widget.taglist({
@@ -346,12 +328,42 @@ awful.screen.connect_for_each_screen(function(s)
 	})
 
 	-- Create the wibox
-	s.mywibox = awful.wibar({
-		position = "top",
-		screen = s,
-	})
+	s.mywibox = awful.wibar({ position = "top", screen = s })
 
-	-- Add widgets to the wibox
+	-- 1. Create a table to hold the widgets for the right side of the wibar.
+	local right_widgets = {
+		layout = wibox.layout.fixed.horizontal,
+		--- Add custom logout button widget
+		logout_menu_widget({
+			font = "Play 14",
+			onlock = function() awful.spawn.with_shell("i3lock-fancy") end,
+		}),
+	}
+
+	-- 2. Conditionally add battery widget based on the global variable
+	if battery then
+		table.insert(right_widgets, batteryarc_widget({
+			show_current_level = true,
+			arc_thickness = 1,
+		}))
+	end
+
+	-- 3. Conditionally add wifi widgets based on the global variable
+	if wifi then
+		table.insert(right_widgets, net_wireless)
+		table.insert(right_widgets, net_internet)
+	end
+
+	-- 4. Add the rest of the widgets to the table
+	table.insert(right_widgets, net_speed_widget())
+	table.insert(right_widgets, net_wired)
+	table.insert(right_widgets, mykeyboardlayout)
+	table.insert(right_widgets, wibox.widget.systray())
+	table.insert(right_widgets, volume_widget) -- added line
+	table.insert(right_widgets, mytextclock)
+	table.insert(right_widgets, s.mylayoutbox)
+
+	-- 5. Add all the widget collections to the wibox
 	s.mywibox:setup({
 		layout = wibox.layout.align.horizontal,
 		{ -- Left widgets
@@ -361,33 +373,9 @@ awful.screen.connect_for_each_screen(function(s)
 			s.mypromptbox,
 		},
 		s.mytasklist, -- Middle widget
-		{       -- Right widgets
-			layout = wibox.layout.fixed.horizontal,
-			--- Add custom logout button widget
-			logout_menu_widget({
-				font = "Play 14",
-				onlock = function()
-					awful.spawn.with_shell("i3lock-fancy")
-				end,
-			}),
-			-- Add custom battery icon
-			show_battery(battery),
-
-			-- Add custom wifi icon
-			show_wifi(wifi),
-
-			-- Add speed network widget
-			net_speed_widget(),
-			net_wired,
-			mykeyboardlayout,
-			wibox.widget.systray(),
-			volume_widget, -- added line
-			mytextclock,
-			s.mylayoutbox,
-		},
+		right_widgets, -- The table we just built
 	})
 end)
--- }}}
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
