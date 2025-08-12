@@ -699,13 +699,13 @@ globalkeys = gears.table.join(
 		description = "Launch Spotify",
 		group = "apps",
 	}), -- Screenshooter
-	awful.key({}, "#107", function()
+	awful.key({}, "Print", function()
 		awful.spawn("flameshot gui")
 	end, {
 		description = "Launch flameshot gui",
 		group = "screenshot",
 	}), -- Screenshooter
-	awful.key({ "Shift", modkey }, "#107", function()
+	awful.key({ "Shift", modkey }, "Print", function()
 		awful.spawn.with_shell(
 			"mkdir -p $HOME/Pictures/screenshots/ && flameshot screen -p $HOME/Pictures/screenshots/"
 		)
@@ -713,7 +713,7 @@ globalkeys = gears.table.join(
 		description = "Capture and save current screen",
 		group = "screenshot",
 	}),
-	awful.key({ "Shift" }, "#107", function()
+	awful.key({ "Shift" }, "Print", function()
 		awful.spawn.with_shell("mkdir -p $HOME/Pictures/screenshots/ && flameshot full -p $HOME/Pictures/screenshots/")
 	end, {
 		description = "Capture and save full screen",
