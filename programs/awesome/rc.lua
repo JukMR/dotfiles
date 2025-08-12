@@ -104,18 +104,24 @@ local myawesomemenu = {
 	{ "edit conf vscode", "code" .. " " .. awesome.conffile },
 }
 
+-- Define helper functions for suspending and locking
+
+local function xlock_w_fonts()
+	awful.spawn.with_shell("LANG=C LC_ALL=C xlock")
+end
+
+local function lock_and_suspend()
+	xlock_w_fonts()
+	awful.spawn.with_shell("systemctl suspend")
+end
+
+
 local power_options_group = {
 	{
-		"lock_session",
-		function()
-			awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
-		end,
+		"lock_session", xlock_w_fonts
 	},
 	{
-		"suspend",
-		function()
-			awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
-		end,
+		"suspend", lock_and_suspend
 	},
 	{ "reboot",   "reboot" },
 	{ "shutdown", "poweroff" },
@@ -570,12 +576,14 @@ globalkeys = gears.table.join(
 		description = "Launch Vscode",
 		group = "apps",
 	}),
-	awful.key({ modkey, "Control", "Shift" }, "l", function()
-		awful.spawn.with_shell("locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
-	end, {
-		description = "Lock Screen",
-		group = "client",
-	}), -- Move current window to next tag or prev tag
+	awful.key({ modkey, "Control", "Shift" }, "l", xlock_w_fonts,
+		{
+			description = "Lock Screen",
+			group = "client",
+		}
+	),
+
+	-- Move current window to next tag or prev tag
 	-- Ctrl+Alt+Shift+Left/Right: move client to prev/next tag
 	awful.key({ modkey, "Control", "Shift" }, "Left", function()
 		-- get current tag
@@ -723,10 +731,8 @@ globalkeys = gears.table.join(
 		description = "Capture and save full screen",
 		group = "screenshot",
 	}),
-	awful.key({ modkey, "Ctrl", "Shift" }, "s", function()
-		awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
-	end, {
-		description = "Suspend and lock session",
+	awful.key({ modkey, "Ctrl", "Shift" }, "s", lock_and_suspend, {
+		description = "Lock and suspend session",
 		group = "client",
 	}), -- End of Personal keybindings
 	awful.key({ modkey, "Ctrl", "Shift" }, "t", function()
@@ -741,8 +747,8 @@ globalkeys = gears.table.join(
 				countdown = countdown - 1
 				gears.timer.start_new(1, countdown_notification)
 			else
-				-- Execute the suspend and lock command after countdown
-				awful.spawn.with_shell("systemctl suspend && locale\nlocale -a\nlocalectl\nLANG=C LC_ALL=C xlock")
+				-- Execute the lock and suspend command after countdown
+				lock_and_suspend()
 			end
 		end
 		countdown_notification()
