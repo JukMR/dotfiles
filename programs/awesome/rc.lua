@@ -1176,30 +1176,16 @@ mylog:write("Your debug message\n")
 
 -- Autorun apps
 
-local function is_exact_process_running(command)
-	-- mylog:write(command)
-	local escaped_command = command:gsub('"', "") -- Properly escape double quotes for shell
-	local pgrep_command = string.format(
-		"pgrep -u $USER -af '%s' | grep -E '[0-9]+ [^ ]*%s[^ ]*$' | grep -v grep",
-		escaped_command,
-		escaped_command
-	)
-
-	-- mylog:write("Executing command:\n", pgrep_command, '\n') -- Debug print
-	local handle = io.popen(pgrep_command)
-	local result = handle:read("*a")
-	handle:close()
-
-	-- Check if result is not empty, indicating processes were found
-	-- mylog:write('result is: ', result, '\n') -- Debug print
-	return result ~= ""
-end
-
+-- A more efficient way to run apps only once
 local function run_once(cmd)
-	-- Escape special characters in cmd for accurate pattern matching
-	if not is_exact_process_running(cmd) then
-		awful.spawn.with_shell(cmd)
-	end
+	-- The '-f' flag matches against the full command line.
+	-- The '||' operator executes the command only if pgrep fails (returns non-zero).
+	local find_cmd = "pgrep -f -u $USER '" .. cmd .. "'"
+	local run_cmd = "sh -c '(" .. cmd .. " &)'"
+	awful.spawn.easy_async_with_shell(
+		"if ! " .. find_cmd .. " > /dev/null; then " .. run_cmd .. "; fi",
+		function() end -- Optional callback
+	)
 end
 
 -- Now you can call run_once with the command for each application
