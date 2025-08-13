@@ -1171,20 +1171,28 @@ awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-a
 local HOME_DIRECTORY = os.getenv("HOME")
 local LOG_FILE = HOME_DIRECTORY .. "/awesome.logs"
 
-local mylog = io.open(LOG_FILE, "a")
-mylog:write("Your debug message\n")
 
 -- Autorun apps
 
 -- A more efficient way to run apps only once
 local function run_once(cmd)
-	-- The '-f' flag matches against the full command line.
-	-- The '||' operator executes the command only if pgrep fails (returns non-zero).
-	local find_cmd = "pgrep -f -u $USER '" .. cmd .. "'"
-	local run_cmd = "sh -c '(" .. cmd .. " &)'"
+	-- check if any process with this name is running
+	local process_name = cmd:match("^([^%s]+)") -- Get first word before any space
+	if process_name then
+		process_name = process_name:match("([^/]+)$") -- Get basename (remove path)
+	end
+
 	awful.spawn.easy_async_with_shell(
-		"if ! " .. find_cmd .. " > /dev/null; then " .. run_cmd .. "; fi",
-		function() end -- Optional callback
+		"pgrep -x '" .. process_name .. "' > /dev/null || (" .. cmd .. " &)",
+		function(stdout, stderr, exitreason, exitcode)
+			-- Debug notification to see what's happening
+			-- naughty.notify({
+			-- 	text = "run_once: " ..
+			-- 		cmd ..
+			-- 		" (process: " .. process_name .. ")" .. (exitcode == 0 and " - executed" or " - already running"),
+			-- 	timeout = 3
+			-- })
+		end
 	)
 end
 
@@ -1219,5 +1227,12 @@ end
 -- naughty.notify({text=tostring((vart))})
 -- naughty.notify({text=tostring((editor))})
 
-mylog:write("\n\n")
-mylog:flush() -- Ensures the output is written immediately
+personal_debug = false -- don't use `debug` variable because it clash with some internal variable of awesome
+if personal_debug then
+	local mylog = io.open(LOG_FILE, "a")
+	naughty.notify({ text = "Debug mode enable" })
+	mylog:write("Your debug message\n")
+	mylog:write("\n\n")
+	mylog:flush() -- Ensures the output is written immediately
+	mylog:close()
+end
