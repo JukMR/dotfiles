@@ -10,13 +10,22 @@ function update_volume(widget)
     local status = fd:read("*all")
     fd:close()
 
-    -- local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
-    local volume = string.match(status, "(%d?%d?%d)%%")
-    volume = string.format("% 3d", volume)
+    -- Try to get the volume level as a string (e.g., "75")
+    local volume_str = string.match(status, "(%d?%d?%d)%%")
 
-    status = string.match(status, "%[(o[^%]]*)%]")
+    if volume_str == nil then
+        -- If no volume was found, display a placeholder and stop.
+        widget:set_markup(" --% ")
+        return -- Exit the function early to prevent a crash
+    end
 
-    if string.find(status, "on", 1, true) then
+    -- If we are here, we have a valid volume string. Proceed with your logic.
+    local volume_num = tonumber(volume_str)
+    local volume = string.format("% 3d", volume_num)
+
+    local mute_status = string.match(status, "%[(o[^%]]*)%]")
+
+    if mute_status and string.find(mute_status, "on", 1, true) then
         -- For the volume numbers
         volume = volume .. "%"
     else
@@ -26,16 +35,9 @@ function update_volume(widget)
     widget:set_markup(volume)
 end
 
-update_volume(volume_widget)
-
-
 mytimer = gears.timer {
     timeout = 1,
     autostart = true,
     call_now = true,
     callback = function() update_volume(volume_widget) end
 }
-
--- mytimer = gears.timer({ timeout = 0.2 })
--- mytimer:connect_signal("timeout", function () update_volume(volume_widget) end)
--- mytimer:start()
