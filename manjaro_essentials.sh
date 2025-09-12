@@ -87,6 +87,7 @@ ttf-fira-code
 noto-fonts-emoji
 xterm
 kitty-terminfo
+ncdu
 "
 
 # Array to store programs that need installation
