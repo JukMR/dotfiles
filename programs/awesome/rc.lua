@@ -1204,7 +1204,6 @@ run_once("xfsettingsd --daemon")
 
 -- Using custom identifiers for each kitty command
 run_once("kitty")
-run_once("kitty --start-as maximized btop")
 
 run_once("brave")
 
@@ -1212,6 +1211,7 @@ run_once("brave")
 local autorunApps = {
 	"sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
 	"sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
+	"sh -c $HOME/dotfiles/scripts/launch_btop_minimized.sh",
 	"copyq",
 	-- "qbittorrent",
 	"picom",
