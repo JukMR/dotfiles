@@ -89,6 +89,7 @@ xterm
 kitty-terminfo
 ncdu
 ksnip
+gromit-mpx
 "
 
 # Array to store programs that need installation
