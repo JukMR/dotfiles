@@ -214,3 +214,10 @@ eval $(thefuck --alias)
 ## Completion scripts setup. Remove the following line to uninstall
 [[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
+
+
+# Define the special prompt prefix for ssh sessions
+autoload -U colors && colors
+if [[ -n "$SSH_CONNECTION" ]]; then
+  PROMPT='ssh%F{red}✈%n%F{white}@%F{magenta}%m%f '"$PROMPT"
+fi
