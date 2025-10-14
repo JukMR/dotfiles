@@ -88,6 +88,7 @@ noto-fonts-emoji
 xterm
 kitty-terminfo
 ncdu
+ksnip
 "
 
 # Array to store programs that need installation
