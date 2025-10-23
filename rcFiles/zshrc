@@ -221,3 +221,4 @@ autoload -U colors && colors
 if [[ -n "$SSH_CONNECTION" ]]; then
   PROMPT='ssh%F{red}✈%n%F{white}@%F{magenta}%m%f '"$PROMPT"
 fi
+RPROMPT='%F{green}[%D{%H:%M:%S}]%f'
