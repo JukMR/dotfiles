@@ -90,6 +90,7 @@ kitty-terminfo
 ncdu
 ksnip
 gromit-mpx
+autorandr
 "
 
 # Array to store programs that need installation
