@@ -227,4 +227,4 @@ fi
 # let prompt expand variables
 setopt PROMPT_SUBST
 
-RPROMPT='${MODE_INDICATOR_PROMPT} %F{green}[%D{%H:%M:%S}]%f'
+RPROMPT='${MODE_INDICATOR_PROMPT} %F{14}[%D{%H:%M:%S}]%f'
