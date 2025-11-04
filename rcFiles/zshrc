@@ -221,4 +221,10 @@ if [[ -n "$SSH_CONNECTION" ]]; then
   PROMPT='%F{cyan}ssh✈%f%F{red}%n%F{blue}@%F{magenta}%m%f '"$PROMPT"
 fi
 
-RPROMPT='%F{green}[%D{%H:%M:%S}]%f'
+
+# Modify RPROMPT and add indicator from zsh-vim-mode-plugin
+
+# let prompt expand variables
+setopt PROMPT_SUBST
+
+RPROMPT='${MODE_INDICATOR_PROMPT} %F{green}[%D{%H:%M:%S}]%f'
