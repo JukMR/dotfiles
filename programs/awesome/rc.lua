@@ -658,7 +658,38 @@ globalkeys = gears.table.join(
 		awful.spawn("playerctl play-pause")
 	end),
 	awful.key({ modkey, "Ctrl", "Shift" }, "\\", function()
-		awful.spawn("playerctld shift")
+		-- Shift the active player using playerctld, then query metadata and notify which player is now active
+		awful.spawn.easy_async_with_shell(
+			"playerctld shift && playerctl metadata --format '{{playerName}}: {{status}} : {{title}} — {{artist}}'",
+			function(stdout, stderr, reason, exitcode)
+				local line = tostring(stdout or ""):gsub("^%s*(.-)%s*$", "%1") -- trim whitespace/newlines
+				if line == "" then
+					naughty.notify({
+						preset = naughty.config.presets.normal,
+						title = "Player switch",
+						text = "No player information available",
+					})
+				else
+					naughty.notify({
+						preset = naughty.config.presets.normal,
+						title = "Active player",
+						text = line,
+					})
+				end
+			end
+		)
+	end),
+	-- Display current playing song
+	-- NOTE: This shortcut can now be removed given that `playerctl shift` now displays also the selected player
+	awful.key({ modkey, "Ctrl", "Shift" }, "i", function()
+		awful.spawn.with_line_callback(
+			"playerctl metadata --format '{{playerName}}: {{status}} : {{title}} — {{artist}}'",
+			{
+				stdout = function(line)
+					awful.spawn("notify-send '" .. line .. "'")
+				end,
+			}
+		)
 	end),
 	awful.key({ modkey, "Ctrl", "Shift" }, "]", function()
 		awful.spawn("playerctl next")
