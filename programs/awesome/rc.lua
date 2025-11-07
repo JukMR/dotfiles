@@ -657,6 +657,9 @@ globalkeys = gears.table.join(
 	awful.key({ modkey, "Ctrl", "Shift" }, "p", function()
 		awful.spawn("playerctl play-pause")
 	end),
+	awful.key({ modkey, "Ctrl", "Shift" }, "\\", function()
+		awful.spawn("playerctld shift")
+	end),
 	awful.key({ modkey, "Ctrl", "Shift" }, "]", function()
 		awful.spawn("playerctl next")
 	end), --- MediaKeys keybindings
@@ -1215,6 +1218,7 @@ local autorunApps = {
 	"copyq",
 	-- "qbittorrent",
 	"picom",
+	"playerctld",
 }
 
 for _, app in ipairs(autorunApps) do
