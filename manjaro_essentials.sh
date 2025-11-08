@@ -91,6 +91,7 @@ ncdu
 ksnip
 gromit-mpx
 autorandr
+bluetui
 "
 
 # Array to store programs that need installation
