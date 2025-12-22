@@ -92,6 +92,7 @@ ksnip
 gromit-mpx
 autorandr
 bluetui
+duf
 "
 
 # Array to store programs that need installation
