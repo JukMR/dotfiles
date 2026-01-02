@@ -242,3 +242,4 @@ if [[ "$TERM_PROGRAM" == "vscode" ]]; then
 fi
 # Allow ctrl-c to quit less
 export LESS="-K -R"
+alias gcc='git commit --verbose --no-verify'
