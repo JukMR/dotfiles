@@ -123,7 +123,6 @@ bash "$DOTDIR"/programs/neovim/install_0.9.5_version.sh
 if [ ! -d ~/.oh-my-zsh ] || [ ! -f ~/.zshrc ]; then
     # If either the .oh-my-zsh directory or the .zshrc file doesn't exist, run the installation scripts
     "$DOTDIR"/programs/oh-my-zsh/zsh.sh
-    "$DOTDIR"/programs/oh-my-zsh/oh-my-zsh-unattended.sh
     "$DOTDIR"/programs/oh-my-zsh/autosuggestion.sh
 fi
 
