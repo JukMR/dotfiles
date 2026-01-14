@@ -24,10 +24,90 @@ pkg_update() {
     esac
 }
 
-# Install packages (idempotent)
+# Install a single package with fallback to snap (Ubuntu/Debian)
+pkg_install_single() {
+    local pkg="$1"
+    local allow_snap="${2:-true}"  # Allow snap by default
+
+    # Check if already installed
+    if pkg_is_installed "$pkg"; then
+        log_skip "Package already installed: $pkg"
+        log_installation "$pkg" "skipped"
+        return 0
+    fi
+
+    log_info "Installing package: $pkg"
+
+    case "$PKG_MANAGER" in
+        apt)
+            # Try apt first
+            if sudo apt install -y "$pkg" 2>/dev/null; then
+                log_success "Installed $pkg via apt"
+                log_installation "$pkg" "installed-apt"
+                return 0
+            fi
+
+            # If apt fails and snap is available, try snap
+            if [ "$allow_snap" = "true" ] && command -v snap &>/dev/null; then
+                log_info "apt failed, trying snap for $pkg"
+                if sudo snap install "$pkg" 2>/dev/null; then
+                    log_success "Installed $pkg via snap"
+                    log_installation "$pkg" "installed-snap"
+                    return 0
+                fi
+            fi
+
+            log_error "Failed to install $pkg via apt${allow_snap:+ and snap}"
+            log_installation "$pkg" "failed"
+            return 1
+            ;;
+        pacman)
+            if sudo pacman -S --noconfirm --needed "$pkg" 2>/dev/null; then
+                log_success "Installed $pkg via pacman"
+                log_installation "$pkg" "installed-pacman"
+                return 0
+            fi
+            log_error "Failed to install $pkg via pacman"
+            log_installation "$pkg" "failed"
+            return 1
+            ;;
+        dnf)
+            if sudo dnf install -y "$pkg" 2>/dev/null; then
+                log_success "Installed $pkg via dnf"
+                log_installation "$pkg" "installed-dnf"
+                return 0
+            fi
+            log_error "Failed to install $pkg via dnf"
+            log_installation "$pkg" "failed"
+            return 1
+            ;;
+        zypper)
+            if sudo zypper install -y "$pkg" 2>/dev/null; then
+                log_success "Installed $pkg via zypper"
+                log_installation "$pkg" "installed-zypper"
+                return 0
+            fi
+            log_error "Failed to install $pkg via zypper"
+            log_installation "$pkg" "failed"
+            return 1
+            ;;
+        *)
+            log_error "Unknown package manager: $PKG_MANAGER"
+            log_installation "$pkg" "failed"
+            return 1
+            ;;
+    esac
+}
+
+# Install packages (idempotent, non-blocking)
+# Returns 0 if at least one package was installed successfully
+# Individual package failures don't stop execution
 pkg_install() {
     local packages=("$@")
     local to_install=()
+    local installed_count=0
+    local failed_count=0
+    local skipped_count=0
 
     # Filter out already installed packages
     for pkg in "${packages[@]}"; do
@@ -36,61 +116,38 @@ pkg_install() {
         else
             log_skip "Package already installed: $pkg"
             log_installation "$pkg" "skipped"
+            ((skipped_count++))
         fi
     done
 
     # Nothing to install
     if [ ${#to_install[@]} -eq 0 ]; then
-        log_info "All packages already installed"
+        log_info "All ${#packages[@]} package(s) already installed"
         return 0
     fi
 
-    log_info "Installing packages: ${to_install[*]}"
+    log_info "Attempting to install ${#to_install[@]} package(s): ${to_install[*]}"
 
-    case "$PKG_MANAGER" in
-        apt)
-            if sudo apt install -y "${to_install[@]}"; then
-                for pkg in "${to_install[@]}"; do
-                    log_installation "$pkg" "installed"
-                done
-                return 0
-            fi
-            ;;
-        pacman)
-            if sudo pacman -S --noconfirm --needed "${to_install[@]}"; then
-                for pkg in "${to_install[@]}"; do
-                    log_installation "$pkg" "installed"
-                done
-                return 0
-            fi
-            ;;
-        dnf)
-            if sudo dnf install -y "${to_install[@]}"; then
-                for pkg in "${to_install[@]}"; do
-                    log_installation "$pkg" "installed"
-                done
-                return 0
-            fi
-            ;;
-        zypper)
-            if sudo zypper install -y "${to_install[@]}"; then
-                for pkg in "${to_install[@]}"; do
-                    log_installation "$pkg" "installed"
-                done
-                return 0
-            fi
-            ;;
-        *)
-            log_error "Unknown package manager: $PKG_MANAGER"
-            return 1
-            ;;
-    esac
-
-    log_error "Package installation failed"
+    # Install packages one by one to allow continuation on failure
     for pkg in "${to_install[@]}"; do
-        log_installation "$pkg" "failed"
+        if pkg_install_single "$pkg"; then
+            ((installed_count++))
+        else
+            ((failed_count++))
+            # Log but continue with next package
+            log_warn "Continuing despite failure to install $pkg"
+        fi
     done
-    return 1
+
+    # Summary
+    log_info "Package installation summary: ${installed_count} installed, ${failed_count} failed, ${skipped_count} skipped"
+
+    # Return success if at least one package was installed or all were skipped
+    if [ $installed_count -gt 0 ] || [ $failed_count -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Check if package is installed
@@ -99,7 +156,15 @@ pkg_is_installed() {
 
     case "$PKG_MANAGER" in
         apt)
-            dpkg -l "$package" 2>/dev/null | grep -q "^ii"
+            # Check apt packages
+            if dpkg -l "$package" 2>/dev/null | grep -q "^ii"; then
+                return 0
+            fi
+            # Check snap packages if snap is available
+            if command -v snap &>/dev/null && snap list "$package" 2>/dev/null | grep -q "^$package"; then
+                return 0
+            fi
+            return 1
             ;;
         pacman)
             pacman -Q "$package" &>/dev/null
@@ -190,7 +255,49 @@ install_aur_helper() {
     fi
 }
 
-# Install from AUR (Arch-based only)
+# Install from snap (Ubuntu/Debian)
+snap_install() {
+    local packages=("$@")
+    local installed_count=0
+    local failed_count=0
+
+    if ! command -v snap &>/dev/null; then
+        log_warn "Snap not available on this system"
+        for pkg in "${packages[@]}"; do
+            log_installation "$pkg" "failed-no-snap"
+        done
+        return 1
+    fi
+
+    log_info "Installing snap packages: ${packages[*]}"
+
+    for pkg in "${packages[@]}"; do
+        # Check if already installed
+        if snap list "$pkg" 2>/dev/null | grep -q "^$pkg"; then
+            log_skip "Snap package already installed: $pkg"
+            log_installation "$pkg" "skipped"
+            continue
+        fi
+
+        log_info "Installing $pkg via snap"
+        if sudo snap install "$pkg" 2>/dev/null; then
+            log_success "Installed $pkg via snap"
+            log_installation "$pkg" "installed-snap"
+            ((installed_count++))
+        else
+            log_error "Failed to install $pkg via snap"
+            log_installation "$pkg" "failed-snap"
+            ((failed_count++))
+        fi
+    done
+
+    log_info "Snap installation summary: ${installed_count} installed, ${failed_count} failed"
+
+    # Return success if at least one package was installed
+    [ $installed_count -gt 0 ] && return 0 || return 1
+}
+
+# Install from AUR (Arch-based only) - non-blocking
 aur_install() {
     if [ "$PKG_MANAGER" != "pacman" ]; then
         log_warn "AUR not available on $DISTRO, skipping AUR packages"
@@ -198,24 +305,114 @@ aur_install() {
     fi
 
     if [ "$AUR_HELPER" = "none" ]; then
-        install_aur_helper || return 1
+        if ! install_aur_helper; then
+            log_error "Failed to install AUR helper"
+            return 1
+        fi
     fi
 
     local packages=("$@")
-    log_info "Installing AUR packages: ${packages[*]}"
+    local to_install=()
+    local installed_count=0
+    local failed_count=0
+    local skipped_count=0
 
-    case "$AUR_HELPER" in
-        yay)
-            yay -S --noconfirm "${packages[@]}"
+    # Filter already installed AUR packages
+    for pkg in "${packages[@]}"; do
+        if ! pkg_is_installed "$pkg"; then
+            to_install+=("$pkg")
+        else
+            log_skip "AUR package already installed: $pkg"
+            log_installation "$pkg" "skipped"
+            ((skipped_count++))
+        fi
+    done
+
+    # Nothing to install
+    if [ ${#to_install[@]} -eq 0 ]; then
+        log_info "All AUR packages already installed"
+        return 0
+    fi
+
+    log_info "Installing AUR packages: ${to_install[*]}"
+
+    # Install packages one by one to allow continuation on failure
+    for pkg in "${to_install[@]}"; do
+        log_info "Installing $pkg from AUR"
+        local install_success=false
+
+        case "$AUR_HELPER" in
+            yay)
+                if yay -S --noconfirm "$pkg" 2>/dev/null; then
+                    install_success=true
+                fi
+                ;;
+            paru)
+                if paru -S --noconfirm "$pkg" 2>/dev/null; then
+                    install_success=true
+                fi
+                ;;
+            pamac)
+                if pamac install --no-confirm "$pkg" 2>/dev/null; then
+                    install_success=true
+                fi
+                ;;
+            *)
+                log_error "No AUR helper available"
+                log_installation "$pkg" "failed-no-aur-helper"
+                ((failed_count++))
+                continue
+                ;;
+        esac
+
+        if [ "$install_success" = true ] && pkg_is_installed "$pkg"; then
+            log_success "Installed $pkg from AUR"
+            log_installation "$pkg" "installed-aur"
+            ((installed_count++))
+        else
+            log_error "Failed to install $pkg from AUR"
+            log_installation "$pkg" "failed-aur"
+            ((failed_count++))
+            log_warn "Continuing despite AUR installation failure for $pkg"
+        fi
+    done
+
+    log_info "AUR installation summary: ${installed_count} installed, ${failed_count} failed, ${skipped_count} skipped"
+
+    # Return success if at least one package was installed or all were skipped
+    if [ $installed_count -gt 0 ] || [ $failed_count -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Remove package (if needed)
+pkg_remove() {
+    local package="$1"
+
+    if ! pkg_is_installed "$package"; then
+        log_skip "Package not installed: $package"
+        return 0
+    fi
+
+    log_info "Removing package: $package"
+
+    case "$PKG_MANAGER" in
+        apt)
+            sudo apt remove -y "$package"
             ;;
-        paru)
-            paru -S --noconfirm "${packages[@]}"
+        pacman)
+            sudo pacman -Rns --noconfirm "$package"
             ;;
-        pamac)
-            pamac install --no-confirm "${packages[@]}"
+        dnf)
+            sudo dnf remove -y "$package"
+            ;;
+        zypper)
+            sudo zypper remove -y "$package"
             ;;
         *)
-            log_error "No AUR helper available"
+            log_error "Unknown package manager: $PKG_MANAGER"
             return 1
             ;;
     esac
