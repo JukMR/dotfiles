@@ -8,12 +8,12 @@ DOTDIR="${DOTDIR:-$HOME/dotfiles}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Enable strict mode but allow commands to fail
-set -uo pipefail
+set -euo pipefail
 
 # Source library functions
 source "$SCRIPT_DIR/lib/detect.sh"
 source "$SCRIPT_DIR/lib/logging.sh"
-source "$SCRIPT_DIR/lib/package_manager.sh"
+source "$SCRIPT_DIR/lib/pkg_manager.sh"
 
 # Initialize logging
 init_logging
@@ -326,9 +326,6 @@ fi
 
 ### ---------- AstroNvim ---------- ###
 log_info "Installing AstroNvim"
-if [ -f "$DOTDIR/programs/neovim/astronvim/install_neovim.sh" ]; then
-    bash "$DOTDIR/programs/neovim/astronvim/install_neovim.sh"
-fi
 
 if [ -f "$DOTDIR/programs/neovim/astronvim/setup_custom_configuration.sh" ]; then
     bash "$DOTDIR/programs/neovim/astronvim/setup_custom_configuration.sh"
