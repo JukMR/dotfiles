@@ -63,9 +63,14 @@ detect_aur_helper() {
 }
 
 # Export detection results
-export DISTRO=$(detect_distro)
-export PKG_MANAGER=$(detect_package_manager "$DISTRO")
-export AUR_HELPER=$(detect_aur_helper)
+DISTRO=$(detect_distro)
+export DISTRO
+
+PKG_MANAGER=$(detect_package_manager "$DISTRO")
+export PKG_MANAGER
+
+AUR_HELPER=$(detect_aur_helper)
+export AUR_HELPER
 
 # Print detection results if sourced with verbose flag
 if [ "${VERBOSE:-0}" = "1" ]; then
