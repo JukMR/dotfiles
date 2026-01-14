@@ -249,6 +249,7 @@ fi
 # Add vim-like-mode plugin to zshrc
 if [ -f "$HOME/.zshrc" ]; then
     if ! grep -q 'zsh-vim-mode.plugin.zsh' "$HOME/.zshrc"; then
+        # shellcheck disable=SC2016
         echo 'source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"' >> "$HOME/.zshrc"
     fi
 fi
