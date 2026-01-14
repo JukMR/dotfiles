@@ -1,4 +1,6 @@
 #!/bin/bash
+# Note
+# This file seems to be outdated in favor of setup_custom_configuration.sh
 
 # Make a backup of your current nvim folder
 mv ~/.config/nvim ~/.config/nvim.bak
