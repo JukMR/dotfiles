@@ -7,8 +7,8 @@
 DOTDIR="${DOTDIR:-$HOME/dotfiles}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Enable strict mode
-set -euo pipefail
+# Enable strict mode but allow commands to fail
+set -uo pipefail
 
 # Source library functions
 source "$SCRIPT_DIR/lib/detect.sh"
@@ -25,8 +25,7 @@ log_info "Package Manager: $PKG_MANAGER"
 ### ---------- Update package database ---------- ###
 log_info "Updating package database"
 if ! pkg_update; then
-    log_error "Failed to update package database"
-    exit 1
+    log_warn "Failed to update package database, continuing anyway"
 fi
 
 ### ---------- Install core utilities ---------- ###
@@ -39,7 +38,8 @@ core_packages=(
     "wget"
 )
 
-pkg_install "${core_packages[@]}" || log_error "Some core packages failed to install"
+# Non-blocking - continue even if some packages fail
+pkg_install "${core_packages[@]}" || log_warn "Some core packages failed to install, continuing"
 
 ### ---------- Terminal Emulator (kitty) ---------- ###
 log_info "Setting up kitty terminal"
@@ -48,10 +48,10 @@ if check_and_log "kitty"; then
     : # Already installed
 else
     if [ -f "$DOTDIR/programs/kitty/install.sh" ]; then
-        bash "$DOTDIR/programs/kitty/install.sh"
+        bash "$DOTDIR/programs/kitty/install.sh" || log_warn "Kitty installation failed, continuing"
     else
         # Fallback: try package manager
-        pkg_install "kitty"
+        pkg_install "kitty" || log_warn "Kitty installation failed, continuing"
     fi
 fi
 
