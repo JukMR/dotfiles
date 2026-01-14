@@ -7,4 +7,4 @@ mv -v ~/.local/state/nvim ~/.local/state/nvim.bak
 mv -v ~/.cache/nvim ~/.cache/nvim.bak
 
 echo "Cloning and setting nvim configuration"
-git clone https://github.com/JuKMR/astronvim-configuration ~/.config/nvim/
+git clone git@github.com:JuKMR/astronvim-configuration ~/.config/nvim/
