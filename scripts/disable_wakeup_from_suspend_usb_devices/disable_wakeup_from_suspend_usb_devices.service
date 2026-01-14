@@ -4,7 +4,7 @@ After=suspend.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/julian/dotfiles/scripts/disable_wakeup_from_suspend_usb_devices/disable_wakeup_from_suspend_usb_devices.sh
+ExecStart=/home/mrjulian/dotfiles/scripts/disable_wakeup_from_suspend_usb_devices/disable_wakeup_from_suspend_usb_devices.sh
 
 [Install]
 WantedBy=multi-user.target

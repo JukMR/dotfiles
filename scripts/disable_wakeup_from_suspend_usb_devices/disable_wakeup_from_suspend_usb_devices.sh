@@ -30,7 +30,7 @@ echo ""
 # Disable each enabled device
 for device in $enabled_devices; do
     echo "Disabling wakeup for device: $device"
-    echo "$device" | sudo tee /proc/acpi/wakeup > /dev/null
+    echo "$device" | tee /proc/acpi/wakeup > /dev/null
     if [ $? -eq 0 ]; then
         echo "✓ Successfully disabled $device"
     else
