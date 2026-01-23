@@ -27,7 +27,6 @@ pkg_update() {
 # Install a single package with fallback to snap (Ubuntu/Debian)
 pkg_install_single() {
     local pkg="$1"
-    local allow_snap="${2:-true}"  # Allow snap by default
 
     # Check if already installed
     if pkg_is_installed "$pkg"; then
@@ -47,17 +46,7 @@ pkg_install_single() {
                 return 0
             fi
 
-            # If apt fails and snap is available, try snap
-            if [ "$allow_snap" = "true" ] && command -v snap &>/dev/null; then
-                log_info "apt failed, trying snap for $pkg"
-                if sudo snap install "$pkg" 2>/dev/null; then
-                    log_success "Installed $pkg via snap"
-                    log_installation "$pkg" "installed-snap"
-                    return 0
-                fi
-            fi
-
-            log_error "Failed to install $pkg via apt${allow_snap:+ and snap}"
+            log_error "Failed to install $pkg via apt"
             log_installation "$pkg" "failed"
             return 1
             ;;
@@ -391,11 +380,6 @@ aur_install() {
 pkg_remove() {
     local package="$1"
 
-    if ! pkg_is_installed "$package"; then
-        log_skip "Package not installed: $package"
-        return 0
-    fi
-
     log_info "Removing package: $package"
 
     case "$PKG_MANAGER" in
@@ -417,3 +401,13 @@ pkg_remove() {
             ;;
     esac
 }
+
+pkg_remove_if_installed() {
+    local package="$1"
+    if pkg_is_installed "$package"; then
+        pkg_remove "$package"
+    else
+        log_info "Package $package is not installed, skipping removal."
+    fi
+}
+
