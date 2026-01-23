@@ -1,20 +1,29 @@
 #!/bin/bash
+# programs/pacman/configure_pacman.sh - Configures pacman repositories and settings
+# Author: Julian Merida
+# Last Updated: $(date +%Y-%m-%d)
 
-set -eu
+DOTDIR="${DOTDIR:-$HOME/dotfiles}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Script to set up a new Linux environment
+# Source library functions
+source "$DOTDIR/lib/logging.sh"
+source "$DOTDIR/lib/pkg_manager.sh"
 
-# Set colors option in pacman
-sed -i -E -e 's/# *Color/Color/g' /etc/pacman.conf
+# Enable strict mode
+set -euo pipefail
 
-# # Enable parallel downloads
-sed -i -E -e 's/# *ParallelDownloads = 5/ParallelDownloads = 5/g' /etc/pacman.conf
+log_info "Configuring pacman"
 
-# Enable ILoveCandy
-
-# Check if ILoveCandy is enabled
-# If it is not enabled, enable it adding the line under ParallelDownloads
-
-if ! grep -q "ILoveCandy" /etc/pacman.conf; then
-    sed -i -E -e '/ParallelDownloads = [0-9]/a ILoveCandy' /etc/pacman.conf
+# Add any specific pacman configurations here
+# For example, enabling multilib repo if not already enabled
+if grep -q "\[multilib\]" /etc/pacman.conf && grep -q "#Include = /etc/pacman.d/mirrorlist" /etc/pacman.conf; then
+    log_info "Enabling multilib repository"
+    sudo sed -i 's/#\[multilib\]/\[multilib\]/' /etc/pacman.conf
+    sudo sed -i 's/#Include = /etc/pacman.d/mirrorlist/Include = /etc/pacman.d/mirrorlist/' /etc/pacman.conf
+    pkg_update
+else
+    log_skip "Multilib repository already enabled or not found"
 fi
+
+log_success "Pacman configuration complete."

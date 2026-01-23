@@ -44,6 +44,11 @@ log() {
         INFO)
             echo -e "${BLUE}[INFO]${NC} $message" >&2
             ;;
+        DEBUG)
+            if [ "${DEBUG_MODE:-0}" = "1" ]; then
+                echo -e "${BLUE}[DEBUG]${NC} $message" >&2
+            fi
+            ;;
         SUCCESS)
             echo -e "${GREEN}[SUCCESS]${NC} $message" >&2
             ;;
@@ -56,9 +61,9 @@ log() {
         SKIP)
             echo -e "${YELLOW}[SKIP]${NC} $message" >&2
             ;;
-        *)
+        *)\
             echo "[UNKNOWN] $message" >&2
-            ;;
+            ;;\
     esac
     
     # File output without color
@@ -68,6 +73,10 @@ log() {
 # Convenience functions
 log_info() {
     log INFO "$@"
+}
+
+log_debug() {
+    log DEBUG "$@"
 }
 
 log_success() {
@@ -80,6 +89,11 @@ log_warn() {
 
 log_error() {
     log ERROR "$@"
+}
+
+log_error_and_exit() {
+    log ERROR "$@"
+    exit 1
 }
 
 log_skip() {
@@ -108,7 +122,7 @@ is_installed() {
 
 # Check and log if program is installed
 check_and_log() {
-    local program="$1"
+    local program="$1"\
     local display_name="${2:-$program}"
     
     if is_installed "$program"; then
