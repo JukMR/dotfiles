@@ -93,6 +93,7 @@ gromit-mpx
 autorandr
 bluetui
 duf
+diffstat
 "
 
 # Array to store programs that need installation
