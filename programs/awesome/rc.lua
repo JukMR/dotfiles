@@ -115,13 +115,14 @@ local function lock_and_suspend()
 	awful.spawn.with_shell("systemctl suspend")
 end
 
-
 local power_options_group = {
 	{
-		"lock_session", xlock_w_fonts
+		"lock_session",
+		xlock_w_fonts,
 	},
 	{
-		"suspend", lock_and_suspend
+		"suspend",
+		lock_and_suspend,
 	},
 	{ "reboot",   "reboot" },
 	{ "shutdown", "poweroff" },
@@ -293,8 +294,6 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-
-
 awful.screen.connect_for_each_screen(function(s)
 	-- Wallpaper
 	set_wallpaper(s)
@@ -308,10 +307,18 @@ awful.screen.connect_for_each_screen(function(s)
 	-- We need one layoutbox per screen.
 	s.mylayoutbox = awful.widget.layoutbox(s)
 	s.mylayoutbox:buttons(gears.table.join(
-		awful.button({}, 1, function() awful.layout.inc(1) end),
-		awful.button({}, 3, function() awful.layout.inc(-1) end),
-		awful.button({}, 4, function() awful.layout.inc(1) end),
-		awful.button({}, 5, function() awful.layout.inc(-1) end)
+		awful.button({}, 1, function()
+			awful.layout.inc(1)
+		end),
+		awful.button({}, 3, function()
+			awful.layout.inc(-1)
+		end),
+		awful.button({}, 4, function()
+			awful.layout.inc(1)
+		end),
+		awful.button({}, 5, function()
+			awful.layout.inc(-1)
+		end)
 	))
 	-- Create a taglist widget
 	s.mytaglist = awful.widget.taglist({
@@ -336,16 +343,22 @@ awful.screen.connect_for_each_screen(function(s)
 		--- Add custom logout button widget
 		logout_menu_widget({
 			font = "Play 14",
-			onlock = function() awful.spawn.with_shell("i3lock-fancy") end,
+			onlock = function()
+				awful.spawn.with_shell("i3lock-fancy")
+			end,
 		}),
+		mic_widget,
 	}
 
 	-- 2. Conditionally add battery widget based on the global variable
 	if battery then
-		table.insert(right_widgets, batteryarc_widget({
-			show_current_level = true,
-			arc_thickness = 1,
-		}))
+		table.insert(
+			right_widgets,
+			batteryarc_widget({
+				show_current_level = true,
+				arc_thickness = 1,
+			})
+		)
 	end
 
 	-- 3. Conditionally add wifi widgets based on the global variable
@@ -564,12 +577,10 @@ globalkeys = gears.table.join(
 		description = "Launch Vscode",
 		group = "apps",
 	}),
-	awful.key({ modkey, "Control", "Shift" }, "l", xlock_w_fonts,
-		{
-			description = "Lock Screen",
-			group = "client",
-		}
-	),
+	awful.key({ modkey, "Control", "Shift" }, "l", xlock_w_fonts, {
+		description = "Lock Screen",
+		group = "client",
+	}),
 
 	-- Move current window to next tag or prev tag
 	-- Ctrl+Alt+Shift+Left/Right: move client to prev/next tag
@@ -756,7 +767,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey, "Ctrl", "Shift" }, "s", lock_and_suspend, {
 		description = "Lock and suspend session",
 		group = "client",
-	}), -- End of Personal keybindings
+	}),
 	awful.key({ modkey, "Ctrl", "Shift" }, "t", function()
 		local countdown = 5
 		local function countdown_notification()
@@ -1205,10 +1216,10 @@ awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-a
 local HOME_DIRECTORY = os.getenv("HOME")
 local LOG_FILE = HOME_DIRECTORY .. "/awesome.logs"
 
-
 -- Autorun apps
 
 -- A more efficient way to run apps only once
+
 local function run_once(cmd)
 	-- check if any process with this name is running
 	local process_name = cmd:match("^([^%s]+)") -- Get first word before any space
