@@ -264,6 +264,20 @@
       },
       "spacing": 1,
       "valueState": "toggle"
+    },
+    {
+      "command": "temporarySpeed",
+      "enabled": true,
+      "greedy": true,
+      "id": "9718848442",
+      "key": {
+        "altKey": false,
+        "code": "KeyE",
+        "ctrlKey": false,
+        "metaKey": false,
+        "shiftKey": false
+      },
+      "valueNumber": 3
     }
   ],
   "keybindsUrlCondition": {
@@ -404,7 +418,7 @@
       }
     ]
   },
-  "lastSpeed": 1.5000000000000004,
+  "lastSpeed": 2.7000000000000015,
   "latestViaShortcut": true,
   "rules": [],
   "sawEnableShortcutOverlayCount": 1,
