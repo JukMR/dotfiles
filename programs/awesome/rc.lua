@@ -23,6 +23,9 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+-- Enable mic widget bar
+local mic_widget = require("widgets.mic")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -195,7 +198,7 @@ end)
 local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
 
 --  Import volume.lua
-require("volume")
+require("awesome-wm-widgets.volume-widget.volume")
 
 -- Add network widgets
 local net_widgets = require("net_widgets")
@@ -788,7 +791,11 @@ globalkeys = gears.table.join(
 	end, {
 		description = "Suspend and lock session after 5 seconds",
 		group = "client",
-	}), -- End of Personal keybindings
+	}),
+	-- End of Personal keybindings
+	awful.key({ modkey, "Shift", "Control" }, "m", function()
+		awful.spawn("mic-toggle.sh", false)
+	end, { description = "toggle microphone mute", group = "audio" }),
 	awful.key({ modkey }, "x", function()
 		awful.prompt.run({
 			prompt = "Run Lua code: ",
