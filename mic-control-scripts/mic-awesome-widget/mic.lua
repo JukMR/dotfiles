@@ -4,7 +4,7 @@ local wibox = require("wibox")
 
 local mic = wibox.widget({
 	text = "",
-	font = "JetBrainsMono Nerd Font 14",
+	font = "JetBrainsMono Nerd Font",
 	align = "center",
 	valign = "center",
 	widget = wibox.widget.textbox,
@@ -14,9 +14,9 @@ local function update()
 	awful.spawn.easy_async_with_shell("wpctl get-volume @DEFAULT_AUDIO_SOURCE@", function(out)
 		if out and out:find("MUTED", 1, true) then
 			mic.markup =
-			"<span font_desc='JetBrainsMono Nerd Font 14' foreground='#ff5555' weight='bold'> muted</span>"
+			"<span font_desc='JetBrainsMono Nerd Font 10' foreground='#ff5555' weight='bold'>  Mic OFF</span>"
 		else
-			mic.markup = "<span font_desc='JetBrainsMono Nerd Font 14' foreground='#f8f8f2'> on</span>"
+			mic.markup = "<span font_desc='JetBrainsMono Nerd Font 10' foreground='#00ff00'> Mic ON</span>"
 		end
 	end)
 end
