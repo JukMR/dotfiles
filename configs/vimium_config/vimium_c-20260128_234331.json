@@ -1,0 +1,109 @@
+{
+	"name": "Vimium C",
+	"@time": "1/28/2026, 11:43:31 PM",
+	"time": 1769654611211,
+	"environment": {
+		"extension": "2.12.2",
+		"platform": "linux",
+		"chromium": 144
+	},
+	"exclusionRules": [
+		{
+			"passKeys": "",
+			"pattern": ":https://appsmith.muttdata.ai/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://clip-general-dev.cloud.databricks.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://docs.google.com/spreadsheets"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://drive.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://keep.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://meet.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://guitarflash.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://guitarflash3.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://www.haxball.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://monkeytype.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": "^https://(?:[^/]+.)?jklm\\.fun/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://pomofocus.io/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://curvefever.pro/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://app.zoom.us/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://tasks.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://calendar.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://pokedle.net/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://game.play-cs.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://docs.google.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://excalidraw.com/"
+		}
+	],
+	"keyLayout": 2,
+	"keyMappings": [
+		"#!no-check",
+		"unmap X",
+		"unmap x",
+		"map D scrollPageDown",
+		"map U scrollPageUp",
+		"map H scrollToLeft",
+		"map L scrollToRight",
+		"",
+		"unmap d",
+		"unmap zH",
+		"unmap zL",
+		"map M Marks.clearLocal",
+		""
+	],
+	"vimSync": true
+}
