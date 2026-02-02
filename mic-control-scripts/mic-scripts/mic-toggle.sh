@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Preflight: require wpctl
+if ! command -v wpctl >/dev/null 2>&1; then
+  echo "Error: wpctl not found. Install PipeWire/WirePlumber (wpctl) first." >&2
+  exit 127
+fi
+
 mapfile -t SOURCES < <(
   wpctl status |
     awk '
