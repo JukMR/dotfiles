@@ -216,6 +216,10 @@ eval $(thefuck --alias)
 [[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
+## Prepare the prompt for SSH sessions
+
 # Define the special prompt prefix for ssh sessions
 autoload -U colors && colors
 if [[ -n "$SSH_CONNECTION" ]]; then
