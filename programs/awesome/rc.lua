@@ -26,6 +26,10 @@ require("awful.hotkeys_popup.keys")
 -- Enable mic widget bar
 local mic_widget = require("widgets.mic")
 
+-- Save current state of windows and layouts
+local state_path = awful.util.get_cache_dir() .. "layout_state.lua"
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -113,6 +117,8 @@ local function xlock_w_fonts()
 	awful.spawn.with_shell("LANG=C LC_ALL=C xlock")
 end
 
+
+
 local function lock_and_suspend()
 	xlock_w_fonts()
 	awful.spawn.with_shell("systemctl suspend")
@@ -130,6 +136,86 @@ local power_options_group = {
 	{ "reboot",   "reboot" },
 	{ "shutdown", "poweroff" },
 }
+
+
+--- Personal function
+---
+---
+---
+local function serialize(o)
+	local t = type(o)
+	if t == "number" or t == "boolean" then
+		return tostring(o)
+	elseif t == "string" then
+		return string.format("%q", o)
+	elseif t == "table" then
+		local s = "{"
+		for k, v in pairs(o) do
+			s = s .. "[" .. serialize(k) .. "]=" .. serialize(v) .. ","
+		end
+		return s .. "}"
+	else
+		return "nil"
+	end
+end
+
+local function save_layout()
+	local state = {}
+
+	for _, c in ipairs(client.get()) do
+		if not c.skip_taskbar then
+			table.insert(state, {
+				class = c.class,
+				instance = c.instance,
+				name = c.name,
+				screen = c.screen.index,
+				tag = c.first_tag and c.first_tag.index or nil,
+				floating = c.floating,
+				maximized = c.maximized,
+				fullscreen = c.fullscreen,
+				geometry = c:geometry(),
+			})
+		end
+	end
+
+	local f = io.open(state_path, "w")
+	f:write("return " .. serialize(state))
+	f:close()
+
+	naughty.notify({ text = "Layout saved" })
+end
+
+local function restore_layout()
+	local ok, state = pcall(dofile, state_path)
+	if not ok then
+		naughty.notify({ text = "No saved layout found" })
+		return
+	end
+
+	for _, c in ipairs(client.get()) do
+		for _, s in ipairs(state) do
+			if c.class == s.class and c.instance == s.instance then
+				local scr = screen[s.screen]
+				if scr then
+					c:move_to_screen(scr)
+					if s.tag and scr.tags[s.tag] then
+						c:move_to_tag(scr.tags[s.tag])
+					end
+				end
+				c.floating = s.floating
+				c.maximized = s.maximized
+				c.fullscreen = s.fullscreen
+				c:geometry(s.geometry)
+			end
+		end
+	end
+
+	naughty.notify({ text = "Layout restored" })
+end
+
+--- End of personal function
+---
+---
 
 local awesome_power_options =
 { { "restart awesome", awesome.restart }, {
@@ -555,7 +641,13 @@ globalkeys = gears.table.join(
 	end, {
 		description = "run prompt",
 		group = "launcher",
-	}), -- Personal keybindings
+	}),
+
+	---
+	--- Personal keybindings
+	---
+
+
 	awful.key({ modkey }, "e", function()
 		awful.spawn("thunar")
 	end, {
@@ -584,6 +676,27 @@ globalkeys = gears.table.join(
 		description = "Lock Screen",
 		group = "client",
 	}),
+
+	awful.key({ modkey, "Shift" }, "s", function()
+		save_layout()
+		naughty.notify({
+			title = "AwesomeWM",
+			text = "Window layout saved",
+			timeout = 2,
+		})
+	end, { description = "save window layout", group = "layout" }),
+	awful.key(
+		{ modkey, "Shift" }, "r",
+		function()
+			restore_layout()
+			naughty.notify({
+				title   = "AwesomeWM",
+				text    = "Window layout restored",
+				timeout = 2,
+			})
+		end,
+		{ description = "restore window layout", group = "layout" }
+	),
 
 	-- Move current window to next tag or prev tag
 	-- Ctrl+Alt+Shift+Left/Right: move client to prev/next tag
@@ -877,7 +990,9 @@ clientkeys = gears.table.join(
 	end, {
 		description = "close",
 		group = "client",
-	}), -- Start personal edit
+	}),
+
+
 	awful.key({ modkey }, "y", function(c)
 		c.sticky = not c.sticky
 	end, {
@@ -901,7 +1016,7 @@ clientkeys = gears.table.join(
 	end),
 	awful.key({ modkey, "Mod1", "Shift" }, "Down", function(c)
 		c:relative_move(20, 20, -40, -40)
-	end), -- End of personal edit
+	end),
 	awful.key({ modkey, "Control" }, "space", awful.client.floating.toggle, {
 		description = "toggle floating",
 		group = "client",
