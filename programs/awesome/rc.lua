@@ -158,33 +158,57 @@ local function serialize(o)
 		return "nil"
 	end
 end
-
 local function save_layout()
 	local state = {}
 
 	for _, c in ipairs(client.get()) do
 		if not c.skip_taskbar then
+			local g = c.screen.geometry
 			table.insert(state, {
-				class = c.class,
-				instance = c.instance,
-				name = c.name,
-				screen = c.screen.index,
-				tag = c.first_tag and c.first_tag.index or nil,
-				floating = c.floating,
-				maximized = c.maximized,
+				class      = c.class,
+				instance   = c.instance,
+				role       = c.role,
+				name       = c.name,
+				screen     = { x = g.x, y = g.y, w = g.width, h = g.height },
+				tag        = c.first_tag and c.first_tag.index or nil,
+				floating   = c.floating,
+				maximized  = c.maximized,
 				fullscreen = c.fullscreen,
-				geometry = c:geometry(),
+				geometry   = c:geometry(),
 			})
 		end
+
+		local tmp = state_path .. ".tmp"
+		local f = assert(io.open(tmp, "w"))
+		f:write("return " .. serialize(state))
+		f:close()
+		os.rename(tmp, state_path)
+
+		naughty.notify({ text = "Layout saved" })
 	end
-
-	local f = io.open(state_path, "w")
-	f:write("return " .. serialize(state))
-	f:close()
-
-	naughty.notify({ text = "Layout saved" })
 end
 
+
+
+local function find_matching_screen(saved)
+	for s in screen do
+		local g = s.geometry
+		if g.x == saved.x and
+			g.y == saved.y and
+			g.width == saved.w and
+			g.height == saved.h then
+			return s
+		end
+	end
+end
+
+local function same_client(c, s)
+	if c.class ~= s.class then return false end
+	if s.role and c.role ~= s.role then return false end
+	if s.instance and c.instance ~= s.instance then return false end
+	if s.name and c.name ~= s.name then return false end
+	return true
+end
 local function restore_layout()
 	local ok, state = pcall(dofile, state_path)
 	if not ok then
@@ -194,18 +218,19 @@ local function restore_layout()
 
 	for _, c in ipairs(client.get()) do
 		for _, s in ipairs(state) do
-			if c.class == s.class and c.instance == s.instance then
-				local scr = screen[s.screen]
-				if scr then
-					c:move_to_screen(scr)
-					if s.tag and scr.tags[s.tag] then
-						c:move_to_tag(scr.tags[s.tag])
-					end
+			if same_client(c, s) then
+				local scr = find_matching_screen(s.screen) or screen.primary
+				c:move_to_screen(scr)
+
+				if s.tag and scr.tags[s.tag] then
+					c:move_to_tag(scr.tags[s.tag])
 				end
-				c.floating = s.floating
-				c.maximized = s.maximized
+
+				c.floating   = s.floating
+				c.maximized  = s.maximized
 				c.fullscreen = s.fullscreen
 				c:geometry(s.geometry)
+				break
 			end
 		end
 	end
