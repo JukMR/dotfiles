@@ -255,3 +255,10 @@ alias 'gcc!'='git commit --verbose --no-verify --amend'
 if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
   alias bat='batcat'
 fi
+
+mkdirtmp() {
+  local new_temp
+  new_temp=$(mktemp -d) || return 1
+  echo "$new_temp"
+  cd "$new_temp" || return 1
+}
