@@ -888,6 +888,9 @@ globalkeys = gears.table.join(
 	}), --- Rofi keybindings
 	awful.key({ modkey }, "w", function()
 		awful.spawn("rofi -show window")
+	end),
+	awful.key({ modkey }, "d", function()
+		awful.spawn("rofi -show drun")
 	end), --- Volume keybindings
 	awful.key({}, "XF86AudioRaiseVolume", function()
 		awful.spawn("amixer set Master 5%+")
@@ -1057,7 +1060,7 @@ globalkeys = gears.table.join(
 		description = "show the menubar",
 		group = "launcher",
 	}),
-	awful.key({ modkey }, "d", function()
+	awful.key({ modkey, "Shift" }, "d", function()
 		menubar.show()
 	end, {
 		description = "show the menubar",
