@@ -3,13 +3,23 @@
 # Define the destination path
 DEST_PATH="$HOME/.config/kitty/kitty.conf"
 
-# Check if the destination file already exists
-if [ -f "$DEST_PATH" ]; then
-    # Create a backup of the existing file with a timestamp
+# Copy the new configuration file
+if [ -f "$DEST_PATH" ] && ! cmp -s kitty.conf "$DEST_PATH"; then
     cp "$DEST_PATH" "$DEST_PATH.backup_$(date +%Y%m%d_%H%M%S)"
-    echo "Existing kitty.conf found. Backup saved as kitty.conf.backup_$(date +%Y%m%d_%H%M%S)"
+    echo "Existing kitty.conf changed. Backup saved."
+    cp kitty.conf "$DEST_PATH"
+    echo "kitty.conf has been copied to $DEST_PATH"
+elif [ ! -f "$DEST_PATH" ]; then
+    cp kitty.conf "$DEST_PATH"
+    echo "kitty.conf has been copied to $DEST_PATH"
 fi
 
-# Copy the new configuration file
-cp kitty.conf "$DEST_PATH"
-echo "kitty.conf has been copied to $DEST_PATH"
+# Copy the kitten file if it exists
+if [ -d "kittens" ] && [ -f "kittens/kitten_save_session.py" ]; then
+    mkdir -p "$HOME/.config/kitty/"
+    KITTEN_DEST="$HOME/.config/kitty/kitten_save_session.py"
+    if [ ! -f "$KITTEN_DEST" ] || ! cmp -s kittens/kitten_save_session.py "$KITTEN_DEST"; then
+        cp kittens/kitten_save_session.py "$KITTEN_DEST"
+        echo "kitten_save_session.py has been copied to $HOME/.config/kitty/"
+    fi
+fi
