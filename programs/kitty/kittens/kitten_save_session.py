@@ -45,23 +45,43 @@ def main(args):
 
     for i, tab in enumerate(tabs):
         if i > 0:
-            lines.extend(["", "new_tab"])
+            lines.append("")
+
+        # new_tab with title if present
+        title = tab.get("title", "")
+        if title:
+            lines.append(f"new_tab {title}")
+        else:
+            lines.append("new_tab")
 
         windows = tab.get("windows", [])
-        for w_idx, w in enumerate(windows):
-            if w_idx > 0:
-                lines.append("launch")
 
-            layout = w.get("layout", "tall")
+        # Filter out kitten windows first
+        valid_windows = []
+        for w in windows:
+            cmdline = w.get("cmdline", [])
+            cmdline_str = " ".join(cmdline) if cmdline else ""
+            # Skip the save kitten's own process
+            if "kitten_save_session.py" not in cmdline_str:
+                valid_windows.append(w)
+
+        # Write layout once per tab, from first valid window
+        if valid_windows:
+            layout = valid_windows[0].get("layout", "tall")
             lines.append(f"layout {layout}")
 
+        # Write all valid windows
+        for w in valid_windows:
             cwd = w.get("cwd", "")
             if cwd:
                 lines.append(f"cd {cwd}")
 
             cmdline = w.get("cmdline", [])
             if cmdline:
-                lines.append(f"launch {' '.join(cmdline)}")
+                # Filter out any problematic flags like -i (kitty handles interactivity)
+                filtered_cmdline = [arg for arg in cmdline if arg != "-i"]
+                cmd_str = " ".join(filtered_cmdline)
+                lines.append(f"launch {cmd_str}")
 
     with open(session_path, "w") as f:
         f.write("\n".join(lines))
