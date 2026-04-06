@@ -76,12 +76,33 @@ def main(args):
             if cwd:
                 lines.append(f"cd {cwd}")
 
-            cmdline = w.get("cmdline", [])
-            if cmdline:
-                # Filter out any problematic flags like -i (kitty handles interactivity)
-                filtered_cmdline = [arg for arg in cmdline if arg != "-i"]
-                cmd_str = " ".join(filtered_cmdline)
-                lines.append(f"launch {cmd_str}")
+            # Determine what command to launch
+            cmd_to_launch = None
+
+            # Try to get the actual running process from foreground_processes
+            fg_processes = w.get("foreground_processes", [])
+            if fg_processes:
+                fg_cmd = fg_processes[0].get("cmdline", [])
+                if fg_cmd:
+                    # Filter out shell processes
+                    fg_exe = fg_cmd[0].split("/")[-1] if fg_cmd else ""
+                    if fg_exe not in ("zsh", "bash", "sh", "fish", "ksh"):
+                        # It's a real program, use it
+                        cmd_to_launch = " ".join(fg_cmd)
+
+            # If no good foreground process and NOT at prompt, try last_reported_cmdline (preserves aliases)
+            # Skip last_reported_cmdline if at shell prompt - those are just previous commands
+            if not cmd_to_launch and not w.get("at_prompt"):
+                last_cmd = w.get("last_reported_cmdline", "")
+                if last_cmd:
+                    cmd_to_launch = last_cmd
+
+            # Always write a launch command (empty launch for plain shells)
+            if cmd_to_launch:
+                lines.append(f"launch {cmd_to_launch}")
+            else:
+                # Plain shell - write empty launch so parser captures this window
+                lines.append("launch")
 
     with open(session_path, "w") as f:
         f.write("\n".join(lines))

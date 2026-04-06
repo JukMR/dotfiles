@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import os
-import json
 import subprocess
 import re
 
@@ -44,8 +43,9 @@ def parse_session_file(content):
         elif line.startswith("cd "):
             current_cwd = line[len("cd "):].strip()
 
-        elif line.startswith("launch "):
-            cmd = line[len("launch "):].strip()
+        elif line.startswith("launch"):
+            # Handle both "launch" (no args) and "launch <cmd>"
+            cmd = line[len("launch"):].strip()
             current_tab["windows"].append({"cwd": current_cwd, "cmd": cmd})
 
     # Don't forget last tab
@@ -87,31 +87,15 @@ def main(args):
 
     session_path = os.path.join(sessions_dir, chosen_session)
 
-    # Get current working directory from focused window
-    ls_result = subprocess.run(
-        ["kitty", "@", "ls"],
-        capture_output=True,
-        text=True,
-    )
-    state = json.loads(ls_result.stdout)
-
-    current_cwd = os.path.expanduser("~")
-
-    if isinstance(state, list) and state:
-        state = state[0]
-
-    # Find focused window and get its cwd
-    for tab in state.get("tabs", []):
-        for window in tab.get("windows", []):
-            if window.get("is_focused"):
-                current_cwd = window.get("cwd", current_cwd)
-                break
+    # Use the kitten process's cwd — kitty sets this to the active window's cwd
+    # when invoked via `map key kitten path/to/kitten.py`
+    current_cwd = os.getcwd()
 
     # Read and parse session file
     with open(session_path, "r") as f:
         session_content = f.read()
 
-    # Replace all cd directives with current cwd
+    # Replace all cd directives with current working directory
     modified_content = re.sub(
         r"^cd .*$",
         f"cd {current_cwd}",
@@ -121,41 +105,53 @@ def main(args):
 
     tabs = parse_session_file(modified_content)
 
-    # Open a new kitty window
-    subprocess.run(["kitty", "@", "launch", "--type=os-window"], capture_output=True)
+    # Create tabs and windows - first tab in a new OS window, rest as additional tabs.
+    # We capture each window ID so we can use --match=window_id:N to target the
+    # correct tab; without this, kitty @ commands default to the kitten's own tab.
+    os_window_ref_id = None  # a window ID inside the new OS window
 
-    # Create tabs and windows in the new window
     for i, tab in enumerate(tabs):
         if not tab["windows"]:
             continue
 
-        # First window in tab (creates the tab)
         first_window = tab["windows"][0]
-        cmd = ["kitty", "@", "launch", "--type=tab"]
 
-        if tab["title"]:
-            cmd.append(f"--tab-title={tab['title']}")
+        # First tab: open new OS window. Subsequent tabs: add to same OS window.
+        if i == 0:
+            cmd = ["kitty", "@", "launch", "--type=os-window"]
+            if tab["title"]:
+                cmd.append(f"--title={tab['title']}")
+        else:
+            cmd = ["kitty", "@", "launch", "--type=tab",
+                   f"--match=window_id:{os_window_ref_id}"]
+            if tab["title"]:
+                cmd.append(f"--tab-title={tab['title']}")
 
         cmd.append(f"--cwd={current_cwd}")
 
-        # Add command if present and it's not just a shell
         if first_window["cmd"] and not is_plain_shell(first_window["cmd"]):
             cmd.extend(["--", first_window["cmd"]])
 
-        subprocess.run(cmd, capture_output=True)
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        window_id = result.stdout.strip()
 
-        # Set layout for this tab
-        subprocess.run(
-            ["kitty", "@", "goto_layout", tab["layout"]],
-            capture_output=True,
-        )
+        if i == 0:
+            os_window_ref_id = window_id  # anchor for targeting the new OS window
 
-        # Remaining windows in tab
+        # Set layout targeting the newly created tab
+        if window_id:
+            subprocess.run(
+                ["kitty", "@", "goto_layout",
+                 f"--match=window_id:{window_id}", tab["layout"]],
+                capture_output=True,
+            )
+
+        # Remaining windows in this tab
         for window in tab["windows"][1:]:
-            cmd = ["kitty", "@", "launch", "--type=window"]
-            cmd.append(f"--cwd={current_cwd}")
+            cmd = ["kitty", "@", "launch", "--type=window",
+                   f"--match=window_id:{window_id}",
+                   f"--cwd={current_cwd}"]
 
-            # Add command if present and it's not just a shell
             if window["cmd"] and not is_plain_shell(window["cmd"]):
                 cmd.extend(["--", window["cmd"]])
 
