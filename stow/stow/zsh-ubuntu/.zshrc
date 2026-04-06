@@ -182,9 +182,9 @@ bindkey \^N down-history
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # Only use this if pyenv is installed
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 alias rgfiles='rg --files| rg'
 
@@ -213,7 +213,7 @@ eval $(thefuck --alias)
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/julian/.dart-cli-completion/zsh-config.zsh ]] && . /home/julian/.dart-cli-completion/zsh-config.zsh || true
+[[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
 # Define the special prompt prefix for ssh sessions
@@ -243,7 +243,7 @@ if [[ "$TERM_PROGRAM" == "vscode" ]]; then
 fi
 
 # Allow ctrl-c to quit less
-export LESS="-K -R"
+export LESS="-K -R -S"
 
 alias gcc='git commit --verbose --no-verify'
 alias 'gcc!'='git commit --verbose --no-verify --amend'
@@ -252,9 +252,17 @@ if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
   alias bat='batcat'
 fi
 
+# opencode
+export PATH=/home/mrjulian/.opencode/bin:$PATH
+
+alias nano='nvim'
 alias v='nvim'
 alias rgi='rg -i'
 alias dfstc='diffstat -C'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 mkdirtmp() {
   local new_temp
@@ -264,11 +272,3 @@ mkdirtmp() {
 }
 
 alias lg='lazygit'
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/julian/.lmstudio/bin"
-# End of LM Studio CLI section
-
-
-# NPM global bin (added by Qwen Code installer)
-export PATH="$HOME/.npm-global/bin:$PATH"

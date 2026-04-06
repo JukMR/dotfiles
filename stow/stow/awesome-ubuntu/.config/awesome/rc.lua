@@ -29,7 +29,6 @@ local mic_widget = require("widgets.mic")
 -- Save current state of windows and layouts
 local state_path = awful.util.get_cache_dir() .. "layout_state.lua"
 
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -114,10 +113,8 @@ local myawesomemenu = {
 -- Define helper functions for suspending and locking
 
 local function xlock_w_fonts()
-	awful.spawn.with_shell("LANG=C LC_ALL=C xlock")
+	awful.spawn.with_shell("i3lock")
 end
-
-
 
 local function lock_and_suspend()
 	xlock_w_fonts()
@@ -137,7 +134,6 @@ local power_options_group = {
 	{ "shutdown", "poweroff" },
 }
 
-
 --- Personal function
 ---
 ---
@@ -148,9 +144,13 @@ local DEBUG_LAYOUT = false -- <<< toggle here
 local debug_log = awful.util.get_cache_dir() .. "layout_debug.log"
 
 local function log(msg)
-	if not DEBUG_LAYOUT then return end
+	if not DEBUG_LAYOUT then
+		return
+	end
 	local f = io.open(debug_log, "a")
-	if not f then return end
+	if not f then
+		return
+	end
 	f:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. msg .. "\n")
 	f:close()
 end
@@ -182,42 +182,44 @@ local function save_layout()
 			local scr = c.screen
 
 			local entry = {
-				class      = c.class,
-				instance   = c.instance,
-				role       = c.role,
-				name       = c.name,
-				screen     = {
+				class = c.class,
+				instance = c.instance,
+				role = c.role,
+				name = c.name,
+				screen = {
 					-- stable identifiers
 					index = scr.index,
-					name  = scr.outputs and next(scr.outputs),
+					name = scr.outputs and next(scr.outputs),
 
 					-- fallback geometry
-					x     = g.x,
-					y     = g.y,
-					w     = g.width,
-					h     = g.height,
+					x = g.x,
+					y = g.y,
+					w = g.width,
+					h = g.height,
 				},
-				tag        = c.first_tag and c.first_tag.index or nil,
-				floating   = c.floating,
-				maximized  = c.maximized,
+				tag = c.first_tag and c.first_tag.index or nil,
+				floating = c.floating,
+				maximized = c.maximized,
 				fullscreen = c.fullscreen,
-				geometry   = c:geometry(),
+				geometry = c:geometry(),
 			}
 
 			table.insert(state, entry)
 
-			log(string.format(
-				"SAVE class=%s instance=%s role=%s name=%s screen=%dx%d+%d+%d tag=%s",
-				tostring(entry.class),
-				tostring(entry.instance),
-				tostring(entry.role),
-				tostring(entry.name),
-				entry.screen.w,
-				entry.screen.h,
-				entry.screen.x,
-				entry.screen.y,
-				tostring(entry.tag)
-			))
+			log(
+				string.format(
+					"SAVE class=%s instance=%s role=%s name=%s screen=%dx%d+%d+%d tag=%s",
+					tostring(entry.class),
+					tostring(entry.instance),
+					tostring(entry.role),
+					tostring(entry.name),
+					entry.screen.w,
+					entry.screen.h,
+					entry.screen.x,
+					entry.screen.y,
+					tostring(entry.tag)
+				)
+			)
 		end
 	end
 
@@ -229,10 +231,6 @@ local function save_layout()
 
 	naughty.notify({ text = "Layout saved" })
 end
-
-
-
-
 
 local function find_matching_screen(saved)
 	-- 1. Match by output name (most stable)
@@ -254,23 +252,18 @@ local function find_matching_screen(saved)
 	-- 3. Match by geometry (fallback)
 	for s in screen do
 		local g = s.geometry
-		log(string.format(
-			"CHECK SCREEN %dx%d+%d+%d",
-			g.width, g.height, g.x, g.y
-		))
-		if g.x == saved.x
-			and g.y == saved.y
-			and g.width == saved.w
-			and g.height == saved.h then
+		log(string.format("CHECK SCREEN %dx%d+%d+%d", g.width, g.height, g.x, g.y))
+		if g.x == saved.x and g.y == saved.y and g.width == saved.w and g.height == saved.h then
 			log("SCREEN MATCH by geometry")
 			return s
 		end
 	end
 end
 
-
 local function match_score(c, s)
-	if c.class ~= s.class then return nil end
+	if c.class ~= s.class then
+		return nil
+	end
 
 	local score = 0
 
@@ -299,13 +292,15 @@ local function restore_layout()
 	log("=== RESTORE LAYOUT ===")
 
 	for _, c in ipairs(client.get()) do
-		log(string.format(
-			"TRY class=%s instance=%s role=%s name=%s",
-			tostring(c.class),
-			tostring(c.instance),
-			tostring(c.role),
-			tostring(c.name)
-		))
+		log(
+			string.format(
+				"TRY class=%s instance=%s role=%s name=%s",
+				tostring(c.class),
+				tostring(c.instance),
+				tostring(c.role),
+				tostring(c.name)
+			)
+		)
 
 		local best_i, best_s, best_score = nil, nil, -1
 
@@ -328,8 +323,8 @@ local function restore_layout()
 				c:move_to_tag(scr.tags[best_s.tag])
 			end
 
-			c.floating   = best_s.floating
-			c.maximized  = best_s.maximized
+			c.floating = best_s.floating
+			c.maximized = best_s.maximized
 			c.fullscreen = best_s.fullscreen
 			c:geometry(best_s.geometry)
 
@@ -342,7 +337,6 @@ local function restore_layout()
 
 	naughty.notify({ text = "Layout restored" })
 end
-
 
 --- End of personal function
 ---
@@ -778,7 +772,6 @@ globalkeys = gears.table.join(
 	--- Personal keybindings
 	---
 
-
 	awful.key({ modkey }, "e", function()
 		awful.spawn("thunar")
 	end, {
@@ -786,13 +779,13 @@ globalkeys = gears.table.join(
 		group = "apps",
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
-		awful.spawn("brave")
+		awful.spawn("brave-browser")
 	end, {
 		description = "Launch Brave",
 		group = "apps",
 	}),
 	awful.key({ modkey }, "b", function()
-		awful.spawn("bitwarden-desktop")
+		awful.spawn("bitwarden")
 	end, {
 		description = "Launch Bitwarden",
 		group = "apps",
@@ -816,18 +809,14 @@ globalkeys = gears.table.join(
 			timeout = 2,
 		})
 	end, { description = "save window layout", group = "layout" }),
-	awful.key(
-		{ modkey, "Shift" }, "r",
-		function()
-			restore_layout()
-			naughty.notify({
-				title   = "AwesomeWM",
-				text    = "Window layout restored",
-				timeout = 2,
-			})
-		end,
-		{ description = "restore window layout", group = "layout" }
-	),
+	awful.key({ modkey, "Shift" }, "r", function()
+		restore_layout()
+		naughty.notify({
+			title = "AwesomeWM",
+			text = "Window layout restored",
+			timeout = 2,
+		})
+	end, { description = "restore window layout", group = "layout" }),
 
 	-- Move current window to next tag or prev tag
 	-- Ctrl+Alt+Shift+Left/Right: move client to prev/next tag
@@ -976,13 +965,13 @@ globalkeys = gears.table.join(
 	-- New brightness
 	-- Brightness Control with brightnessctl
 	awful.key({}, "XF86MonBrightnessUp", function()
-		awful.spawn("brightnessctl set +25", false)
+		awful.spawn("brightnessctl set +2500", false)
 	end, {
 		description = "increase brightness",
 		group = "custom",
 	}),
 	awful.key({}, "XF86MonBrightnessDown", function()
-		awful.spawn("brightnessctl set 25-", false)
+		awful.spawn("brightnessctl set -2500", false)
 	end, {
 		description = "decrease brightness",
 		group = "custom",
@@ -1125,7 +1114,6 @@ clientkeys = gears.table.join(
 		description = "close",
 		group = "client",
 	}),
-
 
 	awful.key({ modkey }, "y", function(c)
 		c.sticky = not c.sticky
@@ -1466,7 +1454,8 @@ end)
 
 -- Run this line to allow polkit agent to run on start
 -- This allows graphicals interfaces to ask for authentication
-awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+-- awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+-- awful.spawn.with_shell("setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl")
 
 -- Create log log file
 local HOME_DIRECTORY = os.getenv("HOME")
@@ -1477,26 +1466,49 @@ local LOG_FILE = HOME_DIRECTORY .. "/awesome.logs"
 -- A more efficient way to run apps only once
 
 local function run_once(cmd)
-	-- check if any process with this name is running
-	local process_name = cmd:match("^([^%s]+)") -- Get first word before any space
+	-- Extract process name for pgrep
+	local process_name = cmd:match("^([^%s]+)")
 	if process_name then
-		process_name = process_name:match("([^/]+)$") -- Get basename (remove path)
+		process_name = process_name:match("([^/]+)$")
 	end
 
+	-- We wrap the command to capture output even if the shell fails
 	awful.spawn.easy_async_with_shell(
-		"pgrep -x '" .. process_name .. "' > /dev/null || (" .. cmd .. " &)",
+		"pgrep -x '" .. process_name .. "' > /dev/null || (" .. cmd .. ")",
 		function(stdout, stderr, exitreason, exitcode)
-			-- Debug notification to see what's happening
-			-- naughty.notify({
-			-- 	text = "run_once: " ..
-			-- 		cmd ..
-			-- 		" (process: " .. process_name .. ")" .. (exitcode == 0 and " - executed" or " - already running"),
-			-- 	timeout = 3
-			-- })
+			-- Open log file in Append mode
+			local f = io.open(LOG_FILE, "a")
+			if f then
+				local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+				f:write("------------------------------------------\n")
+				f:write(string.format("[%s] COMMAND: %s\n", timestamp, cmd))
+				f:write(string.format("PROCESS: %s | EXIT CODE: %s\n", process_name, tostring(exitcode)))
+
+				if stdout and stdout ~= "" then
+					f:write("STDOUT: " .. stdout .. "\n")
+				end
+
+				if stderr and stderr ~= "" then
+					f:write("STDERR: " .. stderr .. "\n")
+				end
+
+				f:close()
+			end
+
+			-- Optional visual notification for immediate feedback
+			if personal_debug then
+				naughty.notify({
+					title = "Autostart: " .. process_name,
+					text = "Exit Code: " .. exitcode .. (stderr ~= "" and "\nError: " .. stderr or ""),
+					timeout = 5,
+				})
+			end
 		end
 	)
 end
 
+-- Spawn notification service to avoid aesome blocking
+-- awful.spawn.with_shell("dunst")
 -- Now you can call run_once with the command for each application
 run_once("volumeicon")
 run_once("nm-applet")
@@ -1504,24 +1516,24 @@ run_once("xfce4-power-manager")
 run_once("xfsettingsd --daemon")
 
 -- Using custom identifiers for each kitty command
-run_once("kitty")
-
-run_once("brave")
+-- run_once("kitty")
+-- run_once("brave-browser")
 
 -- Other autorun programs
 local autorunApps = {
-	"sh -c $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
-	"sh -c $HOME/dotfiles/scripts/fix-scroll.sh",
-	"sh -c $HOME/dotfiles/scripts/launch_btop_minimized.sh",
+	"bash $HOME/dotfiles/scripts/wallpaper_changer_cron.sh",
+	"bash $HOME/dotfiles/scripts/fix-scroll.sh",
+	"bash $HOME/dotfiles/scripts/launch_btop_minimized.sh",
 	"copyq",
 	-- "qbittorrent",
-	"picom",
+	-- "picom",
 	"playerctld",
 }
 
 for _, app in ipairs(autorunApps) do
 	run_once(app)
 end
+awful.spawn.with_shell("xset s off -dpms s noblank") -- disable auto blank screen timeout
 
 -- Debug awesome getting nano as editor
 
