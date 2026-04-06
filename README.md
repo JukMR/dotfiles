@@ -7,8 +7,24 @@ This is my personal dotfiles repository, managed with [GNU Stow](https://www.gnu
 Run the install script to symlink all config files to your home directory:
 
 ```bash
-./install.sh
+./install.sh           # uses "default" machine
+./install.sh personal  # uses "personal" machine config
+./install.sh work     # uses "work" machine config
 ```
+
+## Machine-Specific Configs
+
+For configs that differ between machines, create machine-specific packages:
+
+```
+stow/
+├── zsh-default/.zshrc      # fallback if no machine-specific version
+├── zsh-personal/.zshrc    # personal machine (manjaro/arch)
+├── zsh-work/.zshrc        # work machine (ubuntu)
+├── ...
+```
+
+The install script automatically prefers `<package>-<machine>` over `<package>`.
 
 ## Usage
 
