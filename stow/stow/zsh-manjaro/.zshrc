@@ -182,9 +182,9 @@ bindkey \^N down-history
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # Only use this if pyenv is installed
-# export PYENV_ROOT="$HOME/.pyenv"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 alias rgfiles='rg --files| rg'
 
@@ -213,7 +213,7 @@ eval $(thefuck --alias)
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
+[[ -f /home/julian/.dart-cli-completion/zsh-config.zsh ]] && . /home/julian/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
 # Define the special prompt prefix for ssh sessions
@@ -264,3 +264,11 @@ mkdirtmp() {
 }
 
 alias lg='lazygit'
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/julian/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+# NPM global bin (added by Qwen Code installer)
+export PATH="$HOME/.npm-global/bin:$PATH"

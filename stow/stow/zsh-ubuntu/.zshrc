@@ -1,0 +1,274 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="robbyrussell"
+
+# Set list of themes to load
+# Setting this variable when ZSH_THEME=random
+# cause zsh load theme from this variable instead of
+# looking in ~/.oh-my-zsh/themes/
+# An empty array have no effect
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  zsh-autosuggestions
+  command-not-found
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export editor='nvim'
+fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias p='python3'
+alias o='xdg-open'
+alias nr='sudo service network-manager restart'
+
+alias gstpush="git stash push"
+alias os="echo lsb_release -a : && lsb_release -a ; echo uname && uname -a; echo hostnamectl && hostnamectl"
+alias calc="mate-calc &"
+alias pythonserver='python -m SimpleHTTPServer'
+alias ftpstart='sudo service vsftpd start'
+alias ftpstop='sudo service vsftpd stop'
+alias ftpstatus='sudo service vsftpd status'
+alias sysss='systemctl suspend'
+
+alias vimedit='vim ~/.vimrc'
+alias zshedit='vim ~/.zshrc'
+
+alias battery="upower -i /org/freedesktop/UPower/devices/battery_BAT0"
+
+stty -ixon
+
+alias cpclip='xclip -sel clip'
+
+# Make C-U delete all till beginning of line
+bindkey \^U backward-kill-line
+
+# Add edit default kitty config file
+alias kittyconfig='vi ~/.config/kitty/kitty.conf'
+
+# Set Intel OneApi path
+if [ -d "/opt/intel/oneapi/compiler/2021.1.1/linux/bin/intel64/icc" ]; then
+  PATH="/opt/intel/Compiler/11.0/083/bin:$PATH"
+fi
+
+export EDITOR=/usr/bin/nvim
+export VISUAL=/usr/bin/nvim
+
+alias clippwd="pwd | xclip -se c"
+
+clip() {
+  cat $1 | xclip -se c
+}
+
+clip2image() {
+  xclip -se c -t image/png -o >>$1
+}
+alias vi=vim
+
+alias xlock="LANG=C LC_ALL=C xlock"
+
+alias sl="echo 'Wrong command. Should write ls'"
+alias show_network_qr="nmcli device wifi show-password"
+alias awesomeedit='vim ~/.config/awesome/rc.lua'
+alias gtf='git ls-tree --full-tree --name-only -r HEAD'
+alias gcq='git commit'
+
+# Add call in zshrc to load vim-like-mode plugin
+# Make sure this is done before loading atuin and zoxide
+source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"
+
+alias gdc='git diff --check'
+alias py='python3 -m pdb -c c'
+
+# Add this alias to stop opening ghostscript
+alias gs='git status'
+
+alias gdst='git diff --stat'
+
+# Set diff-image shortcut
+alias diff-image='$HOME/git-diff-image/diff-image'
+
+alias rgfiles='rg --files| rg'
+
+# Set the default terminal to xterm if it is a ssh session.
+# This is to prevent handle backspaces correctly and being able to remove characters
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  export TERM=xterm
+fi
+
+eval "$(zoxide init zsh --cmd cd)"
+
+# Overwrite ^P and ^N keyboard shortcuts to move through history
+bindkey \^P up-history
+bindkey \^N down-history
+
+# Variable for loading ssh-agent
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# Only use this if pyenv is installed
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
+
+alias rgfiles='rg --files| rg'
+
+# Escape insert mode in zsh-vim-mode-plugin with jk, kj, jj
+bindkey -M viins jk vi-cmd-mode
+bindkey -M viins kj vi-cmd-mode
+bindkey -M viins jj vi-cmd-mode
+
+# Remove the default keybinding for fzf alt+c or esc+c which colided with zsh-vim-mode-plugin
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+bindkey -r '\ec'
+bindkey -M vicmd '\eq' fzf-cd-widget
+bindkey -M viins '\eq' fzf-cd-widget
+# Disable fzf triggering fzf-search-widget when doing esc + ctrl + r
+bindkey -M vicmd -r '^R'
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+# Make sure atuin is loaded after fzf
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init zsh)"
+
+# Enable thefuck
+eval $(thefuck --alias)
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+# Define the special prompt prefix for ssh sessions
+autoload -U colors && colors
+if [[ -n "$SSH_CONNECTION" ]]; then
+  PROMPT='%F{cyan}ssh✈%f%F{red}%n%F{blue}@%F{magenta}%m%f '"$PROMPT"
+fi
+
+
+# Modify RPROMPT and add indicator from zsh-vim-mode-plugin
+
+# let prompt expand variables
+setopt PROMPT_SUBST
+
+RPROMPT='${MODE_INDICATOR_PROMPT} %F{14}[%D{%H:%M:%S}]%f'
+
+# VS Code Shell Integration for Copilot
+# Fix for terminal completion detection issue
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    # Disable RPROMPT in VS Code (causes detection issues)
+    unset RPROMPT
+    unset RPS1
+
+    # Load VS Code shell integration
+    [[ -f "$(code --locate-shell-integration-path zsh)" ]] && \
+        . "$(code --locate-shell-integration-path zsh)"
+fi
+
+# Allow ctrl-c to quit less
+export LESS="-K -R -S"
+
+alias gcc='git commit --verbose --no-verify'
+alias 'gcc!'='git commit --verbose --no-verify --amend'
+
+if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+  alias bat='batcat'
+fi
+
+# opencode
+export PATH=/home/mrjulian/.opencode/bin:$PATH
+
+alias nano='nvim'
+alias v='nvim'
+alias rgi='rg -i'
+alias dfstc='diffstat -C'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+mkdirtmp() {
+  local new_temp
+  new_temp=$(mktemp -d) || return 1
+  echo "$new_temp"
+  cd "$new_temp" || return 1
+}
+
+alias lg='lazygit'
