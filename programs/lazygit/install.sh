@@ -19,11 +19,6 @@ require_cmd() {
 }
 
 detect_os() {
-    [[ -f /etc/os-release ]] || error "/etc/os-release not found"
-
-    # shellcheck disable=SC1091
-    source /etc/os-release
-
     echo "$ID"
 }
 
@@ -66,6 +61,11 @@ install_from_github() {
 }
 
 main() {
+    [[ -f /etc/os-release ]] || error "/etc/os-release not found"
+
+    # shellcheck disable=SC1091
+    source /etc/os-release
+
     local os
     os="$(detect_os)"
 
