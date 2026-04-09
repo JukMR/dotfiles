@@ -359,7 +359,7 @@ mymainmenu = awful.menu({
 		{ "open terminal", terminal },
 		{ "power options", power_options_group },
 		{ "awesome power", awesome_power_options },
-		{ "brave",         "brave" },
+		{ "brave",         "brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox" },
 	},
 })
 
@@ -779,7 +779,7 @@ globalkeys = gears.table.join(
 		group = "apps",
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
-		awful.spawn("brave-browser")
+		awful.spawn("brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox")
 	end, {
 		description = "Launch Brave",
 		group = "apps",
