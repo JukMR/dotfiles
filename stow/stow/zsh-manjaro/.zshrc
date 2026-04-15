@@ -249,7 +249,9 @@ alias gcc='git commit --verbose --no-verify'
 alias 'gcc!'='git commit --verbose --no-verify --amend'
 
 if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
-  alias bat='batcat'
+  alias bat='batcat -p'
+elif then
+  alias bat='bat -p'
 fi
 
 alias v='nvim'
