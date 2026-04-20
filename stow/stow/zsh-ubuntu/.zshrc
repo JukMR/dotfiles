@@ -274,3 +274,4 @@ mkdirtmp() {
 }
 
 alias lg='lazygit'
+alias ls='eza'
