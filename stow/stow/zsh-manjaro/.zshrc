@@ -272,3 +272,4 @@ export PATH="$PATH:/home/julian/.lmstudio/bin"
 
 # NPM global bin (added by Qwen Code installer)
 export PATH="$HOME/.npm-global/bin:$PATH"
+alias ls='exa'
