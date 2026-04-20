@@ -94,6 +94,8 @@ autorandr
 bluetui
 duf
 diffstat
+eza
+git-delta
 "
 
 # Array to store programs that need installation
