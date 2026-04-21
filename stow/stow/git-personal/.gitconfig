@@ -1,0 +1,29 @@
+[alias]
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	diff-image = "!f() { cd -- \"${GIT_PREFIX:-.}\"; GIT_DIFF_IMAGE_ENABLED=1 git diff \"$@\"; }; f"
+	undo = reset --soft HEAD^
+	local-branches-remove = !git branch -v | grep '\\[gone\\]' | awk '{print $1}' | xargs git branch -D
+	local-branches-show = !git branch -v | grep '\\[gone\\]' | awk '{print $1}'
+[user]
+	name = Julian Merida
+	email = julianmr97@gmail.com
+[core]
+	attributesfile = ~/.gitattributes
+	autocrlf = input
+    pager = delta
+[diff "image"]
+	command = /home/julian/git-diff-image/git_diff_image
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+
+[merge]
+    conflictStyle = zdiff3
