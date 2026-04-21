@@ -365,7 +365,7 @@ mymainmenu = awful.menu({
 		{ "awesome power", awesome_power_options },
 		{
 			"brave",
-			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.8",
+			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.9",
 		},
 	},
 })
@@ -787,7 +787,7 @@ globalkeys = gears.table.join(
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
 		awful.spawn(
-			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.8"
+			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.9"
 		)
 	end, {
 		description = "Launch Brave",
