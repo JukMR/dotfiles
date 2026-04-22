@@ -132,7 +132,7 @@ export VISUAL=/usr/bin/nvim
 alias clippwd="pwd | xclip -se c"
 
 clip() {
-    xclip -se c < "$1"
+  cat $1 | xclip -se c
 }
 
 clip2image() {
