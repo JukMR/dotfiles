@@ -1,7 +1,7 @@
 -- Configure widgets to show
 -- Global config variables
-battery = true
-wifi = true
+local battery = true
+local wifi = true
 
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
@@ -27,7 +27,7 @@ require("awful.hotkeys_popup.keys")
 local mic_widget = require("widgets.mic")
 
 -- Save current state of windows and layouts
-local state_path = awful.util.get_cache_dir() .. "layout_state.lua"
+local state_path = gears.filesystem.get_cache_dir() .. "layout_state.lua"
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -65,16 +65,16 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "kitty"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
+local terminal = "kitty"
+local editor = os.getenv("EDITOR") or "vim"
+local editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+local modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -141,7 +141,7 @@ local power_options_group = {
 
 local DEBUG_LAYOUT = false -- <<< toggle here
 
-local debug_log = awful.util.get_cache_dir() .. "layout_debug.log"
+local debug_log = gears.filesystem.get_cache_dir() .. "layout_debug.log"
 
 local function log(msg)
 	if not DEBUG_LAYOUT then
@@ -355,11 +355,18 @@ local menu_terminal = { "open terminal", terminal }
 
 mymainmenu = awful.menu({
 	items = {
-		{ "awesome",       myawesomemenu,        beautiful.awesome_icon },
+		{
+			"awesome",
+			myawesomemenu,
+			beautiful.awesome_icon,
+		},
 		{ "open terminal", terminal },
 		{ "power options", power_options_group },
 		{ "awesome power", awesome_power_options },
-		{ "brave",         "brave" },
+		{
+			"brave",
+			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.9",
+		},
 	},
 })
 
@@ -779,7 +786,9 @@ globalkeys = gears.table.join(
 		group = "apps",
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
-		awful.spawn("brave-browser")
+		awful.spawn(
+			"brave-browser --use-gl=angle --use-angle=gl-egl --disable-gpu-sandbox --force-device-scale-factor=0.9"
+		)
 	end, {
 		description = "Launch Brave",
 		group = "apps",
@@ -1036,8 +1045,11 @@ globalkeys = gears.table.join(
 		awful.prompt.run({
 			prompt = "Run Lua code: ",
 			textbox = awful.screen.focused().mypromptbox.widget,
-			exe_callback = awful.util.eval,
-			history_path = awful.util.get_cache_dir() .. "/history_eval",
+			exe_callback = function(input)
+				local result = loadstring("return " .. input)()
+				print(result)
+			end,
+			history_path = gears.filesystem.get_cache_dir() .. "/history_eval",
 		})
 	end, {
 		description = "lua execute prompt",
@@ -1297,7 +1309,7 @@ end
 
 -- Keybindings for modkey + Alt + number
 for i = 1, 9 do
-	globalkeys = awful.util.table.join(
+	globalkeys = gears.table.join(
 		globalkeys,
 		awful.key({ modkey, "Mod1" }, "#" .. i + 9, function()
 			local screen = awful.screen.focused()

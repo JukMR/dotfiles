@@ -1,3 +1,4 @@
+ZSH_DISABLE_COMPFIX="true"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -24,7 +25,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -62,6 +63,7 @@ plugins=(
   git
   zsh-autosuggestions
   command-not-found
+  zsh-vim-mode
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -96,11 +98,8 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias p='python3'
 alias o='xdg-open'
-alias nr='sudo service network-manager restart'
 
-alias gstpush="git stash push"
 alias os="echo lsb_release -a : && lsb_release -a ; echo uname && uname -a; echo hostnamectl && hostnamectl"
-alias calc="mate-calc &"
 alias pythonserver='python -m SimpleHTTPServer'
 alias ftpstart='sudo service vsftpd start'
 alias ftpstop='sudo service vsftpd stop'
@@ -149,10 +148,6 @@ alias awesomeedit='vim ~/.config/awesome/rc.lua'
 alias gtf='git ls-tree --full-tree --name-only -r HEAD'
 alias gcq='git commit'
 
-# Add call in zshrc to load vim-like-mode plugin
-# Make sure this is done before loading atuin and zoxide
-source "$HOME/.oh-my-zsh/custom/plugins/zsh-vim-mode/zsh-vim-mode.plugin.zsh"
-
 alias gdc='git diff --check'
 alias py='python3 -m pdb -c c'
 
@@ -182,11 +177,8 @@ bindkey \^N down-history
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # Only use this if pyenv is installed
-# export PYENV_ROOT="$HOME/.pyenv"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
-alias rgfiles='rg --files| rg'
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
 # Escape insert mode in zsh-vim-mode-plugin with jk, kj, jj
 bindkey -M viins jk vi-cmd-mode
@@ -201,15 +193,9 @@ bindkey -M viins '\eq' fzf-cd-widget
 # Disable fzf triggering fzf-search-widget when doing esc + ctrl + r
 bindkey -M vicmd -r '^R'
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-
 # Make sure atuin is loaded after fzf
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
-
-# Enable thefuck
-eval $(thefuck --alias)
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
@@ -222,9 +208,7 @@ if [[ -n "$SSH_CONNECTION" ]]; then
   PROMPT='%F{cyan}ssh✈%f%F{red}%n%F{blue}@%F{magenta}%m%f '"$PROMPT"
 fi
 
-
 # Modify RPROMPT and add indicator from zsh-vim-mode-plugin
-
 # let prompt expand variables
 setopt PROMPT_SUBST
 
@@ -250,7 +234,7 @@ alias 'gcc!'='git commit --verbose --no-verify --amend'
 
 if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
   alias bat='batcat -p'
-elif then
+else
   alias bat='bat -p'
 fi
 
@@ -263,8 +247,16 @@ alias rgi='rg -i'
 alias dfstc='diffstat -C'
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+nvm() {
+  unset -f nvm node npm npx
+  source "$NVM_DIR/nvm.sh"
+  nvm "$@"
+}
+
+node() { nvm "$@"; }
+npm()  { nvm "$@"; }
+npx()  { nvm "$@"; }
 
 mkdirtmp() {
   local new_temp
@@ -274,3 +266,24 @@ mkdirtmp() {
 }
 
 alias lg='lazygit'
+alias ls='eza'
+
+fpath+=~/.zfunc;
+
+zstyle ':completion:*' menu select
+
+# Create deferred block for application to not interfere with startup times
+# ---
+autoload -Uz add-zsh-hook
+
+_deferred_init() {
+  add-zsh-hook -d precmd _deferred_init
+
+  # run in current shell (NOT background)
+  eval $(thefuck --alias)
+  eval "$(pyenv init -)"
+}
+
+add-zsh-hook precmd _deferred_init
+
+# ---
