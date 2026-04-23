@@ -207,6 +207,8 @@ def main() -> None:
         print(f"Done with errors: {linked_count} linked, {failed_count} failed.")
     elif linked_count == 0:
         print("No dotfiles were linked.")
+    elif args.dry_run:
+        print("Dry run complete. No changes were made.")
     else:
         print("Done! Config files are now symlinked to your home directory.")
 
