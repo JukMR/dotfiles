@@ -25,9 +25,23 @@ uv run python3 install_stow.py            # Interactive profile selection
 
 # Adopt existing files into stow packages (use with caution)
 uv run python3 install_stow.py --adopt manjaro
+
+# Dry run - print commands without executing
+uv run python3 install_stow.py --dry-run manjaro
+
+# Verbose output - log what is being executed
+uv run python3 install_stow.py -v manjaro
+uv run python3 install_stow.py --verbose manjaro
+
+# Combine flags
+uv run python3 install_stow.py --dry-run -v manjaro
 ```
 
 The `--adopt` flag moves existing conflicting files from your home directory into the stow package directories, then creates symlinks. Use this when you have existing dotfiles that you want to bring under stow management.
+
+The `--dry-run` flag prints the stow commands that would be run without actually executing them.
+
+The `-v`/`--verbose` flag enables verbose output, logging the exact commands being executed.
 
 ## Adding New Packages
 
