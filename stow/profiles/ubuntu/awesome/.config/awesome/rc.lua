@@ -105,8 +105,8 @@ local myawesomemenu = {
 			hotkeys_popup.show_help(nil, awful.screen.focused())
 		end,
 	},
-	{ "manual",           terminal .. " -e man awesome" },
-	{ "edit conf nvim",   editor_cmd .. " " .. awesome.conffile },
+	{ "manual", terminal .. " -e man awesome" },
+	{ "edit conf nvim", editor_cmd .. " " .. awesome.conffile },
 	{ "edit conf vscode", "code" .. " " .. awesome.conffile },
 }
 
@@ -130,7 +130,7 @@ local power_options_group = {
 		"suspend",
 		lock_and_suspend,
 	},
-	{ "reboot",   "reboot" },
+	{ "reboot", "reboot" },
 	{ "shutdown", "poweroff" },
 }
 
@@ -343,12 +343,12 @@ end
 ---
 
 local awesome_power_options =
-{ { "restart awesome", awesome.restart }, {
-	"quit awesome",
-	function()
-		awesome.quit()
-	end,
-} }
+	{ { "restart awesome", awesome.restart }, {
+		"quit awesome",
+		function()
+			awesome.quit()
+		end,
+	} }
 
 local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
@@ -616,8 +616,8 @@ root.buttons(gears.table.join(
 	awful.button({}, 3, function()
 		mymainmenu:toggle()
 	end) -- comment the following lines to avoid mouse wheel from turning tags
--- awful.button({ }, 4, awful.tag.viewnext),
--- awful.button({ }, 5, awful.tag.viewprev)
+	-- awful.button({ }, 4, awful.tag.viewnext),
+	-- awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
