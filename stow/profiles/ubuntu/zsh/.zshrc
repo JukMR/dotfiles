@@ -247,6 +247,7 @@ alias rgi='rg -i'
 alias dfstc='diffstat -C'
 
 export NVM_DIR="$HOME/.nvm"
+export PATH="$HOME/.nvm/versions/node/*/bin:$PATH"
 
 nvm() {
   unset -f nvm node npm npx
