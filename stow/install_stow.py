@@ -83,9 +83,7 @@ def stow_package(
                 package_file = package_dir / rel_path
 
                 if dry_run:
-                    print(
-                        f"  [DRY RUN] Would adopt {rel_path}: {target_file} -> {package_file}"
-                    )
+                    print(f"  [DRY RUN] Would adopt {rel_path}: {target_file} -> {package_file}")
                     continue
 
                 if target_file.exists() or target_file.is_symlink():
@@ -127,7 +125,7 @@ def main() -> None:
         "machine",
         nargs="?",
         default=None,
-        help="Machine profile (e.g., ubuntu, manjaro, basic). If not provided, prompts for selection.",
+        help="Machine profile (e.g., ubuntu, manjaro, base). If not provided, prompts for selection.",
     )
     parser.add_argument(
         "--adopt",
@@ -153,7 +151,7 @@ def main() -> None:
     machine = args.machine
 
     if not machine and available_profiles:
-        choices = available_profiles + ["basic (base profile only)"]
+        choices = available_profiles + ["base (base profile only)"]
         questions = [
             inquirer.List(
                 "machine",
@@ -167,22 +165,18 @@ def main() -> None:
             sys.exit(1)
         machine = answers["machine"].split()[0]
     elif not machine:
-        machine = "basic"
+        machine = "base"
 
     selected_profiles = ["base"]
-    if machine != "basic" and machine in available_profiles:
+    if machine != "base" and machine in available_profiles:
         selected_profiles.append(machine)
-    elif machine != "basic":
-        print(
-            f"Warning: Profile '{machine}' not found. Using base only.", file=sys.stderr
-        )
+    elif machine != "base":
+        print(f"Warning: Profile '{machine}' not found. Using base only.", file=sys.stderr)
 
     if args.dry_run:
         print("Running in dry-run mode - no changes will be made.")
 
-    print(
-        f"Installing dotfiles with GNU Stow (profiles: {', '.join(selected_profiles)})..."
-    )
+    print(f"Installing dotfiles with GNU Stow (profiles: {', '.join(selected_profiles)})...")
     print(f"Using stow dir: {stow_dir}")
 
     linked_count = 0
