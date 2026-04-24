@@ -1,0 +1,6 @@
+customCommands:
+  - key: '<c-g>'
+    context: 'global'
+    command: "git log --oneline --decorate --graph --all"
+    description: 'Git log graph all (gloga)'
+    output: terminal
