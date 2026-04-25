@@ -228,8 +228,6 @@ local function save_layout()
 	f:write("return " .. serialize(state))
 	f:close()
 	os.rename(tmp, state_path)
-
-	naughty.notify({ text = "Layout saved" })
 end
 
 local function find_matching_screen(saved)
@@ -334,8 +332,6 @@ local function restore_layout()
 			log("NO MATCH")
 		end
 	end
-
-	naughty.notify({ text = "Layout restored" })
 end
 
 --- End of personal function
