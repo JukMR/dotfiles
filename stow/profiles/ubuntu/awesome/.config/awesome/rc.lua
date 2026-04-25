@@ -1466,7 +1466,7 @@ end)
 
 -- Run this line to allow polkit agent to run on start
 -- This allows graphicals interfaces to ask for authentication
--- awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+awful.spawn.with_shell("exec /usr/bin/lxqt-policykit-agent ")
 -- awful.spawn.with_shell("setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl")
 
 -- Create log log file
