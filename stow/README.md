@@ -60,6 +60,35 @@ The `-v`/`--verbose` flag enables verbose output, logging the exact commands bei
 
 Example: `profiles/base/lazygit/.config/lazygit/config.yml` → `~/.config/lazygit/config.yml`
 
+The installer validates package shape before reporting success. In particular, app-specific XDG packages should not place files directly at paths such as `.config/config.yml`; that layout would incorrectly link to `~/.config/config.yml` instead of an app-owned subdirectory such as `~/.config/lazygit/config.yml`.
+
+After `stow` runs, the wrapper also verifies that each expected target exists and resolves back to the package source before printing `Linked ...`.
+
+## Testing
+
+Run the automated test suite from the `stow/` directory:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Notes:
+
+1. The tests use Python's built-in `unittest` runner.
+2. GNU Stow must be installed and available on `PATH` for the integration-style tests. If it is missing, those tests are skipped.
+3. The test suite covers malformed package detection, valid package layouts (`kitty`, `vim`), native `--adopt` behavior, and lazygit dry-run/install behavior.
+
+For a quick manual smoke test against an isolated home directory:
+
+```bash
+tmp_home="$(mktemp -d)"
+HOME="$tmp_home" python3 install_stow.py --dry-run base
+HOME="$tmp_home" python3 install_stow.py base
+ls -l "$tmp_home/.config/lazygit/config.yml"
+```
+
+That smoke test should show `~/.config/lazygit/config.yml` as the managed lazygit target, and it should not create `~/.config/config.yml`.
+
 ## Migration Notes
 
 Migrated from tag-based naming (`zsh-manjaro`, `awesome-ubuntu`) to folder-based profiles.
