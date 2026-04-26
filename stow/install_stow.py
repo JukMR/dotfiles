@@ -7,12 +7,10 @@
 # ///
 
 import argparse
-import shutil
 import subprocess
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
-
-import inquirer
 
 
 def get_script_dir() -> Path:
@@ -33,6 +31,140 @@ def get_profile_packages(stow_dir: Path, profile: str) -> list[str]:
     return sorted(entry.name for entry in profile_dir.iterdir() if entry.is_dir())
 
 
+@dataclass
+class ValidationResult:
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+    @property
+    def ok(self) -> bool:
+        return not self.errors
+
+
+def get_package_entries(package_dir: Path) -> list[Path]:
+    if not package_dir.is_dir():
+        return []
+
+    return sorted(
+        entry.relative_to(package_dir)
+        for entry in package_dir.rglob("*")
+        if entry.is_file() or entry.is_symlink()
+    )
+
+
+def format_target_path(target: Path, rel_path: Path) -> str:
+    full_path = target / rel_path
+    if target == Path.home():
+        return f"~/{rel_path.as_posix()}"
+    return str(full_path)
+
+
+def is_suspicious_xdg_root_file(rel_path: Path) -> bool:
+    if len(rel_path.parts) != 2 or rel_path.parts[0] != ".config":
+        return False
+
+    filename = rel_path.name.lower()
+    return filename.startswith("config.") or filename.startswith("settings.")
+
+
+def validate_package_layout(package_dir: Path, package: str, target: Path) -> ValidationResult:
+    result = ValidationResult()
+    entries = get_package_entries(package_dir)
+
+    if not entries:
+        result.errors.append(f"Package directory '{package_dir}' does not contain any files to stow.")
+        return result
+
+    expected_config_dir = Path(".config") / package
+    for rel_path in entries:
+        if not is_suspicious_xdg_root_file(rel_path):
+            continue
+
+        result.errors.append(
+            f"{rel_path.as_posix()} would link to {format_target_path(target, rel_path)}. "
+            f"Use a nested app directory such as {format_target_path(target, expected_config_dir / rel_path.name)} instead."
+        )
+
+    return result
+
+
+def validate_linked_targets(package_dir: Path, target: Path) -> ValidationResult:
+    result = ValidationResult()
+
+    for rel_path in get_package_entries(package_dir):
+        target_path = target / rel_path
+        source_path = package_dir / rel_path
+
+        if not target_path.exists():
+            if target_path.is_symlink():
+                result.errors.append(
+                    f"{format_target_path(target, rel_path)} is a broken symlink; expected {source_path}."
+                )
+            else:
+                result.errors.append(
+                    f"Missing expected target {format_target_path(target, rel_path)}."
+                )
+            continue
+
+        if target_path.resolve() != source_path.resolve():
+            result.errors.append(
+                f"{format_target_path(target, rel_path)} resolves to {target_path.resolve()}, expected {source_path.resolve()}."
+            )
+
+    return result
+
+
+def print_validation_result(package: str, result: ValidationResult, *, stream: object | None = None) -> None:
+    if not result.errors and not result.warnings:
+        return
+
+    if stream is None:
+        stream = sys.stderr
+
+    if result.errors:
+        print(f"  Invalid package layout for {package}:", file=stream)
+        for message in result.errors:
+            print(f"    - {message}", file=stream)
+
+    if result.warnings:
+        print(f"  Warnings for {package}:", file=stream)
+        for message in result.warnings:
+            print(f"    - {message}", file=stream)
+
+
+def build_stow_command(
+    profile_dir: Path,
+    package: str,
+    target: Path,
+    *,
+    adopt: bool,
+    dry_run: bool,
+    verbose: bool,
+) -> list[str]:
+    cmd = ["stow", "-t", str(target), "-d", str(profile_dir)]
+
+    if adopt:
+        cmd.append("--adopt")
+    if dry_run:
+        cmd.extend(["-n", "--verbose=1"])
+    elif verbose:
+        cmd.append("--verbose=1")
+
+    cmd.extend(["-S", package])
+    return cmd
+
+
+def print_dry_run_targets(package_dir: Path, target: Path) -> None:
+    print("  [DRY RUN] Would manage:")
+    for rel_path in get_package_entries(package_dir):
+        print(f"    - {format_target_path(target, rel_path)}")
+
+
+def format_stow_error(result: subprocess.CompletedProcess[str]) -> str:
+    output_parts = [part.strip() for part in (result.stderr, result.stdout) if part and part.strip()]
+    return "\n".join(output_parts)
+
+
 def stow_package(
     stow_dir: Path,
     profile: str,
@@ -40,80 +172,58 @@ def stow_package(
     adopt: bool = False,
     dry_run: bool = False,
     verbose: bool = False,
+    target: Path | None = None,
 ) -> bool:
-    target = Path.home()
+    target = target or Path.home()
     profile_dir = stow_dir / "profiles" / profile
     package_dir = profile_dir / package
+    preflight = validate_package_layout(package_dir, package, target)
 
-    # Build the stow command
-    cmd = ["stow", "-t", str(target), "-S", package, "-d", str(profile_dir)]
+    if not preflight.ok:
+        print_validation_result(package, preflight)
+        return False
+
+    cmd = build_stow_command(
+        profile_dir,
+        package,
+        target,
+        adopt=adopt,
+        dry_run=dry_run,
+        verbose=verbose,
+    )
 
     if verbose:
         print(f"  Command: {' '.join(cmd)}")
 
     if dry_run:
-        print(f"  [DRY RUN] Would run: {' '.join(cmd)}")
-        return True
+        print_dry_run_targets(package_dir, target)
 
-    # First attempt without --adopt
     result = subprocess.run(
         cmd,
         capture_output=True,
         text=True,
     )
 
-    if result.returncode == 0:
-        print(f"  Linked {package} (profile: {profile})")
-        return True
-
-    # If failed and adopt is requested, try to manually adopt conflicting files
-    if adopt and "would cause conflicts" in result.stderr:
-        conflicts = []
-        for line in result.stderr.split("\n"):
-            line = line.strip()
-            if line.startswith("*"):
-                parts = line.split(": ", 1)
-                if len(parts) >= 2:
-                    conflicts.append(parts[1].strip())
-
-        if conflicts:
-            print(f"  Adopting {len(conflicts)} conflicting file(s)...")
-            for rel_path in conflicts:
-                target_file = target / rel_path
-                package_file = package_dir / rel_path
-
-                if dry_run:
-                    print(f"  [DRY RUN] Would adopt {rel_path}: {target_file} -> {package_file}")
-                    continue
-
-                if target_file.exists() or target_file.is_symlink():
-                    package_file.parent.mkdir(parents=True, exist_ok=True)
-                    if target_file.is_symlink():
-                        target_file.unlink()
-                        if verbose:
-                            print(f"    Removed symlink: {target_file}")
-                    else:
-                        shutil.move(str(target_file), str(package_file))
-                        print(f"    Adopted {rel_path}")
-                    if not package_file.exists():
-                        print(f"    Warning: {rel_path} not found in package, skipping")
-                        continue
-                else:
-                    print(f"    {rel_path} not found in target, skipping")
-
-            # Retry stow after adopting
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-            )
-
     if result.returncode != 0:
-        print(f"  Error stowing {package}: {result.stderr.strip()}", file=sys.stderr)
+        print(f"  Error stowing {package}: {format_stow_error(result)}", file=sys.stderr)
         return False
-    else:
-        print(f"  Linked {package} (profile: {profile})")
+
+    if dry_run:
+        if verbose and result.stdout.strip():
+            for line in result.stdout.strip().splitlines():
+                print(f"    {line}")
+        print(f"  [DRY RUN] Validated {package} (profile: {profile})")
         return True
+
+    postflight = validate_linked_targets(package_dir, target)
+    if not postflight.ok:
+        print(f"  Post-stow validation failed for {package}:", file=sys.stderr)
+        for message in postflight.errors:
+            print(f"    - {message}", file=sys.stderr)
+        return False
+
+    print(f"  Linked {package} (profile: {profile})")
+    return True
 
 
 def main() -> None:
@@ -130,12 +240,12 @@ def main() -> None:
     parser.add_argument(
         "--adopt",
         action="store_true",
-        help="Adopt existing files into stow packages (use with caution).",
+        help="Pass through GNU Stow's native --adopt behavior (use with caution).",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print commands without executing them.",
+        help="Validate package layout and show managed targets without making changes.",
     )
     parser.add_argument(
         "-v",
@@ -151,6 +261,16 @@ def main() -> None:
     machine = args.machine
 
     if not machine and available_profiles:
+        try:
+            import inquirer
+        except ModuleNotFoundError:
+            print(
+                "Interactive profile selection requires 'inquirer'. Run with "
+                "`uv run --script install_stow.py` or use the repo virtualenv.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
         choices = available_profiles + ["base (base profile only)"]
         questions = [
             inquirer.List(

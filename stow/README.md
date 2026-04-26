@@ -12,7 +12,7 @@ stow/
 │   ├── ubuntu/        # Ubuntu-specific packages (awesome, zsh)
 │   └── personal/      # Optional personal packages (git-personal)
 ├── install_stow.py    # PEP 723 script - dependencies managed by uv
-└── pyproject.toml     # Alternative pip-based setup
+└── README.md
 ```
 
 ## Usage
@@ -33,7 +33,7 @@ uv run -s install_stow.py
 # Adopt existing files into stow packages (use with caution)
 uv run -s install_stow.py --adopt manjaro
 
-# Dry run - print commands without executing
+# Dry run - validate layout and show managed targets
 uv run -s install_stow.py --dry-run manjaro
 
 # Verbose output - log what is being executed
@@ -44,11 +44,11 @@ uv run -s install_stow.py --verbose manjaro
 uv run -s install_stow.py --dry-run -v manjaro
 ```
 
-Dependencies are auto-managed via the PEP 723 `# /// script` header. When running with `uv run --script`, uv automatically installs the declared dependencies (inquirer) on-demand into a cached environment.
+Dependencies are auto-managed via the PEP 723 `# /// script` header. When running with `uv run --script`, uv automatically installs the declared dependencies (`inquirer`) on-demand into a cached environment.
 
-The `--adopt` flag moves existing conflicting files from your home directory into the stow package directories, then creates symlinks. Use this when you have existing dotfiles that you want to bring under stow management.
+The `--adopt` flag now passes GNU Stow's native `--adopt` behavior through directly. Existing target files are imported into the package before the symlink is created, so use it only when you want the target content to become the new source of truth.
 
-The `--dry-run` flag prints the stow commands that would be run without actually executing them.
+The `--dry-run` flag validates package layout and prints the target paths each package would manage without making filesystem changes.
 
 The `-v`/`--verbose` flag enables verbose output, logging the exact commands being executed.
 
@@ -66,3 +66,4 @@ Migrated from tag-based naming (`zsh-manjaro`, `awesome-ubuntu`) to folder-based
 Old hyphenated packages are replaced by organized profile directories.
 The nested `stow/stow/` directory has been flattened into `profiles/`.
 All package dependencies are managed on-demand via uv's PEP 723 script mechanism.
+The `lazygit` source of truth is `profiles/base/lazygit/.config/lazygit/config.yml`; if an older install left a stray `~/.config/config.yml`, remove or migrate it before reinstalling.
