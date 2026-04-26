@@ -65,16 +65,16 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "kitty"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
+local terminal = "kitty"
+local editor = os.getenv("EDITOR") or "vim"
+local editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+local modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -113,7 +113,7 @@ local myawesomemenu = {
 -- Define helper functions for suspending and locking
 
 local function xlock_w_fonts()
-	awful.spawn.with_shell("LANG=C LC_ALL=C xlock")
+	awful.spawn.with_shell("i3lock")
 end
 
 local function lock_and_suspend()
@@ -228,8 +228,6 @@ local function save_layout()
 	f:write("return " .. serialize(state))
 	f:close()
 	os.rename(tmp, state_path)
-
-	naughty.notify({ text = "Layout saved" })
 end
 
 local function find_matching_screen(saved)
@@ -334,8 +332,6 @@ local function restore_layout()
 			log("NO MATCH")
 		end
 	end
-
-	naughty.notify({ text = "Layout restored" })
 end
 
 --- End of personal function
@@ -359,7 +355,7 @@ mymainmenu = awful.menu({
 		{ "open terminal", terminal },
 		{ "power options", power_options_group },
 		{ "awesome power", awesome_power_options },
-		{ "brave",         "brave" },
+		{ "brave",         "brave --force-device-scale-factor=0.9" },
 	},
 })
 
@@ -779,7 +775,7 @@ globalkeys = gears.table.join(
 		group = "apps",
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
-		awful.spawn("brave")
+		awful.spawn("brave --force-device-scale-factor=0.9")
 	end, {
 		description = "Launch Brave",
 		group = "apps",
@@ -965,7 +961,7 @@ globalkeys = gears.table.join(
 	-- New brightness
 	-- Brightness Control with brightnessctl
 	awful.key({}, "XF86MonBrightnessUp", function()
-		awful.spawn("brightnessctl set +25", false)
+		awful.spawn("brightnessctl set 25+", false)
 	end, {
 		description = "increase brightness",
 		group = "custom",
@@ -1454,7 +1450,8 @@ end)
 
 -- Run this line to allow polkit agent to run on start
 -- This allows graphicals interfaces to ask for authentication
-awful.spawn.with_shell("exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+-- awful.spawn.with_shell("exec /usr/bin/lxqt-policykit-agent ")
+-- awful.spawn.with_shell("setxkbmap -rules evdev -model evdev -layout us -variant altgr-intl")
 
 -- Create log log file
 local HOME_DIRECTORY = os.getenv("HOME")
@@ -1494,7 +1491,7 @@ run_once("xfsettingsd --daemon")
 -- Using custom identifiers for each kitty command
 run_once("kitty")
 
-run_once("brave")
+run_once("brave --force-device-scale-factor=0.9")
 
 -- Other autorun programs
 local autorunApps = {
@@ -1510,13 +1507,13 @@ local autorunApps = {
 for _, app in ipairs(autorunApps) do
 	run_once(app)
 end
+awful.spawn.with_shell("xset s off -dpms s noblank") -- disable auto blank screen timeout
 
 -- Debug awesome getting nano as editor
 
 -- vart = os.execute('printenv > /tmp/hola')
 -- naughty.notify({text=tostring((vart))})
 -- naughty.notify({text=tostring((editor))})
-awful.spawn.with_shell("xset s off -dpms s noblank")
 
 personal_debug = false -- don't use `debug` variable because it clash with some internal variable of awesome
 if personal_debug then
