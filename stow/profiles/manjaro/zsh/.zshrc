@@ -238,6 +238,7 @@ else
 fi
 alias nano='nvim'
 alias v='nvim'
+alias vi='nvim'
 alias rgi='rg -i'
 alias dfstc='diffstat -C'
 
