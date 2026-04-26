@@ -288,3 +288,5 @@ _deferred_init() {
 add-zsh-hook precmd _deferred_init
 
 # ---
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
