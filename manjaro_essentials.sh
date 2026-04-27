@@ -96,6 +96,7 @@ duf
 diffstat
 eza
 git-delta
+dua-cli
 "
 
 # Array to store programs that need installation
