@@ -321,10 +321,10 @@ local function restore_layout()
 				c:move_to_tag(scr.tags[best_s.tag])
 			end
 
-			c.floating = best_s.floating
 			c.maximized = best_s.maximized
 			c.fullscreen = best_s.fullscreen
 			c:geometry(best_s.geometry)
+			c.floating = best_s.floating
 
 			-- CRITICAL: keep array dense
 			table.remove(state, best_i)
