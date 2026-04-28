@@ -1,7 +1,7 @@
 -- Configure widgets to show
 -- Global config variables
-battery = false
-wifi = false
+local battery = false
+local wifi = false
 
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
@@ -27,7 +27,7 @@ require("awful.hotkeys_popup.keys")
 local mic_widget = require("widgets.mic")
 
 -- Save current state of windows and layouts
-local state_path = awful.util.get_cache_dir() .. "layout_state.lua"
+local state_path = gears.filesystem.get_cache_dir() .. "layout_state.lua"
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -141,7 +141,7 @@ local power_options_group = {
 
 local DEBUG_LAYOUT = false -- <<< toggle here
 
-local debug_log = awful.util.get_cache_dir() .. "layout_debug.log"
+local debug_log = gears.filesystem.get_cache_dir() .. "layout_debug.log"
 
 local function log(msg)
 	if not DEBUG_LAYOUT then
@@ -321,10 +321,10 @@ local function restore_layout()
 				c:move_to_tag(scr.tags[best_s.tag])
 			end
 
-			c.floating = best_s.floating
 			c.maximized = best_s.maximized
 			c.fullscreen = best_s.fullscreen
 			c:geometry(best_s.geometry)
+			c.floating = best_s.floating
 
 			-- CRITICAL: keep array dense
 			table.remove(state, best_i)
