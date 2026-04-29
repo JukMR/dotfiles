@@ -4,3 +4,13 @@ customCommands:
     command: "git log --oneline --decorate --graph --all"
     description: 'Git log graph all (gloga)'
     output: terminal
+
+  - key: 'C'
+    context: 'files'
+    command: "git commit --verbose"
+    description: 'Git commit in editor with context'
+    output: terminal
+
+keybinding:
+  universal:
+    focusMainView: '<tab>'
