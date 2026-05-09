@@ -142,3 +142,40 @@ class StowPackageTests(unittest.TestCase):
             self.assertTrue(target_file.exists())
             self.assertEqual("target-version\n", config_file.read_text(encoding="utf-8"))
             self.assertEqual(config_file.resolve(), target_file.resolve())
+
+
+class BuildStowCommandTests(unittest.TestCase):
+    def test_adopt_flag_included_when_enabled(self) -> None:
+        cmd = install_stow.build_stow_command(
+            profile_dir=Path("/repo/profiles/base"),
+            package="lazygit",
+            target=Path.home(),
+            adopt=True,
+            dry_run=False,
+            verbose=False,
+        )
+        self.assertIn("--adopt", cmd)
+
+    def test_adopt_flag_not_included_when_disabled(self) -> None:
+        cmd = install_stow.build_stow_command(
+            profile_dir=Path("/repo/profiles/base"),
+            package="lazygit",
+            target=Path.home(),
+            adopt=False,
+            dry_run=False,
+            verbose=False,
+        )
+        self.assertNotIn("--adopt", cmd)
+
+    def test_adopt_flag_included_in_dry_run(self) -> None:
+        cmd = install_stow.build_stow_command(
+            profile_dir=Path("/repo/profiles/base"),
+            package="lazygit",
+            target=Path.home(),
+            adopt=True,
+            dry_run=True,
+            verbose=False,
+        )
+        self.assertIn("--adopt", cmd)
+        self.assertIn("-n", cmd)
+        self.assertIn("--verbose=1", cmd)
