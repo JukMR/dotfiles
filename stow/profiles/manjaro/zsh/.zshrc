@@ -198,7 +198,7 @@ eval "$(atuin init zsh)"
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/julian/.dart-cli-completion/zsh-config.zsh ]] && . /home/julian/.dart-cli-completion/zsh-config.zsh || true
+[[ -f $HOME/.dart-cli-completion/zsh-config.zsh ]] && . $HOME/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
 # Define the special prompt prefix for ssh sessions
@@ -270,7 +270,7 @@ mkdirtmp() {
 alias lg='lazygit'
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/julian/.lmstudio/bin"
+export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
 
@@ -300,4 +300,4 @@ add-zsh-hook precmd _deferred_init
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
 
-export PATH="/home/julian/llama-cpp/llama.cpp/build/bin:$PATH"
+export PATH="$HOME/llama-cpp/llama.cpp/build/bin:$PATH"

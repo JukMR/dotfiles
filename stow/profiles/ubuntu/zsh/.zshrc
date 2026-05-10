@@ -198,7 +198,7 @@ eval "$(atuin init zsh)"
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/mrjulian/.dart-cli-completion/zsh-config.zsh ]] && . /home/mrjulian/.dart-cli-completion/zsh-config.zsh || true
+[[ -f $HOME/.dart-cli-completion/zsh-config.zsh ]] && . $HOME/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
 # Define the special prompt prefix for ssh sessions
@@ -238,7 +238,7 @@ else
 fi
 
 # opencode
-export PATH=/home/mrjulian/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 
 alias nano='nvim'
 alias v='nvim'
