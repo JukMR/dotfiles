@@ -247,17 +247,22 @@ alias rgi='rg -i'
 alias dfstc='diffstat -C'
 
 export NVM_DIR="$HOME/.nvm"
-export PATH="$HOME/.nvm/versions/node/*/bin:$PATH"
 
-nvm() {
+lazy_load_nvm() {
+  local cmd="$1"
+  shift
+
   unset -f nvm node npm npx
-  source "$NVM_DIR/nvm.sh"
-  nvm "$@"
+
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+  command "$cmd" "$@"
 }
 
-node() { nvm "$@"; }
-npm()  { nvm "$@"; }
-npx()  { nvm "$@"; }
+nvm()  { lazy_load_nvm nvm "$@"; }
+node() { lazy_load_nvm node "$@"; }
+npm()  { lazy_load_nvm npm "$@"; }
+npx()  { lazy_load_nvm npx "$@"; }
 
 mkdirtmp() {
   local new_temp
