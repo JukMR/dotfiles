@@ -62,11 +62,14 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "sky/theme.lua")
+beautiful.init(gears.filesystem.get_themes_dir() .. "xresources/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "kitty"
-local editor = os.getenv("EDITOR") or "vim"
+local editor = os.getenv("EDITOR") or "nvim" or "vim"
 local editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
