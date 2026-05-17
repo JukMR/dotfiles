@@ -358,7 +358,7 @@ mymainmenu = awful.menu({
 		{ "open terminal", terminal },
 		{ "power options", power_options_group },
 		{ "awesome power", awesome_power_options },
-		{ "brave",         "brave --force-device-scale-factor=0.85" },
+		{ "brave",         "brave --force-device-scale-factor=0.90" },
 	},
 })
 
@@ -778,7 +778,7 @@ globalkeys = gears.table.join(
 		group = "apps",
 	}),
 	awful.key({ modkey, "Shift" }, "w", function()
-		awful.spawn("brave --force-device-scale-factor=0.85")
+		awful.spawn("brave --force-device-scale-factor=0.90")
 	end, {
 		description = "Launch Brave",
 		group = "apps",
@@ -1494,7 +1494,7 @@ run_once("xfsettingsd --daemon")
 -- Using custom identifiers for each kitty command
 run_once("kitty")
 
-run_once("brave --force-device-scale-factor=0.85")
+run_once("brave --force-device-scale-factor=0.90")
 
 -- Other autorun programs
 local autorunApps = {
