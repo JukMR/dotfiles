@@ -17,12 +17,11 @@ Migrate `manjaro_essentials.sh` to a modular, OS-independent Python orchestrator
 - Reviewed existing stow setup: `stow/install_stow.py` (Python, `inquirer`, `dataclasses`) and `stow/profiles/` (`base/`, `manjaro/`, `ubuntu/`, `personal/`)
 - Inspected dependency scripts in `programs/` (`kitty/install.sh`, `atuin/install.sh`, `zoxide/install.sh`, `neovim/`, `oh-my-zsh/`, `ssh-agent/apply_service.sh`, `clipboard/install.sh`, etc.)
 - Reviewed `programs/vscode-nvim/` — minimal config for vscode-neovim extension that bypasses AstroNvim (stowed via stow)
-
-### In Progress
-- Designing Python orchestrator architecture
-
-### Blocked
-- None
+- Implemented full Python orchestrator (`setup/` package) with loguru logging and uv dependency management
+- Created 14 modules: kitty, pacman_config, zsh_ohmyzsh, git, neovim, dotfiles, awesome, picom, ssh, atuin, zoxide, clipboard, cronjob, git_diff_image
+- CLI with --dry-run, --skip, --list, --verbose, --os, --profile, --log-file options
+- 51 unit tests (all mocked, no system changes) — all passing
+- `pyproject.toml` for uv with loguru + pytest dependencies
 
 ## Key Decisions
 - **No shell subprocesses for install logic**: Use `subprocess.run()` directly in Python instead of calling `.sh` scripts. The `.sh` scripts become the source of truth to port, not runtime dependencies.
