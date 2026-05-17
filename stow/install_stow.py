@@ -7,6 +7,7 @@
 # ///
 
 import argparse
+import os
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -226,6 +227,83 @@ def stow_package(
     return True
 
 
+def check_package_installed(package_dir: Path, target: Path) -> bool:
+    pkg_resolved = package_dir.resolve()
+    for rel_path in get_package_entries(package_dir):
+        target_path = target / rel_path
+
+        if target_path.is_symlink():
+            link_target = Path(os.readlink(target_path))
+            if not link_target.is_absolute():
+                link_target = target_path.parent / link_target
+            if link_target.resolve().is_relative_to(pkg_resolved):
+                continue
+
+        parent = target_path.parent
+        while not parent.is_relative_to(target):
+            if parent.is_symlink():
+                link_target = Path(os.readlink(parent))
+                if not link_target.is_absolute():
+                    link_target = parent.parent / link_target
+                if link_target.resolve().is_relative_to(pkg_resolved):
+                    break
+            parent = parent.parent
+        else:
+            if parent.is_symlink():
+                link_target = Path(os.readlink(parent))
+                if not link_target.is_absolute():
+                    link_target = parent.parent / link_target
+                if link_target.resolve().is_relative_to(pkg_resolved):
+                    continue
+            return False
+    return True
+
+
+def print_status(stow_dir: Path, target: Path | None = None) -> None:
+    target = target or Path.home()
+    profiles = list_profiles(stow_dir)
+
+    GREEN = "\033[32m"
+    RED = "\033[31m"
+    YELLOW = "\033[33m"
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+
+    total_installed = 0
+    total_available = 0
+
+    for profile in profiles:
+        packages = get_profile_packages(stow_dir, profile)
+        if not packages:
+            continue
+
+        print(f"\n{BOLD}{profile}{RESET}")
+        for package in packages:
+            package_dir = stow_dir / "profiles" / profile / package
+            installed = check_package_installed(package_dir, target)
+            total_available += 1
+            if installed:
+                total_installed += 1
+
+            status_color = GREEN if installed else RED
+            status_label = "INSTALLED" if installed else "NOT INSTALLED"
+
+            print(f"  {status_color}{status_label:<13}{RESET} {package}")
+
+            entries = get_package_entries(package_dir)
+            if installed:
+                for e in entries:
+                    target_path = target / e
+                    print(f"  {'':>13} {package_dir / e} -> {target_path}")
+            else:
+                targets = ", ".join(format_target_path(target, e) for e in entries[:3])
+                if len(entries) > 3:
+                    targets += f" (+{len(entries) - 3} more)"
+                print(f"  {'':>13} {targets}")
+
+    print(f"\n{BOLD}Summary: {total_installed}/{total_available} packages installed{RESET}")
+
+
 def main() -> None:
     script_dir = get_script_dir()
     stow_dir = script_dir
@@ -248,12 +326,21 @@ def main() -> None:
         help="Validate package layout and show managed targets without making changes.",
     )
     parser.add_argument(
+        "--status",
+        action="store_true",
+        help="Show which packages are installed and which are not.",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         help="Enable verbose output.",
     )
     args = parser.parse_args()
+
+    if args.status:
+        print_status(stow_dir)
+        return
 
     profiles = list_profiles(stow_dir)
     available_profiles = [p for p in profiles if p != "base"]

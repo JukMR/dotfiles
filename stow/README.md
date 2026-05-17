@@ -42,6 +42,9 @@ uv run -s install_stow.py --verbose manjaro
 
 # Combine flags
 uv run -s install_stow.py --dry-run -v manjaro
+
+# Status - show installed vs available packages (green/red)
+uv run -s install_stow.py --status
 ```
 
 Dependencies are auto-managed via the PEP 723 `# /// script` header. When running with `uv run --script`, uv automatically installs the declared dependencies (`inquirer`) on-demand into a cached environment.
@@ -51,6 +54,8 @@ The `--adopt` flag now passes GNU Stow's native `--adopt` behavior through direc
 The `--dry-run` flag validates package layout and prints the target paths each package would manage without making filesystem changes.
 
 The `-v`/`--verbose` flag enables verbose output, logging the exact commands being executed.
+
+The `--status` flag shows all available packages with green (INSTALLED) or red (NOT INSTALLED) status, plus a summary count.
 
 ## Adding New Packages
 
